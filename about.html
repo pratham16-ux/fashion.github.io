@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="About Stackly — Our story, values, and the people behind the fashion.">
+  <title>About Us — Stackly Fashion</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <style>
+    /* ====== ABOUT PAGE EXTRAS ====== */
+
+    /* Hero */
+    .about-hero {
+      position: relative;
+      height: 90vh;
+      min-height: 580px;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+    .about-hero-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+      transition: transform 8s ease;
+    }
+    .about-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(170deg, rgba(26,20,15,0.25) 0%, rgba(26,20,15,0.7) 80%);
+    }
+    .about-hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 60px 80px;
+      max-width: 900px;
+    }
+    .about-hero-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--blush);
+      margin-bottom: 20px;
+      display: block;
+    }
+    .about-hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(52px, 8vw, 110px);
+      font-weight: 300;
+      color: #fff;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+    }
+    .about-hero-title em { font-style: italic; color: var(--blush); }
+    .about-hero-year {
+      font-family: var(--font-accent);
+      font-size: 200px;
+      color: rgba(255,255,255,0.04);
+      position: absolute;
+      right: 60px;
+      bottom: 40px;
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* Brand Story */
+    .brand-story {
+      background: var(--warm-white);
+      padding: 120px 0;
+    }
+    .brand-story-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 60px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 100px;
+      align-items: center;
+    }
+    .story-images {
+      position: relative;
+    }
+    .story-img-main {
+      border-radius: 24px;
+      overflow: hidden;
+      aspect-ratio: 4/5;
+    }
+    .story-img-main img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s var(--transition);
+    }
+    .story-img-main:hover img { transform: scale(1.04); }
+    .story-img-accent {
+      position: absolute;
+      bottom: -40px;
+      right: -40px;
+      width: 48%;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 6px solid var(--warm-white);
+      aspect-ratio: 1;
+      box-shadow: var(--shadow-strong);
+    }
+    .story-img-accent img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .story-founded {
+      position: absolute;
+      top: -24px;
+      left: -24px;
+      background: var(--terracotta);
+      color: #fff;
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 24px rgba(201,97,74,0.4);
+      border: 4px solid var(--warm-white);
+    }
+    .story-founded-year {
+      font-family: var(--font-accent);
+      font-size: 24px;
+      line-height: 1;
+    }
+    .story-founded-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.85;
+    }
+    .story-text {}
+    .story-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: 20px;
+      display: block;
+    }
+    .story-title {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 4vw, 56px);
+      font-weight: 300;
+      color: var(--soft-black);
+      line-height: 1.1;
+      margin-bottom: 28px;
+    }
+    .story-title em { font-style: italic; color: var(--terracotta); }
+    .story-body {
+      font-size: 16px;
+      color: var(--medium-gray);
+      line-height: 1.85;
+      margin-bottom: 20px;
+    }
+    .story-signature {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-style: italic;
+      color: var(--terracotta);
+      margin-top: 32px;
+    }
+    .story-signature-role {
+      font-size: 13px;
+      color: var(--medium-gray);
+      letter-spacing: 0.08em;
+      margin-top: 4px;
+    }
+
+    /* Values */
+    .values {
+      background: var(--soft-black);
+      padding: 120px 0;
+    }
+    .values-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 60px;
+    }
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      border-radius: 24px;
+      overflow: hidden;
+      margin-top: 64px;
+    }
+    .value-card {
+      background: rgba(255,255,255,0.03);
+      padding: 60px 48px;
+      transition: background 0.4s;
+      position: relative;
+      overflow: hidden;
+    }
+    .value-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--terracotta);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.5s var(--transition);
+    }
+    .value-card:hover { background: rgba(255,255,255,0.06); }
+    .value-card:hover::before { transform: scaleX(1); }
+    .value-icon {
+      font-size: 36px;
+      margin-bottom: 24px;
+      display: block;
+    }
+    .value-num {
+      font-family: var(--font-accent);
+      font-size: 80px;
+      color: rgba(255,255,255,0.03);
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      line-height: 1;
+      pointer-events: none;
+      transition: color 0.4s;
+    }
+    .value-card:hover .value-num { color: rgba(201,97,74,0.08); }
+    .value-title {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 500;
+      color: #fff;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+    .value-desc {
+      font-size: 15px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.8;
+    }
+
+    /* Timeline */
+    .timeline-section {
+      background: var(--cream);
+      padding: 120px 0;
+    }
+    .timeline-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 60px;
+    }
+    .timeline {
+      position: relative;
+      margin-top: 64px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1px;
+      background: var(--light-gray);
+    }
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 1fr 48px 1fr;
+      gap: 0;
+      align-items: center;
+      margin-bottom: 64px;
+    }
+    .timeline-item:last-child { margin-bottom: 0; }
+    .timeline-content {
+      padding: 0 40px;
+    }
+    .timeline-item:nth-child(odd) .timeline-content { order: 0; text-align: right; }
+    .timeline-item:nth-child(odd) .timeline-empty { order: 1; }
+    .timeline-item:nth-child(odd) .timeline-dot { order: 1; }
+    .timeline-item:nth-child(even) .timeline-dot { order: 1; }
+    .timeline-item:nth-child(even) .timeline-empty { order: 0; }
+    .timeline-item:nth-child(even) .timeline-content { order: 2; }
+    .timeline-dot-wrap {
+      display: flex;
+      justify-content: center;
+    }
+    .timeline-dot {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--warm-white);
+      border: 3px solid var(--light-gray);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+      transition: all 0.4s;
+      flex-shrink: 0;
+    }
+    .timeline-item:hover .timeline-dot {
+      background: var(--terracotta);
+      border-color: var(--terracotta);
+      transform: scale(1.15);
+    }
+    .timeline-dot svg { color: var(--medium-gray); transition: color 0.4s; }
+    .timeline-item:hover .timeline-dot svg { color: #fff; }
+    .timeline-year {
+      font-family: var(--font-accent);
+      font-size: 40px;
+      color: var(--terracotta);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .timeline-event-title {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--soft-black);
+      margin-bottom: 8px;
+    }
+    .timeline-event-desc {
+      font-size: 14px;
+      color: var(--medium-gray);
+      line-height: 1.7;
+    }
+    .timeline-empty {}
+
+    /* Team */
+    .team-section {
+      background: var(--warm-white);
+      padding: 120px 0;
+    }
+    .team-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 60px;
+    }
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 28px;
+      margin-top: 64px;
+    }
+    .team-card {
+      position: relative;
+    }
+    .team-img-wrap {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      aspect-ratio: 3/4;
+      margin-bottom: 20px;
+    }
+    .team-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s var(--transition);
+    }
+    .team-card:hover .team-img { transform: scale(1.05); }
+    .team-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(201,97,74,0.8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .team-card:hover .team-overlay { opacity: 1; }
+    .team-overlay-quote {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-style: italic;
+      color: #fff;
+      text-align: center;
+      padding: 0 24px;
+      line-height: 1.6;
+    }
+    .team-overlay-links {
+      display: flex;
+      gap: 12px;
+    }
+    .team-overlay-link {
+      width: 36px;
+      height: 36px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      transition: background 0.2s;
+    }
+    .team-overlay-link:hover { background: rgba(255,255,255,0.3); }
+    .team-name {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--soft-black);
+      margin-bottom: 4px;
+    }
+    .team-role {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: 8px;
+    }
+    .team-bio {
+      font-size: 13px;
+      color: var(--medium-gray);
+      line-height: 1.6;
+    }
+
+    /* Press */
+    .press-section {
+      background: var(--cream);
+      padding: 80px 0;
+    }
+    .press-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 60px;
+    }
+    .press-logos {
+      display: flex;
+      gap: 40px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 48px;
+    }
+    .press-logo {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-style: italic;
+      color: var(--light-gray);
+      letter-spacing: 0.05em;
+      transition: color 0.3s;
+    }
+    .press-logo:hover { color: var(--charcoal); }
+
+    /* Mission banner */
+    .mission-banner {
+      background: linear-gradient(120deg, var(--deep-sage) 0%, var(--sage) 100%);
+      padding: 100px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .mission-banner::before {
+      content: '✦';
+      position: absolute;
+      font-size: 400px;
+      color: rgba(255,255,255,0.03);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .mission-inner { position: relative; z-index: 2; max-width: 760px; margin: 0 auto; }
+    .mission-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 20px;
+      display: block;
+    }
+    .mission-quote {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 4vw, 52px);
+      font-weight: 300;
+      color: #fff;
+      line-height: 1.3;
+      font-style: italic;
+      margin-bottom: 24px;
+    }
+    .mission-author {
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 0.1em;
+    }
+
+    /* ====== RESPONSIVE ====== */
+    @media (max-width: 1100px) {
+      .brand-story-inner { gap: 60px; padding: 0 40px; }
+      .values-inner { padding: 0 40px; }
+      .team-inner { padding: 0 40px; }
+      .timeline-inner { padding: 0 40px; }
+      .press-inner { padding: 0 40px; }
+      .team-grid { grid-template-columns: repeat(3, 1fr); }
+      .values-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 800px) {
+      .brand-story-inner { grid-template-columns: 1fr; gap: 60px; }
+      .story-img-accent { right: -16px; bottom: -24px; }
+      .about-hero-content { padding: 0 24px 60px; }
+      .about-hero-year { display: none; }
+      .values-grid { grid-template-columns: 1fr; }
+      .team-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+      .timeline::before { left: 24px; }
+      .timeline-item { grid-template-columns: 48px 1fr; }
+      .timeline-item:nth-child(odd) .timeline-content { order: 2; text-align: left; }
+      .timeline-item:nth-child(odd) .timeline-empty { display: none; }
+      .timeline-item:nth-child(even) .timeline-empty { display: none; }
+      .timeline-content { padding: 0 0 0 24px; }
+      .mission-banner { padding: 70px 24px; }
+      .press-inner, .team-inner, .values-inner, .timeline-inner, .brand-story-inner { padding: 0 24px; }
+    }
+    @media (max-width: 480px) {
+      .team-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="header-mount"></div>
+  <main>
+
+    <!-- ===== HERO ===== -->
+    <section class="about-hero" aria-label="About Stackly">
+      <img class="about-hero-bg"
+           src="https://wsrv.nl/?url=images.unsplash.com/photo-1445205170230-053b83016050?w=1600&h=900&fit=crop&auto=format&q=72&output=webp"
+           alt="Stackly Story" width="1600" height="900" loading="eager">
+      <div class="about-hero-overlay"></div>
+      <div class="about-hero-content">
+        <span class="about-hero-eyebrow">✦ Our Story</span>
+        <h1 class="about-hero-title">Fashion Born<br>from <em>Passion</em></h1>
+      </div>
+      <span class="about-hero-year" aria-hidden="true">2018</span>
+    </section>
+
+    <!-- ===== BRAND STORY ===== -->
+    <section class="brand-story">
+      <div class="brand-story-inner">
+        <div class="story-images reveal-left">
+          <div class="story-img-main">
+            <img src="https://wsrv.nl/?url=images.unsplash.com/photo-1509631179647-0177331693ae?w=600&h=760&fit=crop&auto=format&q=72&output=webp"
+                 alt="Stackly Studio" width="600" height="760" loading="lazy">
+          </div>
+          <div class="story-img-accent">
+            <img src="https://wsrv.nl/?url=images.unsplash.com/photo-1558769132-cb1aea458c5e?w=320&h=320&fit=crop&auto=format&q=72&output=webp"
+                 alt="Fashion Detail" width="320" height="320" loading="lazy">
+          </div>
+          <div class="story-founded" aria-label="Founded in 2018">
+            <span class="story-founded-year">2018</span>
+            <span class="story-founded-label">Founded</span>
+          </div>
+        </div>
+
+        <div class="story-text reveal-right">
+          <span class="story-label">Our Beginning</span>
+          <h2 class="story-title">Style is a way to say who you are — <em>without speaking</em></h2>
+          <p class="story-body">Stackly was born in a small studio in Mumbai in 2018, with one simple idea: that great fashion shouldn't come with a great price tag, and that every person deserves to feel extraordinary in what they wear.</p>
+          <p class="story-body">We started with a curated edit of just 40 pieces. Today, we carry over 1,200 styles from India's most exciting emerging designers alongside globally recognised names — all handpicked for quality, craftsmanship, and that indefinable sense of rightness when you put something on.</p>
+          <p class="story-body">What we've never changed: our obsession with fabric, our commitment to sustainable sourcing, and our belief that fashion should feel personal — not mass-produced.</p>
+          <div style="margin-top:36px">
+            <a href="shop.html" class="btn-primary" style="display:inline-flex">
+              Explore Our Collection
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+          <div class="story-signature">Meera Agarwal</div>
+          <div class="story-signature-role">Founder & Creative Director, Stackly Fashion</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== MISSION QUOTE ===== -->
+    <div class="mission-banner">
+      <div class="mission-inner reveal">
+        <span class="mission-label">Our Mission</span>
+        <blockquote class="mission-quote">"We believe that when you dress well, you feel well — and when you feel well, you do well. Fashion is our vehicle for helping people show up as the very best version of themselves."</blockquote>
+        <p class="mission-author">— Meera Agarwal, Founder</p>
+      </div>
+    </div>
+
+    <!-- ===== VALUES ===== -->
+    <section class="values">
+      <div class="values-inner">
+        <div class="section-header reveal">
+          <span class="section-label" style="color:var(--blush)">What We Stand For</span>
+          <h2 class="section-title" style="color:#fff">Our <em>Core Values</em></h2>
+          <p class="section-subtitle" style="color:rgba(255,255,255,0.55)">Every decision we make at Stackly runs through these guiding principles.</p>
+        </div>
+
+        <div class="values-grid stagger">
+          <div class="value-card">
+            <span class="value-num" aria-hidden="true">01</span>
+            <span class="value-icon">🌿</span>
+            <h3 class="value-title">Sustainable by Design</h3>
+            <p class="value-desc">Every fabric we carry is sourced with the planet in mind. We work exclusively with suppliers who share our commitment to ethical production and reduced environmental impact — no exceptions.</p>
+          </div>
+          <div class="value-card">
+            <span class="value-num" aria-hidden="true">02</span>
+            <span class="value-icon">✦</span>
+            <h3 class="value-title">Uncompromising Quality</h3>
+            <p class="value-desc">Our buyers visit every manufacturer. Every stitch, every seam, every finish goes through a rigorous 14-point quality check before it earns the Stackly label. Good enough is never good enough.</p>
+          </div>
+          <div class="value-card">
+            <span class="value-num" aria-hidden="true">03</span>
+            <span class="value-icon">💛</span>
+            <h3 class="value-title">Inclusivity Always</h3>
+            <p class="value-desc">Fashion is for everyone. Our collections span sizes XS to 5XL, our imagery features real people of all shapes and backgrounds, and our prices are designed to make quality accessible — not exclusive.</p>
+          </div>
+          <div class="value-card">
+            <span class="value-num" aria-hidden="true">04</span>
+            <span class="value-icon">🤝</span>
+            <h3 class="value-title">Community First</h3>
+            <p class="value-desc">We're not just a store — we're a community. Through our Stackly Circle programme, we platform emerging Indian designers, celebrate customer stories, and give back to artisan communities across India.</p>
+          </div>
+          <div class="value-card">
+            <span class="value-num" aria-hidden="true">05</span>
+            <span class="value-icon">🔄</span>
+            <h3 class="value-title">Circular Fashion</h3>
+            <p class="value-desc">Our pre-loved programme lets customers return and resell Stackly pieces, keeping clothes in circulation longer. Every return earns store credit. Good for your wallet. Great for the earth.</p>
+          </div>
+          <div class="value-card">
+            <span class="value-num" aria-hidden="true">06</span>
+            <span class="value-icon">💡</span>
+            <h3 class="value-title">Transparent Pricing</h3>
+            <p class="value-desc">We show you the cost breakdown on every product page — what you pay for materials, labour, and our margin. No mystery markups. Radical transparency is how trust is built.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== JOURNEY TIMELINE ===== -->
+    <section class="timeline-section">
+      <div class="timeline-inner">
+        <div class="section-header reveal" style="text-align:center">
+          <span class="section-label">Our Journey</span>
+          <h2 class="section-title">From Studio to <em>Nationwide</em></h2>
+          <p class="section-subtitle">Six years, millions of outfits, and one unbreakable love of fashion.</p>
+        </div>
+
+        <div class="timeline stagger">
+          <div class="timeline-item">
+            <div class="timeline-content">
+              <div class="timeline-year">2018</div>
+              <h3 class="timeline-event-title">The Beginning</h3>
+              <p class="timeline-event-desc">Stackly launches from a 400 sq ft studio in Bandra, Mumbai, with a curated edit of 40 pieces and a dream to change how India shops for fashion.</p>
+            </div>
+            <div class="timeline-dot-wrap">
+              <div class="timeline-dot">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/></svg>
+              </div>
+            </div>
+            <div class="timeline-empty"></div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-empty"></div>
+            <div class="timeline-dot-wrap">
+              <div class="timeline-dot">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+              </div>
+            </div>
+            <div class="timeline-content">
+              <div class="timeline-year">2019</div>
+              <h3 class="timeline-event-title">Going Digital</h3>
+              <p class="timeline-event-desc">Launched stackly.in, bringing our curation to customers across India. First month online: 2,400 orders. We ran out of packaging boxes by day three.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-content">
+              <div class="timeline-year">2020</div>
+              <h3 class="timeline-event-title">Adapting & Growing</h3>
+              <p class="timeline-event-desc">During the pandemic we pivoted to loungewear, launched virtual styling sessions, and donated 12,000 face masks made from our fabric offcuts. Our community grew stronger.</p>
+            </div>
+            <div class="timeline-dot-wrap">
+              <div class="timeline-dot">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+              </div>
+            </div>
+            <div class="timeline-empty"></div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-empty"></div>
+            <div class="timeline-dot-wrap">
+              <div class="timeline-dot">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              </div>
+            </div>
+            <div class="timeline-content">
+              <div class="timeline-year">2022</div>
+              <h3 class="timeline-event-title">50,000 Happy Customers</h3>
+              <p class="timeline-event-desc">We crossed a milestone that made us cry. Launched the Stackly Circle loyalty programme and our first sustainable packaging line — 100% recycled, 100% beautiful.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-content">
+              <div class="timeline-year">2024</div>
+              <h3 class="timeline-event-title">First Physical Store</h3>
+              <p class="timeline-event-desc">Opened our flagship store on Linking Road, Mumbai — 3,200 sq ft of carefully designed retail space. 200 people queued outside on opening day.</p>
+            </div>
+            <div class="timeline-dot-wrap">
+              <div class="timeline-dot">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              </div>
+            </div>
+            <div class="timeline-empty"></div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-empty"></div>
+            <div class="timeline-dot-wrap">
+              <div class="timeline-dot" style="background:var(--terracotta);border-color:var(--terracotta)">
+                <svg width="16" height="16" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+            </div>
+            <div class="timeline-content">
+              <div class="timeline-year">2026</div>
+              <h3 class="timeline-event-title">Today & Beyond</h3>
+              <p class="timeline-event-desc">1,200+ styles. 8 cities. 50,000+ customers. A new menswear line launching this autumn. And still that same hunger to make fashion that matters.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== TEAM ===== -->
+    <section class="team-section">
+      <div class="team-inner">
+        <div class="section-header reveal">
+          <span class="section-label">Behind the Brand</span>
+          <h2 class="section-title">Meet the <em>Team</em></h2>
+          <p class="section-subtitle">The people who make Stackly what it is — obsessive about fashion, committed to you.</p>
+        </div>
+
+        <div class="team-grid stagger">
+          <div class="team-card">
+            <div class="team-img-wrap">
+              <img class="team-img" src="https://wsrv.nl/?url=https://images.unsplash.com/photo-1573496799652-408c2ac9fe98&w=400&output=webp&q=60&fit=cover" alt="Meera Agarwal" width="320" height="426" loading="lazy">
+              <div class="team-overlay">
+                <p class="team-overlay-quote">"Fashion should tell your story before you say a word."</p>
+                <div class="team-overlay-links">
+                  <a href="404.html" class="team-overlay-link" aria-label="Instagram">
+                    <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+                  </a>
+                  <a href="404.html" class="team-overlay-link" aria-label="LinkedIn">
+                    <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <h3 class="team-name">Meera Agarwal</h3>
+            <p class="team-role">Founder & Creative Director</p>
+            <p class="team-bio">10 years at NIFT before founding Stackly. Believes sustainable fashion is the only future worth building.</p>
+          </div>
+
+          <div class="team-card">
+            <div class="team-img-wrap">
+              <img class="team-img" src="https://wsrv.nl/?url=https://images.unsplash.com/photo-1560250097-0b93528c311a&w=400&output=webp&q=60&fit=cover" alt="Aryan Shah" width="320" height="426" loading="lazy">
+              <div class="team-overlay">
+                <p class="team-overlay-quote">"Growth without community is just numbers."</p>
+                <div class="team-overlay-links">
+                  <a href="404.html" class="team-overlay-link" aria-label="Instagram"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></a>
+                </div>
+              </div>
+            </div>
+            <h3 class="team-name">Aryan Shah</h3>
+            <p class="team-role">Co-founder & CEO</p>
+            <p class="team-bio">Ex-McKinsey. Turned down a VP role in Singapore to help build something that actually matters to people.</p>
+          </div>
+
+          <div class="team-card">
+            <div class="team-img-wrap">
+              <img class="team-img" src="https://wsrv.nl/?url=https://images.unsplash.com/photo-1580489944761-15a19d654956&w=400&output=webp&q=60&fit=cover" alt="Priya Nair" width="320" height="426" loading="lazy">
+              <div class="team-overlay">
+                <p class="team-overlay-quote">"Every stitch is a story. Every collection is a chapter."</p>
+                <div class="team-overlay-links">
+                  <a href="404.html" class="team-overlay-link" aria-label="Instagram"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></a>
+                </div>
+              </div>
+            </div>
+            <h3 class="team-name">Priya Nair</h3>
+            <p class="team-role">Head of Buying & Curation</p>
+            <p class="team-bio">Travels 20 weeks a year to find pieces that deserve a place in your wardrobe. If Priya approves it, you'll love it.</p>
+          </div>
+
+          <div class="team-card">
+            <div class="team-img-wrap">
+              <img class="team-img" src="https://wsrv.nl/?url=https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d&w=400&output=webp&q=60&fit=cover" alt="Karan Malhotra" width="320" height="426" loading="lazy">
+              <div class="team-overlay">
+                <p class="team-overlay-quote">"Good design is invisible. Great design is felt."</p>
+                <div class="team-overlay-links">
+                  <a href="404.html" class="team-overlay-link" aria-label="Instagram"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></a>
+                </div>
+              </div>
+            </div>
+            <h3 class="team-name">Karan Malhotra</h3>
+            <p class="team-role">Head of Design & Experience</p>
+            <p class="team-bio">IIT Bombay Design. Responsible for the Stackly look, feel, and every pixel of the experience you're having right now.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PRESS ===== -->
+    <section class="press-section">
+      <div class="press-inner">
+        <div class="section-header reveal">
+          <span class="section-label">As Featured In</span>
+          <h2 class="section-title">They <em>Love</em> Us Too</h2>
+        </div>
+        <div class="press-logos stagger">
+          <span class="press-logo">Vogue India</span>
+          <span class="press-logo">Harper's Bazaar</span>
+          <span class="press-logo">Elle</span>
+          <span class="press-logo">Femina</span>
+          <span class="press-logo">Forbes India</span>
+          <span class="press-logo">Grazia</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <div id="footer-mount"></div>
+  <script src="component.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

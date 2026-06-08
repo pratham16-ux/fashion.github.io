@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Stackly Fashion Store — Curating timeless fashion for the modern soul. Explore our latest collections.">
+  <title>Stackly — Fashion That Speaks</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+
+  <!-- Header Mount -->
+  <div id="header-mount"></div>
+
+  <main>
+
+    <!-- ===== HERO SECTION ===== -->
+    <section class="hero" aria-label="Featured collections">
+      <div class="hero-slides">
+
+        <!-- Slide 1 -->
+        <div class="hero-slide">
+          <img class="hero-slide-bg"
+               src="https://wsrv.nl/?url=images.unsplash.com/photo-1483985988355-763728e1935b?w=1600&h=900&fit=crop&auto=format&q=75&output=webp"
+               alt="Summer Collection 2026" width="1600" height="900" loading="eager">
+          <div class="hero-slide-overlay"></div>
+          <div class="hero-content">
+            <span class="hero-tag">✦ New Season 2026</span>
+            <h1 class="hero-title">Dress Your <em>Story</em><br>Own the Room</h1>
+            <p class="hero-desc">Discover curated fashion pieces that blend contemporary silhouettes with timeless elegance — made for women who dare to stand out.</p>
+            <div class="hero-actions">
+              <a href="shop.html" class="btn-primary">
+                Explore Collection
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+              <a href="lookbook.html" class="btn-outline">View Lookbook</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="hero-slide">
+          <img class="hero-slide-bg"
+               src="https://wsrv.nl/?url=images.unsplash.com/photo-1469334031218-e382a71b716b?w=1600&h=900&fit=crop&auto=format&q=75&output=webp"
+               alt="Men's Collection" width="1600" height="900" loading="lazy">
+          <div class="hero-slide-overlay"></div>
+          <div class="hero-content">
+            <span class="hero-tag">✦ Men's Essentials</span>
+            <h1 class="hero-title">Sharp Lines,<br><em>Refined</em> Style</h1>
+            <p class="hero-desc">A wardrobe built for the modern man — from tailored classics to everyday essentials crafted in premium fabrics.</p>
+            <div class="hero-actions">
+              <a href="shop.html" class="btn-primary">
+                Shop Men's
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+              <a href="about.html" class="btn-outline">Our Story</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="hero-slide">
+          <img class="hero-slide-bg"
+               src="https://wsrv.nl/?url=images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1600&h=900&fit=crop&auto=format&q=75&output=webp"
+               alt="Accessories Collection" width="1600" height="900" loading="lazy">
+          <div class="hero-slide-overlay"></div>
+          <div class="hero-content">
+            <span class="hero-tag">✦ Accessories Edit</span>
+            <h1 class="hero-title">The <em>Details</em><br>Make the Look</h1>
+            <p class="hero-desc">Bags, jewellery, scarves and more — because the perfect accessory transforms every outfit into a statement.</p>
+            <div class="hero-actions">
+              <a href="shop.html" class="btn-primary">
+                Shop Accessories
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+              <a href="lookbook.html" class="btn-outline">Get Inspired</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="hero-slide">
+          <img class="hero-slide-bg"
+               src="https://wsrv.nl/?url=images.unsplash.com/photo-1445205170230-053b83016050?w=1600&h=900&fit=crop&auto=format&q=75&output=webp"
+               alt="Sale Collection" width="1600" height="900" loading="lazy">
+          <div class="hero-slide-overlay"></div>
+          <div class="hero-content">
+            <span class="hero-tag">✦ End of Season Sale</span>
+            <h1 class="hero-title">Up to <em>60% Off</em><br>Top Picks</h1>
+            <p class="hero-desc">Don't miss our biggest sale of the year. Premium fashion at prices that make your wardrobe smile.</p>
+            <div class="hero-actions">
+              <a href="shop.html" class="btn-primary">
+                Shop the Sale
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+              <a href="contact.html" class="btn-outline">Get Alerts</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dots -->
+      <div class="hero-dots" role="tablist" aria-label="Slide navigation">
+        <button class="hero-dot" role="tab" aria-label="Slide 1"></button>
+        <button class="hero-dot" role="tab" aria-label="Slide 2"></button>
+        <button class="hero-dot" role="tab" aria-label="Slide 3"></button>
+        <button class="hero-dot" role="tab" aria-label="Slide 4"></button>
+      </div>
+
+      <!-- Arrows -->
+      <div class="hero-arrows">
+        <button class="hero-arrow prev" aria-label="Previous slide">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <button class="hero-arrow next" aria-label="Next slide">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+
+      <!-- Scroll Hint -->
+      <div class="hero-scroll-hint">
+        <div class="scroll-mouse"></div>
+        <span>Scroll</span>
+      </div>
+    </section>
+
+    <!-- ===== MARQUEE ===== -->
+    <div class="marquee-section" aria-hidden="true">
+      <div class="marquee-track">
+        <span class="marquee-item">Free Shipping on Orders Over ₹2000<span class="marquee-dot"></span></span>
+        <span class="marquee-item">New Arrivals Every Week<span class="marquee-dot"></span></span>
+        <span class="marquee-item">Easy Returns Within 30 Days<span class="marquee-dot"></span></span>
+        <span class="marquee-item">Handpicked Premium Fabrics<span class="marquee-dot"></span></span>
+        <span class="marquee-item">Exclusive Member Discounts<span class="marquee-dot"></span></span>
+        <span class="marquee-item">Sustainable Fashion Forward<span class="marquee-dot"></span></span>
+        <span class="marquee-item">Free Shipping on Orders Over ₹2000<span class="marquee-dot"></span></span>
+        <span class="marquee-item">New Arrivals Every Week<span class="marquee-dot"></span></span>
+        <span class="marquee-item">Easy Returns Within 30 Days<span class="marquee-dot"></span></span>
+        <span class="marquee-item">Handpicked Premium Fabrics<span class="marquee-dot"></span></span>
+        <span class="marquee-item">Exclusive Member Discounts<span class="marquee-dot"></span></span>
+        <span class="marquee-item">Sustainable Fashion Forward<span class="marquee-dot"></span></span>
+      </div>
+    </div>
+
+    <!-- ===== CATEGORIES ===== -->
+    <section class="categories py-section">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-label">Browse by Category</span>
+          <h2 class="section-title">Shop Your <em>Style</em></h2>
+          <p class="section-subtitle">From breezy casuals to elegant eveningwear — find your perfect look across our curated categories.</p>
+        </div>
+
+        <div class="categories-grid stagger">
+          <div class="category-card">
+            <img class="category-img"
+                 src="https://wsrv.nl/?url=images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&h=1000&fit=crop&auto=format&q=75&output=webp"
+                 alt="Women's Fashion" width="800" height="1000" loading="lazy">
+            <div class="category-overlay"></div>
+            <div class="category-info">
+              <h3 class="category-name">Women's Fashion</h3>
+              <p class="category-count">420+ Styles Available</p>
+            </div>
+            <div class="category-arrow">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+
+          <div class="category-card">
+            <img class="category-img"
+                 src="https://wsrv.nl/?url=images.unsplash.com/photo-1516257984-b1b4d707412e?w=600&h=800&fit=crop&auto=format&q=75&output=webp"
+                 alt="Men's Collection" width="600" height="800" loading="lazy">
+            <div class="category-overlay"></div>
+            <div class="category-info">
+              <h3 class="category-name">Men's Collection</h3>
+              <p class="category-count">280+ Styles</p>
+            </div>
+            <div class="category-arrow">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+
+          <div class="category-card">
+            <img class="category-img"
+                 src="https://wsrv.nl/?url=images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&h=800&fit=crop&auto=format&q=75&output=webp"
+                 alt="Accessories" width="600" height="800" loading="lazy">
+            <div class="category-overlay"></div>
+            <div class="category-info">
+              <h3 class="category-name">Accessories</h3>
+              <p class="category-count">190+ Items</p>
+            </div>
+            <div class="category-arrow">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+
+          <div class="category-card">
+            <img class="category-img"
+                 src="https://wsrv.nl/?url=images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&h=800&fit=crop&auto=format&q=75&output=webp"
+                 alt="Footwear" width="600" height="800" loading="lazy">
+            <div class="category-overlay"></div>
+            <div class="category-info">
+              <h3 class="category-name">Footwear</h3>
+              <p class="category-count">150+ Pairs</p>
+            </div>
+            <div class="category-arrow">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== FEATURES STRIP ===== -->
+    <section class="features-strip">
+      <div class="features-grid stagger">
+        <div class="feature-item">
+          <div class="feature-icon">🚚</div>
+          <h3 class="feature-title">Free Delivery</h3>
+          <p class="feature-desc">Complimentary shipping on all orders above ₹2,000 across India.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">↩️</div>
+          <h3 class="feature-title">Easy Returns</h3>
+          <p class="feature-desc">Hassle-free 30-day return policy. No questions asked.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🔒</div>
+          <h3 class="feature-title">Secure Checkout</h3>
+          <p class="feature-desc">Bank-grade encryption on every transaction. Your data stays safe.</p>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🎁</div>
+          <h3 class="feature-title">Gift Wrapping</h3>
+          <p class="feature-desc">Complimentary gift packaging available at checkout for loved ones.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== FEATURED PRODUCTS ===== -->
+    <section class="py-section" style="background:var(--cream)">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-label">Trending Now</span>
+          <h2 class="section-title">This Week's <em>Hot Picks</em></h2>
+          <p class="section-subtitle">Fresh styles curated by our fashion editors. These are the pieces everyone is talking about.</p>
+        </div>
+
+        <div class="products-grid stagger">
+          <!-- Product 1 -->
+          <article class="product-card">
+            <div class="product-img-wrap">
+              <span class="product-badge">New</span>
+              <img class="product-img"
+                   src="https://wsrv.nl/?url=images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&h=800&fit=crop&auto=format&q=75&output=webp"
+                   alt="Floral Wrap Dress" width="600" height="800" loading="lazy">
+              <div class="product-actions">
+                <button class="product-action-btn btn-add-cart">Add to Cart</button>
+                <button class="product-action-btn btn-wishlist" aria-label="Add to wishlist">
+                  <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="product-info">
+              <p class="product-brand">Stackly Essentials</p>
+              <h3 class="product-name">Floral Wrap Midi Dress</h3>
+              <div class="product-rating">
+                <div class="stars">★★★★★</div>
+                <span class="rating-count">(128)</span>
+              </div>
+              <div class="product-price">
+                <span class="price-current">₹2,499</span>
+                <span class="price-original">₹3,999</span>
+                <span class="price-save">Save 37%</span>
+              </div>
+              <div class="product-colors">
+                <div class="color-swatch active" style="background:#E8C4B0" title="Blush"></div>
+                <div class="color-swatch" style="background:#8FA882" title="Sage"></div>
+                <div class="color-swatch" style="background:#2C2C2C" title="Charcoal"></div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Product 2 -->
+          <article class="product-card">
+            <div class="product-img-wrap">
+              <img class="product-img"
+                   src="https://wsrv.nl/?url=images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&h=800&fit=crop&auto=format&q=75&output=webp"
+                   alt="Linen Blazer" width="600" height="800" loading="lazy">
+              <div class="product-actions">
+                <button class="product-action-btn btn-add-cart">Add to Cart</button>
+                <button class="product-action-btn btn-wishlist" aria-label="Add to wishlist">
+                  <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="product-info">
+              <p class="product-brand">Studio Line</p>
+              <h3 class="product-name">Premium Linen Blazer</h3>
+              <div class="product-rating">
+                <div class="stars">★★★★☆</div>
+                <span class="rating-count">(87)</span>
+              </div>
+              <div class="product-price">
+                <span class="price-current">₹4,799</span>
+              </div>
+              <div class="product-colors">
+                <div class="color-swatch active" style="background:#D4C5A9" title="Beige"></div>
+                <div class="color-swatch" style="background:#2C2C2C" title="Black"></div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Product 3 -->
+          <article class="product-card">
+            <div class="product-img-wrap">
+              <span class="product-badge sale">Sale</span>
+              <img class="product-img"
+                   src="https://wsrv.nl/?url=images.unsplash.com/photo-1485230895905-ec40ba36b9bc?w=600&h=800&fit=crop&auto=format&q=75&output=webp"
+                   alt="Summer Dress" width="600" height="800" loading="lazy">
+              <div class="product-actions">
+                <button class="product-action-btn btn-add-cart">Add to Cart</button>
+                <button class="product-action-btn btn-wishlist" aria-label="Add to wishlist">
+                  <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="product-info">
+              <p class="product-brand">Stackly Summer</p>
+              <h3 class="product-name">Boho Smocked Sundress</h3>
+              <div class="product-rating">
+                <div class="stars">★★★★★</div>
+                <span class="rating-count">(204)</span>
+              </div>
+              <div class="product-price">
+                <span class="price-current">₹1,799</span>
+                <span class="price-original">₹2,999</span>
+                <span class="price-save">Save 40%</span>
+              </div>
+              <div class="product-colors">
+                <div class="color-swatch active" style="background:#F2C4B0" title="Peach"></div>
+                <div class="color-swatch" style="background:#C9A96E" title="Gold"></div>
+                <div class="color-swatch" style="background:#FFFFFF;border:1px solid #ddd" title="White"></div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Product 4 -->
+          <article class="product-card">
+            <div class="product-img-wrap">
+              <span class="product-badge new">New</span>
+              <img class="product-img"
+                   src="https://wsrv.nl/?url=images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600&h=800&fit=crop&auto=format&q=75&output=webp"
+                   alt="Silk Blouse" width="600" height="800" loading="lazy">
+              <div class="product-actions">
+                <button class="product-action-btn btn-add-cart">Add to Cart</button>
+                <button class="product-action-btn btn-wishlist" aria-label="Add to wishlist">
+                  <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="product-info">
+              <p class="product-brand">Luxe Edit</p>
+              <h3 class="product-name">Silk Satin Relaxed Blouse</h3>
+              <div class="product-rating">
+                <div class="stars">★★★★☆</div>
+                <span class="rating-count">(56)</span>
+              </div>
+              <div class="product-price">
+                <span class="price-current">₹3,299</span>
+              </div>
+              <div class="product-colors">
+                <div class="color-swatch active" style="background:#FAEBD7" title="Ivory"></div>
+                <div class="color-swatch" style="background:#C9614A" title="Terracotta"></div>
+                <div class="color-swatch" style="background:#8FA882" title="Sage"></div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div style="text-align:center;margin-top:48px" class="reveal">
+          <a href="shop.html" class="btn-primary" style="display:inline-flex">
+            View All Products
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== BANNER SPLIT ===== -->
+    <section class="banner-split" aria-label="Promotional banners">
+      <div class="banner-half">
+        <img class="banner-half-img"
+             src="https://wsrv.nl/?url=images.unsplash.com/photo-1509631179647-0177331693ae?w=800&h=600&fit=crop&auto=format&q=75&output=webp"
+             alt="Women's New Arrivals" width="800" height="600" loading="lazy">
+        <div class="banner-half-overlay"></div>
+        <div class="banner-half-content reveal-left">
+          <span class="banner-half-label">✦ Just Arrived</span>
+          <h2 class="banner-half-title">Summer Florals<br>for Her</h2>
+          <a href="shop.html" class="btn-white">
+            Shop Women
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="banner-half">
+        <img class="banner-half-img"
+             src="https://wsrv.nl/?url=images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop&auto=format&q=75&output=webp"
+             alt="Men's New Arrivals" width="800" height="600" loading="lazy">
+        <div class="banner-half-overlay"></div>
+        <div class="banner-half-content reveal-right">
+          <span class="banner-half-label">✦ Men's Edit</span>
+          <h2 class="banner-half-title">Effortless<br>Cool for Him</h2>
+          <a href="shop.html" class="btn-white">
+            Shop Men
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== STATS ===== -->
+    <section class="stats">
+      <div class="stats-grid stagger">
+        <div class="stat-item">
+          <span class="stat-number" data-count="50000" data-suffix="+">50,000+</span>
+          <span class="stat-label">Happy Customers</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" data-count="1200" data-suffix="+">1,200+</span>
+          <span class="stat-label">Unique Styles</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" data-count="98" data-suffix="%">98%</span>
+          <span class="stat-label">Satisfaction Rate</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" data-count="30" data-suffix=" Days">30 Days</span>
+          <span class="stat-label">Easy Returns</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SALE BANNER ===== -->
+    <section class="py-section" style="background:var(--cream)">
+      <div class="sale-banner reveal-scale">
+        <div class="sale-banner-content">
+          <h2>End of Season<br><em style="font-style:italic;color:var(--warm-white)">Grand Sale</em></h2>
+          <p>Grab your favourite styles at unbeatable prices. Limited stock, unlimited style. Use code <strong style="color:#fff">STACKLY20</strong> for extra 20% off.</p>
+          <a href="shop.html" class="btn-white" style="display:inline-flex;gap:8px;margin-top:24px;color:var(--deep-sage)">
+            Shop the Sale
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+        <div class="sale-discount">60%<br><small style="font-size:0.4em;display:block;margin-top:-10px">OFF</small></div>
+      </div>
+    </section>
+
+    <!-- ===== TESTIMONIALS ===== -->
+    <section class="testimonials py-section">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-label">Customer Stories</span>
+          <h2 class="section-title" style="color:var(--warm-white)">What Our <em>Customers</em> Say</h2>
+          <p class="section-subtitle" style="color:rgba(255,255,255,0.6)">Over 50,000 happy shoppers can't be wrong. Here's what they love about Stackly.</p>
+        </div>
+
+        <div class="testimonials-track-wrap">
+          <div class="testimonials-track">
+            <div class="testimonial-card">
+              <span class="testimonial-quote">"</span>
+              <p class="testimonial-text">Absolutely love the quality! The Floral Wrap Dress I ordered arrived beautifully packaged and fits perfectly. Stackly has become my go-to for every special occasion.</p>
+              <div class="testimonial-author">
+                <img src="https://wsrv.nl/?url=i.pravatar.cc/88?img=1&output=webp" alt="Priya S." class="author-avatar" width="44" height="44" loading="lazy">
+                <div>
+                  <p class="author-name">Priya Sharma</p>
+                  <p class="author-role">Mumbai ⭐⭐⭐⭐⭐</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="testimonial-card">
+              <span class="testimonial-quote">"</span>
+              <p class="testimonial-text">I was skeptical about buying clothes online but Stackly changed that. The size guide is accurate, returns are effortless, and the clothes are genuinely beautiful.</p>
+              <div class="testimonial-author">
+                <img src="https://wsrv.nl/?url=i.pravatar.cc/88?img=5&output=webp" alt="Arjun M." class="author-avatar" width="44" height="44" loading="lazy">
+                <div>
+                  <p class="author-name">Arjun Mehta</p>
+                  <p class="author-role">Delhi ⭐⭐⭐⭐⭐</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="testimonial-card">
+              <span class="testimonial-quote">"</span>
+              <p class="testimonial-text">From browsing to delivery — everything about Stackly is premium. The curation is spot on and I always find something that feels made just for my style.</p>
+              <div class="testimonial-author">
+                <img src="https://wsrv.nl/?url=i.pravatar.cc/88?img=9&output=webp" alt="Nisha K." class="author-avatar" width="44" height="44" loading="lazy">
+                <div>
+                  <p class="author-name">Nisha Kapoor</p>
+                  <p class="author-role">Bangalore ⭐⭐⭐⭐⭐</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="testimonial-card">
+              <span class="testimonial-quote">"</span>
+              <p class="testimonial-text">The linen blazer I bought from Stackly gets compliments every single time. Premium quality, fast delivery, and the packaging is stunning. Highly recommend!</p>
+              <div class="testimonial-author">
+                <img src="https://wsrv.nl/?url=i.pravatar.cc/88?img=12&output=webp" alt="Rahul V." class="author-avatar" width="44" height="44" loading="lazy">
+                <div>
+                  <p class="author-name">Rahul Verma</p>
+                  <p class="author-role">Hyderabad ⭐⭐⭐⭐⭐</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonials-nav">
+          <button class="test-nav-btn prev" aria-label="Previous testimonials">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </button>
+          <button class="test-nav-btn next" aria-label="Next testimonials">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== INSTAGRAM LOOKBOOK GRID ===== -->
+    <section style="background:var(--warm-white);padding:80px 0 0">
+      <div class="container" style="padding-bottom:0">
+        <div class="section-header reveal">
+          <span class="section-label">@stackly.fashion</span>
+          <h2 class="section-title">Style in the <em>Wild</em></h2>
+          <p class="section-subtitle">Follow us on Instagram for daily style inspiration and tag your outfits with #WearStackly to get featured.</p>
+        </div>
+      </div>
+      <div class="lookbook-grid stagger">
+        <div class="lookbook-item">
+          <img class="lookbook-img" src="https://wsrv.nl/?url=images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&h=400&fit=crop&auto=format&q=70&output=webp" alt="Lookbook 1" width="400" height="400" loading="lazy">
+          <div class="lookbook-overlay">
+            <svg width="28" height="28" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07..."/></svg>
+            ♡
+          </div>
+        </div>
+        <div class="lookbook-item">
+          <img class="lookbook-img" src="https://wsrv.nl/?url=images.unsplash.com/photo-1509631179647-0177331693ae?w=400&h=400&fit=crop&auto=format&q=70&output=webp" alt="Lookbook 2" width="400" height="400" loading="lazy">
+          <div class="lookbook-overlay">♡</div>
+        </div>
+        <div class="lookbook-item">
+          <img class="lookbook-img" src="https://wsrv.nl/?url=images.unsplash.com/photo-1558769132-cb1aea458c5e?w=400&h=400&fit=crop&auto=format&q=70&output=webp" alt="Lookbook 3" width="400" height="400" loading="lazy">
+          <div class="lookbook-overlay">♡</div>
+        </div>
+        <div class="lookbook-item">
+          <img class="lookbook-img" src="https://wsrv.nl/?url=images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=400&fit=crop&auto=format&q=70&output=webp" alt="Lookbook 4" width="400" height="400" loading="lazy">
+          <div class="lookbook-overlay">♡</div>
+        </div>
+        <div class="lookbook-item">
+          <img class="lookbook-img" src="https://wsrv.nl/?url=images.unsplash.com/photo-1534126511673-b6899657816a?w=400&h=400&fit=crop&auto=format&q=70&output=webp" alt="Lookbook 5" width="400" height="400" loading="lazy">
+          <div class="lookbook-overlay">♡</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== BRANDS ===== -->
+    <section class="brands py-section">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-label">Our Partners</span>
+          <h2 class="section-title">Brands We <em>Carry</em></h2>
+        </div>
+        <div class="brands-row stagger">
+          <span class="brand-logo">ZARA</span>
+          <span class="brand-logo">H&amp;M</span>
+          <span class="brand-logo">MANGO</span>
+          <span class="brand-logo">ONLY</span>
+          <span class="brand-logo">VERO MODA</span>
+          <span class="brand-logo">AND</span>
+          <span class="brand-logo">FOREVER 21</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer Mount -->
+  <div id="footer-mount"></div>
+
+  <script src="component.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

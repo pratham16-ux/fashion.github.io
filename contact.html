@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Contact Stackly Fashion — Get in touch with our team. Visit our flagship store, call us, or send a message. We'd love to hear from you.">
+  <title>Contact Us — Stackly Fashion</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <style>
+    /* ====== CONTACT PAGE STYLES ====== */
+
+    /* Hero */
+    .contact-hero {
+      position: relative;
+      height: 72vh;
+      min-height: 520px;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+    .contact-hero-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 35%;
+      transform: scale(1.06);
+      transition: transform 8s ease;
+    }
+    .contact-hero-bg.loaded { transform: scale(1); }
+    .contact-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, rgba(26,20,15,0.2) 0%, rgba(26,20,15,0.72) 85%);
+    }
+    .contact-hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 60px 80px;
+      max-width: 860px;
+    }
+    .contact-hero-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--blush);
+      display: inline-block;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 6px 16px;
+      border-radius: 50px;
+      margin-bottom: 24px;
+    }
+    .contact-hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(52px, 8vw, 108px);
+      font-weight: 300;
+      color: #fff;
+      line-height: 0.96;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+    .contact-hero-title em { font-style: italic; color: var(--blush); }
+    .contact-hero-sub {
+      font-size: 17px;
+      color: rgba(255,255,255,0.75);
+      max-width: 460px;
+      line-height: 1.7;
+    }
+    .contact-hero-deco {
+      font-family: var(--font-accent);
+      font-size: 210px;
+      color: rgba(255,255,255,0.04);
+      position: absolute;
+      right: 60px;
+      bottom: 32px;
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* ====== CONTACT BODY ====== */
+    .contact-body {
+      background: var(--cream);
+      padding: 100px 0;
+    }
+    .contact-body-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 60px;
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 72px;
+      align-items: start;
+    }
+
+    /* ====== LEFT COLUMN — Info + Map ====== */
+    .contact-left {}
+
+    /* Info cards */
+    .contact-info-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .contact-info-card {
+      background: var(--warm-white);
+      border-radius: 20px;
+      padding: 28px 32px;
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      transition: all 0.4s var(--transition);
+      border: 1.5px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+    .contact-info-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--terracotta);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.4s var(--transition);
+    }
+    .contact-info-card:hover {
+      border-color: var(--light-gray);
+      transform: translateX(6px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.07);
+    }
+    .contact-info-card:hover::before { transform: scaleY(1); }
+
+    .contact-info-icon-wrap {
+      width: 52px;
+      height: 52px;
+      background: rgba(201,97,74,0.1);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--terracotta);
+      flex-shrink: 0;
+      transition: all 0.4s var(--transition);
+    }
+    .contact-info-card:hover .contact-info-icon-wrap {
+      background: var(--terracotta);
+      color: #fff;
+      transform: scale(1.08);
+    }
+    .contact-info-text {}
+    .contact-info-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: 5px;
+    }
+    .contact-info-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--soft-black);
+      margin-bottom: 4px;
+    }
+    .contact-info-detail {
+      font-size: 14px;
+      color: var(--medium-gray);
+      line-height: 1.65;
+    }
+    .contact-info-detail a {
+      color: var(--medium-gray);
+      transition: color 0.2s;
+    }
+    .contact-info-detail a:hover { color: var(--terracotta); }
+
+    /* Hours table */
+    .hours-card {
+      background: var(--soft-black);
+      border-radius: 20px;
+      padding: 32px;
+      margin-bottom: 32px;
+    }
+    .hours-card-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--blush);
+      margin-bottom: 20px;
+    }
+    .hours-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .hours-table tr {
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .hours-table tr:last-child { border-bottom: none; }
+    .hours-table td {
+      padding: 9px 0;
+      font-size: 14px;
+    }
+    .hours-day {
+      color: rgba(255,255,255,0.55);
+      font-weight: 500;
+    }
+    .hours-time {
+      color: rgba(255,255,255,0.9);
+      text-align: right;
+      font-weight: 600;
+    }
+    .hours-today .hours-day,
+    .hours-today .hours-time {
+      color: var(--blush);
+    }
+    .today-badge {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: var(--terracotta);
+      color: #fff;
+      padding: 2px 7px;
+      border-radius: 50px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    /* Map section */
+    .map-section {}
+    .map-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: 14px;
+      display: block;
+    }
+    .map-wrapper {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 12px 48px rgba(0,0,0,0.12);
+    }
+    .map-wrapper iframe {
+      width: 100%;
+      height: 320px;
+      border: none;
+      display: block;
+      filter: saturate(0.85) contrast(1.05);
+    }
+    .map-overlay-tag {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      background: var(--warm-white);
+      border-radius: 12px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--soft-black);
+      pointer-events: none;
+    }
+    .map-pin-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--terracotta);
+      box-shadow: 0 0 0 4px rgba(201,97,74,0.2);
+      flex-shrink: 0;
+      animation: pulseDot 2s ease-in-out infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { box-shadow: 0 0 0 4px rgba(201,97,74,0.2); }
+      50% { box-shadow: 0 0 0 8px rgba(201,97,74,0.08); }
+    }
+    .map-open-link {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: var(--terracotta);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 9px 16px;
+      border-radius: 50px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.3s var(--transition);
+      box-shadow: 0 4px 16px rgba(201,97,74,0.35);
+    }
+    .map-open-link:hover {
+      background: var(--rust);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(201,97,74,0.4);
+    }
+
+    /* Social strip */
+    .contact-social {
+      display: flex;
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .contact-social-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--warm-white);
+      border: 1.5px solid var(--light-gray);
+      border-radius: 12px;
+      padding: 13px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      transition: all 0.3s var(--transition);
+      cursor: pointer;
+    }
+    .contact-social-btn:hover {
+      border-color: var(--terracotta);
+      color: var(--terracotta);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    /* ====== RIGHT COLUMN — Form ====== */
+    .contact-form-wrap {
+      background: var(--warm-white);
+      border-radius: 28px;
+      padding: 56px 52px;
+      box-shadow: 0 8px 48px rgba(0,0,0,0.06);
+      position: sticky;
+      top: 104px;
+    }
+    .form-header {
+      margin-bottom: 40px;
+    }
+    .form-header-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: 12px;
+      display: block;
+    }
+    .form-header-title {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 3.5vw, 48px);
+      font-weight: 400;
+      color: var(--soft-black);
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+    .form-header-title em { font-style: italic; color: var(--terracotta); }
+    .form-header-sub {
+      font-size: 15px;
+      color: var(--medium-gray);
+      line-height: 1.7;
+    }
+
+    /* Topic tabs */
+    .form-topic-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+    .form-topic-tab {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--medium-gray);
+      background: var(--cream);
+      border: 1.5px solid var(--light-gray);
+      padding: 7px 16px;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    .form-topic-tab:hover,
+    .form-topic-tab.active {
+      background: var(--terracotta);
+      border-color: var(--terracotta);
+      color: #fff;
+    }
+
+    /* Form fields */
+    .contact-form .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+    .contact-form .form-group {
+      margin-bottom: 18px;
+    }
+    .contact-form .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      margin-bottom: 8px;
+    }
+    .contact-form .form-label span {
+      color: var(--terracotta);
+      margin-left: 2px;
+    }
+    .contact-form .form-input,
+    .contact-form .form-select,
+    .contact-form .form-textarea {
+      width: 100%;
+      background: var(--cream);
+      border: 1.5px solid var(--light-gray);
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--charcoal);
+      outline: none;
+      transition: all 0.3s var(--transition);
+      appearance: none;
+    }
+    .contact-form .form-input::placeholder,
+    .contact-form .form-textarea::placeholder {
+      color: #bbb;
+    }
+    .contact-form .form-input:focus,
+    .contact-form .form-select:focus,
+    .contact-form .form-textarea:focus {
+      border-color: var(--terracotta);
+      background: var(--warm-white);
+      box-shadow: 0 0 0 4px rgba(201,97,74,0.1);
+    }
+    .contact-form .form-select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='none' stroke='%23888' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      cursor: pointer;
+    }
+    .contact-form .form-textarea {
+      resize: vertical;
+      min-height: 130px;
+    }
+    .char-count {
+      font-size: 11px;
+      color: var(--medium-gray);
+      text-align: right;
+      margin-top: 5px;
+    }
+    .form-rating-wrap {
+      display: flex;
+      gap: 8px;
+    }
+    .form-rating-star {
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--light-gray);
+      transition: color 0.15s, transform 0.15s;
+      user-select: none;
+    }
+    .form-rating-star.lit { color: var(--gold); }
+    .form-rating-star:hover { transform: scale(1.2); }
+    .form-checkbox-wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+    }
+    .form-checkbox-wrap input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--terracotta);
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .form-checkbox-label {
+      font-size: 13px;
+      color: var(--medium-gray);
+      line-height: 1.6;
+    }
+    .form-checkbox-label a {
+      color: var(--terracotta);
+      text-decoration: underline;
+    }
+
+    /* Submit button */
+    .btn-contact-submit {
+      width: 100%;
+      padding: 17px;
+      background: var(--terracotta);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.4s var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-contact-submit::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.12);
+      transform: translateX(-100%);
+      transition: transform 0.5s var(--transition);
+    }
+    .btn-contact-submit:hover::before { transform: translateX(0); }
+    .btn-contact-submit:hover {
+      background: var(--rust);
+      transform: translateY(-3px);
+      box-shadow: 0 14px 36px rgba(201,97,74,0.38);
+    }
+    .btn-contact-submit svg {
+      transition: transform 0.3s;
+    }
+    .btn-contact-submit:hover svg { transform: translateX(4px); }
+
+    /* Success state */
+    .form-success {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 48px 32px;
+    }
+    .form-success.show { display: flex; }
+    .form-success-icon {
+      width: 80px;
+      height: 80px;
+      background: rgba(143,168,130,0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      color: var(--sage);
+      font-size: 36px;
+      animation: successPop 0.5s var(--transition-bounce) forwards;
+    }
+    @keyframes successPop {
+      0% { transform: scale(0); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .form-success-title {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 500;
+      color: var(--soft-black);
+      margin-bottom: 10px;
+    }
+    .form-success-title em { font-style: italic; color: var(--sage); }
+    .form-success-desc {
+      font-size: 15px;
+      color: var(--medium-gray);
+      line-height: 1.7;
+      max-width: 340px;
+      margin: 0 auto 28px;
+    }
+
+    /* ====== FAQ STRIP ====== */
+    .faq-section {
+      background: var(--warm-white);
+      padding: 100px 0;
+    }
+    .faq-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 60px;
+    }
+    .faq-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 56px;
+    }
+    .faq-item {
+      background: var(--cream);
+      border-radius: 16px;
+      padding: 28px 32px;
+      cursor: pointer;
+      transition: all 0.35s var(--transition);
+      border: 1.5px solid transparent;
+    }
+    .faq-item.open {
+      background: var(--warm-white);
+      border-color: rgba(201,97,74,0.2);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    }
+    .faq-question {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .faq-q-text {
+      font-family: var(--font-display);
+      font-size: 19px;
+      font-weight: 500;
+      color: var(--soft-black);
+      line-height: 1.35;
+    }
+    .faq-toggle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--light-gray);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--charcoal);
+      flex-shrink: 0;
+      transition: all 0.3s;
+    }
+    .faq-item.open .faq-toggle {
+      background: var(--terracotta);
+      color: #fff;
+      transform: rotate(45deg);
+    }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s var(--transition), opacity 0.3s;
+      opacity: 0;
+    }
+    .faq-item.open .faq-answer {
+      max-height: 200px;
+      opacity: 1;
+    }
+    .faq-answer-inner {
+      padding-top: 16px;
+      font-size: 14px;
+      color: var(--medium-gray);
+      line-height: 1.75;
+    }
+
+    /* ====== SOCIAL CTA ====== */
+    .contact-social-cta {
+      background: linear-gradient(120deg, var(--soft-black) 0%, #2A1F1A 100%);
+      padding: 80px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .contact-social-cta::before {
+      content: '✦';
+      position: absolute;
+      font-size: 360px;
+      color: rgba(255,255,255,0.02);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .cta-inner { position: relative; z-index: 2; max-width: 640px; margin: 0 auto; }
+    .cta-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--blush);
+      margin-bottom: 16px;
+      display: block;
+    }
+    .cta-title {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 5vw, 60px);
+      font-weight: 300;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    .cta-title em { font-style: italic; color: var(--blush); }
+    .cta-desc {
+      font-size: 16px;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 36px;
+      line-height: 1.7;
+    }
+    .cta-social-row {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .cta-social-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: rgba(255,255,255,0.85);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 13px 24px;
+      border-radius: 50px;
+      transition: all 0.35s var(--transition);
+      backdrop-filter: blur(8px);
+    }
+    .cta-social-link:hover {
+      background: var(--terracotta);
+      border-color: var(--terracotta);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 28px rgba(201,97,74,0.3);
+      color: #fff;
+    }
+
+    /* ====== RESPONSIVE ====== */
+    @media (max-width: 1100px) {
+      .contact-body-inner { padding: 0 40px; gap: 48px; }
+      .faq-inner { padding: 0 40px; }
+      .contact-form-wrap { padding: 44px 36px; }
+    }
+    @media (max-width: 900px) {
+      .contact-hero-content { padding: 0 24px 60px; }
+      .contact-hero-deco { display: none; }
+      .contact-body-inner {
+        grid-template-columns: 1fr;
+        padding: 0 24px;
+        gap: 40px;
+      }
+      .contact-form-wrap {
+        padding: 36px 28px;
+        position: static;
+      }
+      .contact-form .form-row { grid-template-columns: 1fr; gap: 0; }
+      .faq-grid { grid-template-columns: 1fr; }
+      .faq-inner { padding: 0 24px; }
+      .contact-social-cta { padding: 60px 24px; }
+    }
+    @media (max-width: 480px) {
+      .contact-social { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div id="header-mount"></div>
+  <main>
+
+    <!-- ===== HERO ===== -->
+    <section class="contact-hero" aria-label="Contact Stackly">
+      <img class="contact-hero-bg" id="contact-hero-bg"
+           src="https://wsrv.nl/?url=images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1600&h=900&fit=crop&auto=format&q=75&output=webp"
+           alt="Stackly Store Interior" width="1600" height="900" loading="eager">
+      <div class="contact-hero-overlay"></div>
+      <div class="contact-hero-content">
+        <span class="contact-hero-eyebrow">✦ Let's Talk</span>
+        <h1 class="contact-hero-title">Say <em>Hello</em><br>to Stackly</h1>
+        <p class="contact-hero-sub">We'd love to hear from you — whether it's a styling question, an order query, or just to tell us what you think. Our team usually replies within 24 hours.</p>
+      </div>
+      <span class="contact-hero-deco" aria-hidden="true">HI</span>
+    </section>
+
+    <!-- ===== CONTACT BODY ===== -->
+    <div class="contact-body">
+      <div class="contact-body-inner">
+
+        <!-- LEFT: Info + Map -->
+        <div class="contact-left reveal-left">
+
+          <!-- Info Cards -->
+          <div class="contact-info-stack">
+            <div class="contact-info-card">
+              <div class="contact-info-icon-wrap">
+                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div class="contact-info-text">
+                <p class="contact-info-label">Visit Us</p>
+                <p class="contact-info-title">Flagship Store, Mumbai</p>
+                <p class="contact-info-detail">123 Fashion Ave, Linking Road,<br>Bandra West, Mumbai 400050</p>
+              </div>
+            </div>
+
+            <div class="contact-info-card">
+              <div class="contact-info-icon-wrap">
+                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91A16 16 0 0 0 15.09 16l.9-.9a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.31z"/></svg>
+              </div>
+              <div class="contact-info-text">
+                <p class="contact-info-label">Call Us</p>
+                <p class="contact-info-title">+91 98765 43210</p>
+                <p class="contact-info-detail"><a href="tel:+919876543210">Mon–Sat, 10:00 AM – 8:00 PM</a><br>Sun: 11:00 AM – 6:00 PM</p>
+              </div>
+            </div>
+
+            <div class="contact-info-card">
+              <div class="contact-info-icon-wrap">
+                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </div>
+              <div class="contact-info-text">
+                <p class="contact-info-label">Email Us</p>
+                <p class="contact-info-title">hello@stackly.in</p>
+                <p class="contact-info-detail"><a href="mailto:hello@stackly.in">We reply within 24 hours</a><br>For order issues: <a href="mailto:orders@stackly.in">orders@stackly.in</a></p>
+              </div>
+            </div>
+
+            <div class="contact-info-card">
+              <div class="contact-info-icon-wrap">
+                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div class="contact-info-text">
+                <p class="contact-info-label">Live Chat</p>
+                <p class="contact-info-title">Chat with Stackly</p>
+                <p class="contact-info-detail">Available on our website &amp; app<br>Avg. response time: under 5 minutes</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Opening Hours -->
+          <div class="hours-card">
+            <p class="hours-card-title">Store Hours</p>
+            <table class="hours-table">
+              <tbody>
+                <tr>
+                  <td class="hours-day">Monday</td>
+                  <td class="hours-time">10:00 AM – 8:00 PM</td>
+                </tr>
+                <tr>
+                  <td class="hours-day">Tuesday</td>
+                  <td class="hours-time">10:00 AM – 8:00 PM</td>
+                </tr>
+                <tr>
+                  <td class="hours-day">Wednesday</td>
+                  <td class="hours-time">10:00 AM – 8:00 PM</td>
+                </tr>
+                <tr>
+                  <td class="hours-day">Thursday</td>
+                  <td class="hours-time">10:00 AM – 8:00 PM</td>
+                </tr>
+                <tr>
+                  <td class="hours-day">Friday</td>
+                  <td class="hours-time">10:00 AM – 9:00 PM</td>
+                </tr>
+                <tr>
+                  <td class="hours-day">Saturday</td>
+                  <td class="hours-time">10:00 AM – 9:00 PM</td>
+                </tr>
+                <tr class="hours-today" id="today-row">
+                  <td class="hours-day">Sunday <span class="today-badge" id="today-badge" style="display:none">Today</span></td>
+                  <td class="hours-time">11:00 AM – 6:00 PM</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Map -->
+          <div class="map-section">
+            <span class="map-label">📍 Find Us on the Map</span>
+            <div class="map-wrapper">
+              <!-- Linking Road, Bandra West, Mumbai -->
+              <iframe
+                title="Stackly Fashion Store — Linking Road, Bandra West, Mumbai"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3771.306988063327!2d72.82806747494517!3d19.05942058216028!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c9399f7a7c07%3A0xc19a4e6b9e32218c!2sLinking%20Rd%2C%20Bandra%20West%2C%20Mumbai%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1717845200000!5m2!1sen!2sin"
+                allowfullscreen
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                aria-label="Google Maps showing Stackly store on Linking Road, Bandra West, Mumbai">
+              </iframe>
+              <div class="map-overlay-tag">
+                <div class="map-pin-dot"></div>
+                <span>Stackly Flagship · Bandra West</span>
+              </div>
+              <a href="https://maps.google.com/?q=Linking+Road,+Bandra+West,+Mumbai" target="_blank" rel="noopener" class="map-open-link">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                Directions
+              </a>
+            </div>
+
+            <!-- Social quick links -->
+            <div class="contact-social">
+              <a href="https://instagram.com" target="_blank" rel="noopener" class="contact-social-btn">
+                <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+                Instagram
+              </a>
+              <a href="https://wa.me/919876543210" target="_blank" rel="noopener" class="contact-social-btn">
+                <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+                WhatsApp
+              </a>
+              <a href="mailto:hello@stackly.in" class="contact-social-btn">
+                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                Email
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Form -->
+        <div class="reveal-right">
+          <div class="contact-form-wrap">
+            <!-- Success state -->
+            <div class="form-success" id="form-success">
+              <div class="form-success-icon">✓</div>
+              <h3 class="form-success-title">Message <em>Sent!</em></h3>
+              <p class="form-success-desc">Thank you for reaching out! Our team will get back to you within 24 hours. In the meantime, feel free to browse our latest collection.</p>
+              <a href="shop.html" class="btn-primary" style="display:inline-flex">
+                Continue Shopping
+                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+
+            <!-- The form itself -->
+            <div id="form-content">
+              <div class="form-header">
+                <span class="form-header-label">Drop Us a Line</span>
+                <h2 class="form-header-title">What's on Your <em>Mind?</em></h2>
+                <p class="form-header-sub">Select a topic and fill in your details — we'll get back to you faster than next-day delivery.</p>
+              </div>
+
+              <!-- Topic tabs -->
+              <div class="form-topic-tabs" role="group" aria-label="Message topic">
+                <button class="form-topic-tab active" data-topic="general">General</button>
+                <button class="form-topic-tab" data-topic="order">My Order</button>
+                <button class="form-topic-tab" data-topic="returns">Returns</button>
+                <button class="form-topic-tab" data-topic="styling">Styling</button>
+                <button class="form-topic-tab" data-topic="wholesale">Wholesale</button>
+                <button class="form-topic-tab" data-topic="press">Press</button>
+              </div>
+
+              <form class="contact-form" id="contact-form" novalidate>
+                <input type="hidden" name="topic" id="form-topic" value="general">
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label" for="f-name">First Name <span>*</span></label>
+                    <input type="text" id="f-name" name="first_name" class="form-input" placeholder="Priya" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="f-lname">Last Name <span>*</span></label>
+                    <input type="text" id="f-lname" name="last_name" class="form-input" placeholder="Sharma" required>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="f-email">Email Address <span>*</span></label>
+                  <input type="email" id="f-email" name="email" class="form-input" placeholder="priya@example.com" required>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label" for="f-phone">Phone</label>
+                    <input type="tel" id="f-phone" name="phone" class="form-input" placeholder="+91 98765 43210">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="f-city">City</label>
+                    <input type="text" id="f-city" name="city" class="form-input" placeholder="Mumbai">
+                  </div>
+                </div>
+
+                <div class="form-group" id="order-id-group" style="display:none">
+                  <label class="form-label" for="f-order">Order ID</label>
+                  <input type="text" id="f-order" name="order_id" class="form-input" placeholder="STK-00012345">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="f-subject">Subject <span>*</span></label>
+                  <select id="f-subject" name="subject" class="form-select" required>
+                    <option value="" disabled selected>Choose a subject…</option>
+                    <option>General Enquiry</option>
+                    <option>Order Status / Tracking</option>
+                    <option>Returns &amp; Refunds</option>
+                    <option>Sizing &amp; Styling Advice</option>
+                    <option>Product Availability</option>
+                    <option>Wholesale &amp; B2B</option>
+                    <option>Press &amp; Partnerships</option>
+                    <option>Feedback &amp; Suggestions</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="f-msg">Your Message <span>*</span></label>
+                  <textarea id="f-msg" name="message" class="form-textarea" placeholder="Tell us how we can help you…" maxlength="800" required></textarea>
+                  <div class="char-count"><span id="char-num">0</span>/800</div>
+                </div>
+
+                <!-- Rating (optional) -->
+                <div class="form-group" id="rating-group" style="display:none">
+                  <label class="form-label">Rate Your Last Purchase</label>
+                  <div class="form-rating-wrap" id="star-rating">
+                    <span class="form-rating-star" data-star="1">★</span>
+                    <span class="form-rating-star" data-star="2">★</span>
+                    <span class="form-rating-star" data-star="3">★</span>
+                    <span class="form-rating-star" data-star="4">★</span>
+                    <span class="form-rating-star" data-star="5">★</span>
+                  </div>
+                  <input type="hidden" id="f-rating" name="rating" value="">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-checkbox-wrap">
+                    <input type="checkbox" id="f-consent" name="consent" required>
+                    <span class="form-checkbox-label">I agree to Stackly's <a href="#">Privacy Policy</a> and consent to being contacted about my enquiry. No spam, ever.</span>
+                  </label>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-checkbox-wrap">
+                    <input type="checkbox" id="f-newsletter" name="newsletter">
+                    <span class="form-checkbox-label">Subscribe me to the Stackly newsletter for style tips, new arrivals &amp; exclusive offers.</span>
+                  </label>
+                </div>
+
+                <button type="submit" class="btn-contact-submit">
+                  Send Message
+                  <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /contact-body-inner -->
+    </div>
+
+    <!-- ===== FAQ ===== -->
+    <section class="faq-section">
+      <div class="faq-inner">
+        <div class="section-header reveal">
+          <span class="section-label">Common Questions</span>
+          <h2 class="section-title">Quick <em>Answers</em></h2>
+          <p class="section-subtitle">Can't find what you're looking for? Drop us a message above and we'll respond within 24 hours.</p>
+        </div>
+
+        <div class="faq-grid stagger">
+
+          <div class="faq-item open">
+            <div class="faq-question">
+              <p class="faq-q-text">How long does standard delivery take?</p>
+              <div class="faq-toggle">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+              </div>
+            </div>
+            <div class="faq-answer">
+              <p class="faq-answer-inner">Standard delivery across India takes 3–5 business days. Express delivery (1–2 days) is available for most metro cities. Orders placed before 2 PM IST are usually dispatched the same day.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <p class="faq-q-text">What is your return and exchange policy?</p>
+              <div class="faq-toggle">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+              </div>
+            </div>
+            <div class="faq-answer">
+              <p class="faq-answer-inner">We offer hassle-free returns within 30 days of delivery. Items must be unworn, unwashed, and have original tags attached. Refunds are processed within 5–7 business days to your original payment method.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <p class="faq-q-text">Do you ship internationally?</p>
+              <div class="faq-toggle">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+              </div>
+            </div>
+            <div class="faq-answer">
+              <p class="faq-answer-inner">Yes! We ship to over 40 countries. International orders typically arrive within 7–14 business days. Free international shipping is available on orders above ₹8,000.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <p class="faq-q-text">How do I find my correct size?</p>
+              <div class="faq-toggle">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+              </div>
+            </div>
+            <div class="faq-answer">
+              <p class="faq-answer-inner">Every product page has a detailed size guide with body measurements. If you're between sizes, we generally recommend sizing up for comfort. Our styling team is also available via chat for personalised advice.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <p class="faq-q-text">Can I modify or cancel my order?</p>
+              <div class="faq-toggle">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+              </div>
+            </div>
+            <div class="faq-answer">
+              <p class="faq-answer-inner">Orders can be modified or cancelled within 2 hours of placement. After that, the order enters our fulfilment pipeline. Email orders@stackly.in with your order ID and we'll do our best to help.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <p class="faq-q-text">Do you offer gift wrapping?</p>
+              <div class="faq-toggle">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+              </div>
+            </div>
+            <div class="faq-answer">
+              <p class="faq-answer-inner">Absolutely! Complimentary gift wrapping is available at checkout. You can also add a personalised message card. Perfect for birthdays, anniversaries, or just because.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SOCIAL CTA ===== -->
+    <section class="contact-social-cta">
+      <div class="cta-inner reveal">
+        <span class="cta-label">Stay Connected</span>
+        <h2 class="cta-title">Follow Us for Daily <em>Style</em></h2>
+        <p class="cta-desc">Join our community of 200K+ fashion lovers. Tag your outfits with #WearStackly to get featured on our page.</p>
+        <div class="cta-social-row">
+          <a href="404.html" target="_blank" rel="noopener" class="cta-social-link">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+            @stackly.fashion
+          </a>
+          <a href="404.html" target="_blank" rel="noopener" class="cta-social-link">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+            Pinterest
+          </a>
+          <a href="404.html" target="_blank" rel="noopener" class="cta-social-link">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            Facebook
+          </a>
+          <a href="404.html" target="_blank" rel="noopener" class="cta-social-link">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            Twitter / X
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <div id="footer-mount"></div>
+  <script src="component.js"></script>
+  <script src="main.js"></script>
+  <script>
+    // ---- Hero image entrance ----
+    const heroBg = document.getElementById('contact-hero-bg');
+    if (heroBg) {
+      heroBg.addEventListener('load', function() { heroBg.classList.add('loaded'); });
+      if (heroBg.complete) heroBg.classList.add('loaded');
+    }
+
+    // ---- Highlight today's hours row ----
+    (function() {
+      const days = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
+      const today = days[new Date().getDay()];
+      const todayBadge = document.getElementById('today-badge');
+      const todayRow = document.getElementById('today-row');
+      const rows = document.querySelectorAll('.hours-table tr');
+
+      // Remove default today highlighting from sunday row
+      if (todayRow) todayRow.classList.remove('hours-today');
+
+      rows.forEach(function(row) {
+        const dayCell = row.querySelector('.hours-day');
+        if (!dayCell) return;
+        const dayText = dayCell.textContent.trim().toLowerCase();
+        if (dayText.startsWith(today)) {
+          row.classList.add('hours-today');
+          // Add badge
+          const badge = document.createElement('span');
+          badge.className = 'today-badge';
+          badge.textContent = 'Today';
+          dayCell.appendChild(badge);
+        }
+      });
+    })();
+
+    // ---- Topic tabs ----
+    const topicTabs = document.querySelectorAll('.form-topic-tab');
+    const formTopic = document.getElementById('form-topic');
+    const orderGroup = document.getElementById('order-id-group');
+    const ratingGroup = document.getElementById('rating-group');
+
+    topicTabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        topicTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const topic = tab.getAttribute('data-topic');
+        if (formTopic) formTopic.value = topic;
+        // Show order ID for order/returns topics
+        if (orderGroup) orderGroup.style.display = (topic === 'order' || topic === 'returns') ? 'block' : 'none';
+        // Show rating for general/feedback
+        if (ratingGroup) ratingGroup.style.display = (topic === 'general' || topic === 'order') ? 'block' : 'none';
+      });
+    });
+
+    // ---- Character count ----
+    const msgArea = document.getElementById('f-msg');
+    const charNum = document.getElementById('char-num');
+    if (msgArea && charNum) {
+      msgArea.addEventListener('input', function() {
+        charNum.textContent = msgArea.value.length;
+      });
+    }
+
+    // ---- Star rating ----
+    const stars = document.querySelectorAll('.form-rating-star');
+    const ratingInput = document.getElementById('f-rating');
+    let currentRating = 0;
+
+    stars.forEach(function(star) {
+      star.addEventListener('mouseover', function() {
+        const val = parseInt(star.getAttribute('data-star'));
+        stars.forEach(function(s, i) {
+          s.classList.toggle('lit', i < val);
+        });
+      });
+      star.addEventListener('mouseout', function() {
+        stars.forEach(function(s, i) {
+          s.classList.toggle('lit', i < currentRating);
+        });
+      });
+      star.addEventListener('click', function() {
+        currentRating = parseInt(star.getAttribute('data-star'));
+        if (ratingInput) ratingInput.value = currentRating;
+        stars.forEach(function(s, i) {
+          s.classList.toggle('lit', i < currentRating);
+        });
+      });
+    });
+
+    // ---- Form submit ----
+    const contactForm = document.getElementById('contact-form');
+    const formContent = document.getElementById('form-content');
+    const formSuccess = document.getElementById('form-success');
+
+    if (contactForm) {
+      contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        // Basic validation
+        const name = document.getElementById('f-name').value.trim();
+        const email = document.getElementById('f-email').value.trim();
+        const message = document.getElementById('f-msg').value.trim();
+        const consent = document.getElementById('f-consent').checked;
+
+        if (!name || !email || !message || !consent) {
+          // Show toast via main.js showToast — fallback alert
+          const toast = new CustomEvent('stackly-toast', { detail: '⚠️ Please fill in all required fields and accept the privacy policy.' });
+          document.dispatchEvent(toast);
+          // Simple inline feedback
+          if (!name) document.getElementById('f-name').style.borderColor = '#C9614A';
+          if (!email) document.getElementById('f-email').style.borderColor = '#C9614A';
+          if (!message) document.getElementById('f-msg').style.borderColor = '#C9614A';
+          return;
+        }
+
+        // Simulate submission
+        const submitBtn = contactForm.querySelector('.btn-contact-submit');
+        if (submitBtn) {
+          submitBtn.textContent = 'Sending…';
+          submitBtn.disabled = true;
+        }
+
+        setTimeout(function() {
+          if (formContent) formContent.style.display = 'none';
+          if (formSuccess) formSuccess.classList.add('show');
+        }, 900);
+      });
+
+      // Clear red borders on input
+      contactForm.querySelectorAll('.form-input, .form-textarea').forEach(function(input) {
+        input.addEventListener('input', function() {
+          input.style.borderColor = '';
+        });
+      });
+    }
+
+    // ---- FAQ accordion ----
+    document.querySelectorAll('.faq-item').forEach(function(item) {
+      item.addEventListener('click', function() {
+        const isOpen = item.classList.contains('open');
+        // Close all
+        document.querySelectorAll('.faq-item').forEach(function(i) { i.classList.remove('open'); });
+        // Toggle clicked
+        if (!isOpen) item.classList.add('open');
+      });
+    });
+  </script>
+</body>
+</html>
