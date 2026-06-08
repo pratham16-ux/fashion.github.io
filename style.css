@@ -186,7 +186,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 50px;
+  padding: 05px 40px;
   transition: all 0.4s var(--transition);
   background: rgba(250, 247, 242, 0.92);
   backdrop-filter: blur(20px);
