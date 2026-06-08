@@ -126,6 +126,8 @@ a:hover ~ .cursor, button:hover ~ .cursor { width: 20px; height: 20px; }
 
 .loader-logo img {
   width: 180px;
+  /* Terracotta tint on loader logo */
+  filter: invert(42%) sepia(60%) saturate(600%) hue-rotate(330deg) brightness(90%) contrast(95%);
 }
 
 .loader-bar {
@@ -184,7 +186,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 60px;
+  padding: 14px 50px;
   transition: all 0.4s var(--transition);
   background: rgba(250, 247, 242, 0.92);
   backdrop-filter: blur(20px);
@@ -193,11 +195,12 @@ header {
 }
 
 header.scrolled .nav-wrapper {
-  padding: 14px 60px;
+  padding: 10px 50px;
   border-bottom-color: var(--light-gray);
   box-shadow: 0 2px 20px rgba(0,0,0,0.06);
 }
 
+/* ========== HEADER LOGO — TERRACOTTA COLOUR ========== */
 .logo {
   display: flex;
   align-items: center;
@@ -207,11 +210,15 @@ header.scrolled .nav-wrapper {
 .logo img {
   width: 130px;
   height: auto;
-  transition: transform 0.3s var(--transition);
+  /* Make logo the same colour as the shop / CTA button (#C9614A terracotta) */
+  filter: invert(42%) sepia(60%) saturate(600%) hue-rotate(330deg) brightness(90%) contrast(95%);
+  transition: transform 0.3s var(--transition), filter 0.3s;
 }
 
 .logo img:hover {
   transform: scale(1.04);
+  /* Slightly darker on hover — matches rust (#A8432A) */
+  filter: invert(30%) sepia(70%) saturate(700%) hue-rotate(340deg) brightness(80%) contrast(100%);
 }
 
 .nav-links {
@@ -867,7 +874,6 @@ section {
   overflow: hidden;
   aspect-ratio: 3/4;
   cursor: pointer;
-  group: true;
 }
 
 .category-card:first-child {
@@ -1510,15 +1516,13 @@ section {
   font-family: var(--font-accent);
   font-size: 22px;
   letter-spacing: 0.1em;
-  color: var(--light-gray);
-  transition: color 0.3s;
   filter: grayscale(1) opacity(0.4);
   transition: all 0.3s;
 }
 
 .brand-logo:hover {
-  color: var(--charcoal);
   filter: grayscale(0) opacity(1);
+  color: var(--charcoal);
 }
 
 /* ========== LOOKBOOK / INSTAGRAM ========== */
@@ -1612,11 +1616,22 @@ footer {
   padding: 80px 60px 60px;
 }
 
-.footer-brand .logo { margin-bottom: 20px; }
+/* ========== FOOTER LOGO — TERRACOTTA COLOUR ========== */
+.footer-brand .logo {
+  margin-bottom: 20px;
+}
 
 .footer-brand .logo img {
   width: 120px;
-  filter: brightness(0) invert(1);
+  /* Same terracotta as the shop button — removes the white invert */
+  filter: invert(42%) sepia(60%) saturate(600%) hue-rotate(330deg) brightness(90%) contrast(95%);
+  opacity: 1;
+  transition: filter 0.3s, opacity 0.3s;
+}
+
+.footer-brand .logo img:hover {
+  /* Slightly lighter on hover */
+  filter: invert(50%) sepia(55%) saturate(500%) hue-rotate(325deg) brightness(100%) contrast(90%);
   opacity: 0.85;
 }
 
@@ -2605,6 +2620,10 @@ footer {
   .cursor, .cursor-follower { display: none; }
   body { cursor: auto; }
   .back-to-top { right: 20px; bottom: 20px; }
+
+  /* Logo size adjustments on mobile */
+  .logo img { width: 110px; }
+  .footer-brand .logo img { width: 100px; }
 }
 
 @media (max-width: 480px) {
@@ -2616,6 +2635,9 @@ footer {
   .hero-title { font-size: 38px; }
   .hero-actions { flex-direction: column; align-items: flex-start; }
   .stats-grid { grid-template-columns: 1fr 1fr; }
+
+  .logo img { width: 96px; }
+  .footer-brand .logo img { width: 88px; }
 }
 
 /* ==========================================
