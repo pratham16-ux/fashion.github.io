@@ -360,7 +360,7 @@
     <div class="cart-grand">
       <span>Total</span><span id="cartTotalEl">₹0</span>
     </div>
-    <button class="btn-checkout">Proceed to Checkout →</button>
+    <button class="btn-checkout"  onclick="proceedToCheckout()">Proceed to Checkout →</button>
     <button class="btn-continue-shop" id="continueShopping">Continue Shopping</button>
     <p class="cart-free-ship">✓ Free shipping on orders above ₹2,000</p>
   </div>
@@ -880,6 +880,8 @@ function renderProducts(catFilter) {
   }
 }
 
+
+
 // ── WISHLIST ───────────────────────────────────────────────────
 function toggleWish(btn) {
   btn.classList.toggle('active');
@@ -965,6 +967,11 @@ document.querySelectorAll('.page-btn:not(.arrow)').forEach(btn=>{
 document.getElementById('sortSelect').addEventListener('change',function(){
   if(typeof showToast==='function') showToast('✓ Sorted: '+this.value.replace('Sort: ',''));
 });
+
+function proceedToCheckout() {
+    window.location.href = "404.html";
+}
+
 
 // ── INIT ───────────────────────────────────────────────────────
 renderProducts('all');
