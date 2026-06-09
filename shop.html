@@ -3,539 +3,321 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Stackly Fashion Store — Shop our full collection of women's, men's, and accessories.">
+  <meta name="description" content="Stackly Fashion Store — Shop our full collection">
   <title>Shop — Stackly Fashion</title>
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <style>
-    /* ====== SHOP PAGE EXTRAS ====== */
+    /* ====== CART DRAWER ====== */
+    .cart-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+      z-index: 1500; opacity: 0; visibility: hidden;
+      transition: all 0.4s; backdrop-filter: blur(4px);
+    }
+    .cart-overlay.open { opacity: 1; visibility: visible; }
+    .cart-drawer {
+      position: fixed; top: 0; right: -500px; width: 460px; height: 100vh;
+      background: var(--warm-white); z-index: 1600;
+      display: flex; flex-direction: column;
+      transition: right 0.45s var(--transition);
+      box-shadow: -8px 0 60px rgba(0,0,0,0.15);
+    }
+    .cart-drawer.open { right: 0; }
+    .cart-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 22px 28px; border-bottom: 1px solid var(--light-gray);
+    }
+    .cart-header h2 {
+      font-family: var(--font-display); font-size: 26px; font-weight: 500;
+      color: var(--soft-black); display: flex; align-items: center; gap: 10px;
+    }
+    .cart-count-badge {
+      background: var(--terracotta); color: #fff; font-size: 11px; font-weight: 700;
+      width: 22px; height: 22px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cart-close-btn {
+      width: 36px; height: 36px; border-radius: 50%; border: none;
+      background: var(--light-gray); color: var(--charcoal); font-size: 17px;
+      display: flex; align-items: center; justify-content: center; transition: all 0.25s;
+    }
+    .cart-close-btn:hover { background: var(--terracotta); color: #fff; }
+    .cart-body { flex: 1; overflow-y: auto; padding: 16px 28px; }
+    .cart-empty-state {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; height: 100%; text-align: center; gap: 14px; padding: 40px 0;
+    }
+    .cart-empty-icon { font-size: 60px; opacity: 0.25; }
+    .cart-empty-state h3 { font-family: var(--font-display); font-size: 22px; font-weight: 400; color: var(--medium-gray); }
+    .cart-empty-state p { font-size: 13px; color: var(--medium-gray); }
+    .cart-item {
+      display: flex; gap: 14px; padding: 15px 0;
+      border-bottom: 1px solid var(--light-gray);
+      animation: ciSlideIn 0.35s var(--transition-bounce);
+    }
+    @keyframes ciSlideIn { from { opacity:0; transform: translateX(24px); } to { opacity:1; transform: none; } }
+    .cart-item-img {
+      width: 78px; height: 96px; border-radius: 10px; object-fit: cover;
+      flex-shrink: 0; background: var(--light-gray);
+    }
+    .cart-item-info { flex: 1; min-width: 0; }
+    .ci-brand { font-size: 9px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 3px; }
+    .ci-name { font-family: var(--font-display); font-size: 15px; font-weight: 500; color: var(--soft-black); margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ci-meta { font-size: 11px; color: var(--medium-gray); margin-bottom: 10px; }
+    .ci-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+    .ci-price { font-size: 15px; font-weight: 700; color: var(--soft-black); }
+    .ci-qty {
+      display: flex; align-items: center;
+      border: 1.5px solid var(--light-gray); border-radius: 8px; overflow: hidden;
+    }
+    .ci-qty-btn {
+      width: 28px; height: 28px; border: none; background: none; font-size: 15px;
+      color: var(--charcoal); display: flex; align-items: center; justify-content: center; transition: background 0.2s;
+    }
+    .ci-qty-btn:hover { background: var(--light-gray); }
+    .ci-qty-val { width: 30px; text-align: center; font-size: 13px; font-weight: 600; }
+    .ci-remove { background: none; border: none; color: var(--medium-gray); font-size: 16px; padding: 4px; transition: color 0.2s; line-height: 1; }
+    .ci-remove:hover { color: #e53935; }
+    .cart-footer {
+      padding: 18px 28px; border-top: 1px solid var(--light-gray); background: var(--warm-white);
+    }
+    .cart-line { display: flex; justify-content: space-between; font-size: 13px; color: var(--charcoal); margin-bottom: 7px; }
+    .cart-line.free { color: var(--sage); font-weight: 600; }
+    .cart-grand {
+      display: flex; justify-content: space-between;
+      font-size: 18px; font-weight: 700; padding-top: 12px; margin-top: 6px;
+      border-top: 1px solid var(--light-gray); margin-bottom: 18px;
+    }
+    .cart-grand span:last-child { color: var(--terracotta); }
+    .btn-checkout {
+      width: 100%; padding: 15px; background: var(--terracotta); color: #fff;
+      border: none; border-radius: 12px; font-family: var(--font-body);
+      font-size: 14px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase;
+      transition: all 0.3s var(--transition-bounce); margin-bottom: 10px;
+    }
+    .btn-checkout:hover { background: var(--rust); transform: translateY(-2px); box-shadow: 0 10px 28px rgba(201,97,74,0.35); }
+    .btn-continue-shop {
+      width: 100%; padding: 12px; background: transparent; color: var(--charcoal);
+      border: 1.5px solid var(--light-gray); border-radius: 12px; font-family: var(--font-body);
+      font-size: 12px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; transition: all 0.3s;
+    }
+    .btn-continue-shop:hover { border-color: var(--terracotta); color: var(--terracotta); }
+    .cart-free-ship { text-align: center; font-size: 11px; color: var(--sage); font-weight: 600; margin-top: 10px; }
+
+    /* ====== SHOP HERO ====== */
     .shop-hero {
       background: linear-gradient(135deg, var(--cream) 0%, #F0EBE3 100%);
-      padding: 160px 60px 80px;
-      position: relative;
-      overflow: hidden;
+      padding: 160px 60px 80px; position: relative; overflow: hidden;
     }
     .shop-hero::before {
-      content: 'SHOP';
-      position: absolute;
-      right: -40px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-family: var(--font-accent);
-      font-size: 240px;
-      color: rgba(201,97,74,0.05);
-      line-height: 1;
-      pointer-events: none;
+      content: 'SHOP'; position: absolute; right: -40px; top: 50%;
+      transform: translateY(-50%); font-family: var(--font-accent);
+      font-size: 240px; color: rgba(201,97,74,0.05); line-height: 1; pointer-events: none;
     }
     .shop-hero-inner {
-      max-width: 1280px;
-      margin: 0 auto;
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 24px;
+      max-width: 1280px; margin: 0 auto;
+      display: flex; align-items: flex-end; justify-content: space-between;
+      flex-wrap: wrap; gap: 24px;
     }
-    .shop-hero-title {
-      font-family: var(--font-display);
-      font-size: clamp(42px, 5vw, 72px);
-      font-weight: 300;
-      color: var(--soft-black);
-      line-height: 1.1;
-    }
+    .shop-hero-title { font-family: var(--font-display); font-size: clamp(42px, 5vw, 72px); font-weight: 300; color: var(--soft-black); line-height: 1.1; }
     .shop-hero-title em { font-style: italic; color: var(--terracotta); }
-    .shop-hero-meta {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-    }
-    .shop-hero-count {
-      font-size: 13px;
-      color: var(--medium-gray);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-    .shop-hero-tags {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
+    .shop-hero-meta { display: flex; align-items: center; gap: 24px; }
+    .shop-hero-count { font-size: 13px; color: var(--medium-gray); letter-spacing: 0.08em; text-transform: uppercase; }
+    .shop-hero-tags { display: flex; gap: 8px; flex-wrap: wrap; }
     .shop-hero-tag {
-      background: var(--warm-white);
-      border: 1.5px solid var(--light-gray);
-      color: var(--charcoal);
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 6px 16px;
-      border-radius: 50px;
-      cursor: pointer;
+      background: var(--warm-white); border: 1.5px solid var(--light-gray);
+      color: var(--charcoal); font-size: 12px; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 6px 16px; border-radius: 50px;
       transition: all 0.3s var(--transition);
     }
-    .shop-hero-tag:hover,
-    .shop-hero-tag.active {
-      background: var(--terracotta);
-      border-color: var(--terracotta);
-      color: #fff;
-    }
+    .shop-hero-tag:hover, .shop-hero-tag.active { background: var(--terracotta); border-color: var(--terracotta); color: #fff; }
 
     /* ====== SHOP LAYOUT ====== */
-    .shop-page-wrap {
-      background: var(--cream);
-      padding: 60px 0 100px;
-    }
+    .shop-page-wrap { background: var(--cream); padding: 60px 0 100px; }
     .shop-inner {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 0 60px;
-      display: grid;
-      grid-template-columns: 272px 1fr;
-      gap: 48px;
-      align-items: start;
+      max-width: 1280px; margin: 0 auto; padding: 0 60px;
+      display: grid; grid-template-columns: 272px 1fr; gap: 48px; align-items: start;
     }
 
     /* ====== FILTER SIDEBAR ====== */
     .filter-sidebar {
-      background: var(--warm-white);
-      border-radius: 20px;
-      padding: 32px;
-      position: sticky;
-      top: 100px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+      background: var(--warm-white); border-radius: 20px; padding: 32px;
+      position: sticky; top: 100px; box-shadow: 0 4px 24px rgba(0,0,0,0.05);
     }
     .filter-sidebar-title {
-      font-family: var(--font-display);
-      font-size: 24px;
-      font-weight: 500;
-      color: var(--soft-black);
-      margin-bottom: 28px;
-      padding-bottom: 20px;
+      font-family: var(--font-display); font-size: 24px; font-weight: 500;
+      color: var(--soft-black); margin-bottom: 28px; padding-bottom: 20px;
       border-bottom: 1px solid var(--light-gray);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      display: flex; justify-content: space-between; align-items: center;
     }
-    .filter-clear {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--terracotta);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      cursor: pointer;
-      transition: opacity 0.2s;
-    }
+    .filter-clear { font-size: 12px; font-weight: 600; color: var(--terracotta); text-transform: uppercase; letter-spacing: 0.08em; background: none; border: none; transition: opacity 0.2s; }
     .filter-clear:hover { opacity: 0.7; }
-    .filter-section {
-      margin-bottom: 28px;
-      padding-bottom: 28px;
-      border-bottom: 1px solid var(--light-gray);
-    }
-    .filter-section:last-child {
-      margin-bottom: 0;
-      padding-bottom: 0;
-      border-bottom: none;
-    }
+    .filter-section { margin-bottom: 28px; padding-bottom: 28px; border-bottom: 1px solid var(--light-gray); }
+    .filter-section:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
     .filter-title {
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--soft-black);
-      margin-bottom: 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
+      font-size: 12px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--soft-black); margin-bottom: 16px;
+      display: flex; justify-content: space-between; align-items: center; cursor: pointer;
     }
-    .filter-title-arrow {
-      transition: transform 0.3s;
-      color: var(--medium-gray);
-    }
+    .filter-title-arrow { transition: transform 0.3s; color: var(--medium-gray); }
     .filter-section.collapsed .filter-title-arrow { transform: rotate(-90deg); }
     .filter-section.collapsed .filter-body { display: none; }
-
-    .filter-checkbox {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 10px;
-      cursor: pointer;
-    }
-    .filter-checkbox-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 14px;
-      color: var(--charcoal);
-      transition: color 0.2s;
-    }
+    .filter-checkbox { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; cursor: pointer; }
+    .filter-checkbox-left { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--charcoal); transition: color 0.2s; }
     .filter-checkbox:hover .filter-checkbox-left { color: var(--terracotta); }
-    .filter-checkbox input[type="checkbox"] {
-      width: 16px;
-      height: 16px;
-      accent-color: var(--terracotta);
-      cursor: pointer;
-    }
-    .filter-count {
-      font-size: 11px;
-      color: var(--medium-gray);
-      background: var(--light-gray);
-      padding: 2px 7px;
-      border-radius: 50px;
-    }
-
-    /* Price slider */
-    .price-range-wrap {
-      position: relative;
-    }
-    .price-labels {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 12px;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--charcoal);
-    }
+    .filter-checkbox input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--terracotta); cursor: pointer; }
+    .filter-count { font-size: 11px; color: var(--medium-gray); background: var(--light-gray); padding: 2px 7px; border-radius: 50px; }
+    .price-range-wrap {}
+    .price-labels { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; font-weight: 600; color: var(--charcoal); }
     .price-slider {
-      width: 100%;
-      -webkit-appearance: none;
-      appearance: none;
-      height: 3px;
-      border-radius: 2px;
-      background: linear-gradient(to right, var(--terracotta) 0%, var(--terracotta) 70%, var(--light-gray) 70%);
-      outline: none;
+      width: 100%; -webkit-appearance: none; appearance: none; height: 3px;
+      border-radius: 2px; background: linear-gradient(to right, var(--terracotta) 0%, var(--terracotta) 70%, var(--light-gray) 70%); outline: none;
     }
     .price-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: var(--terracotta);
-      cursor: pointer;
-      border: 3px solid #fff;
-      box-shadow: 0 2px 8px rgba(201,97,74,0.35);
+      -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%;
+      background: var(--terracotta); cursor: pointer; border: 3px solid #fff; box-shadow: 0 2px 8px rgba(201,97,74,0.35);
     }
-
-    /* Color swatches in filter */
-    .filter-colors {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
+    .filter-colors { display: flex; gap: 10px; flex-wrap: wrap; }
     .filter-color-swatch {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      cursor: pointer;
-      border: 3px solid transparent;
-      outline: 2px solid transparent;
-      transition: all 0.25s;
+      width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
+      border: 3px solid transparent; outline: 2px solid transparent; transition: all 0.25s;
     }
-    .filter-color-swatch:hover,
-    .filter-color-swatch.active {
-      outline-color: var(--terracotta);
-      outline-offset: 2px;
-    }
+    .filter-color-swatch:hover, .filter-color-swatch.active { outline-color: var(--terracotta); outline-offset: 2px; }
 
-    /* ====== PRODUCTS MAIN AREA ====== */
+    /* ====== SHOP MAIN ====== */
     .shop-main {}
     .shop-toolbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 32px;
-      flex-wrap: wrap;
-      gap: 16px;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 32px; flex-wrap: wrap; gap: 16px;
     }
-    .shop-result-info {
-      font-size: 14px;
-      color: var(--medium-gray);
-    }
-    .shop-result-info strong {
-      color: var(--charcoal);
-      font-weight: 600;
-    }
-    .shop-toolbar-right {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-    .view-toggle {
-      display: flex;
-      gap: 4px;
-    }
+    .shop-result-info { font-size: 14px; color: var(--medium-gray); }
+    .shop-result-info strong { color: var(--charcoal); font-weight: 600; }
+    .shop-toolbar-right { display: flex; align-items: center; gap: 16px; }
+    .view-toggle { display: flex; gap: 4px; }
     .view-btn {
-      width: 36px;
-      height: 36px;
-      border: 1.5px solid var(--light-gray);
-      border-radius: 8px;
-      background: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--medium-gray);
-      transition: all 0.25s;
+      width: 36px; height: 36px; border: 1.5px solid var(--light-gray); border-radius: 8px;
+      background: none; display: flex; align-items: center; justify-content: center;
+      color: var(--medium-gray); transition: all 0.25s;
     }
-    .view-btn.active {
-      border-color: var(--terracotta);
-      background: var(--terracotta);
-      color: #fff;
-    }
+    .view-btn.active { border-color: var(--terracotta); background: var(--terracotta); color: #fff; }
     .sort-select {
-      border: 1.5px solid var(--light-gray);
-      border-radius: 50px;
-      padding: 9px 20px;
-      font-family: var(--font-body);
-      font-size: 13px;
-      color: var(--charcoal);
-      background: var(--warm-white);
-      cursor: pointer;
-      outline: none;
-      transition: border-color 0.3s;
-      font-weight: 500;
+      border: 1.5px solid var(--light-gray); border-radius: 50px; padding: 9px 20px;
+      font-family: var(--font-body); font-size: 13px; color: var(--charcoal);
+      background: var(--warm-white); outline: none; transition: border-color 0.3s; font-weight: 500;
     }
     .sort-select:focus { border-color: var(--terracotta); }
-
-    /* Active filter tags */
-    .active-filters {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 24px;
-    }
+    .active-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
     .active-filter-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(201,97,74,0.1);
-      color: var(--terracotta);
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      padding: 5px 12px;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: background 0.2s;
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(201,97,74,0.1); color: var(--terracotta);
+      font-size: 12px; font-weight: 600; letter-spacing: 0.05em;
+      padding: 5px 12px; border-radius: 50px; cursor: pointer; transition: background 0.2s;
     }
     .active-filter-tag:hover { background: rgba(201,97,74,0.2); }
-    .active-filter-tag-x { font-size: 14px; line-height: 1; margin-top: -1px; }
 
-    /* Products grid */
-    .products-grid-4 {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
+    /* Collection section header */
+    .collection-section-head {
+      font-family: var(--font-display); font-size: 28px; font-weight: 400;
+      color: var(--soft-black); margin: 48px 0 20px; padding-bottom: 14px;
+      border-bottom: 1.5px solid var(--light-gray);
+      display: flex; align-items: center; gap: 14px;
     }
-    .products-grid-4.view-2col {
-      grid-template-columns: repeat(2, 1fr);
+    .collection-section-head:first-child { margin-top: 0; }
+    .collection-section-head em { font-style: italic; color: var(--terracotta); }
+    .coll-pill {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+      background: rgba(201,97,74,0.1); color: var(--terracotta);
+      padding: 4px 11px; border-radius: 50px;
     }
 
-    /* ===== PRODUCT CARD (extended) ===== */
+    /* ====== PRODUCTS GRID ====== */
+    .products-grid-4 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .products-grid-4.view-2col { grid-template-columns: repeat(2, 1fr); }
+
+    /* ====== PRODUCT CARD ====== */
     .product-card {
-      background: var(--warm-white);
-      border-radius: 16px;
-      overflow: hidden;
+      background: var(--warm-white); border-radius: 16px; overflow: hidden;
       transition: transform 0.4s var(--transition), box-shadow 0.4s var(--transition);
-      position: relative;
-      cursor: pointer;
+      position: relative; cursor: pointer;
     }
-    .product-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 16px 48px rgba(0,0,0,0.1);
-    }
-    .product-img-wrap {
-      position: relative;
-      overflow: hidden;
-      aspect-ratio: 3/4;
-      background: var(--light-gray);
-    }
-    .product-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.7s var(--transition);
-    }
+    .product-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(0,0,0,0.1); }
+    .product-img-wrap { position: relative; overflow: hidden; aspect-ratio: 3/4; background: var(--light-gray); }
+    .product-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s var(--transition); }
     .product-card:hover .product-img { transform: scale(1.05); }
     .product-badge {
-      position: absolute;
-      top: 14px;
-      left: 14px;
-      background: var(--terracotta);
-      color: #fff;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 4px 10px;
-      border-radius: 50px;
-      z-index: 2;
+      position: absolute; top: 14px; left: 14px;
+      background: var(--terracotta); color: #fff; font-size: 10px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase; padding: 4px 10px;
+      border-radius: 50px; z-index: 2;
     }
     .product-badge.new { background: var(--sage); }
     .product-badge.sale { background: var(--gold); color: var(--soft-black); }
     .product-badge.hot { background: #E83C2E; }
     .product-actions {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      display: flex;
-      gap: 8px;
-      padding: 14px;
+      position: absolute; bottom: 0; left: 0; right: 0;
+      display: flex; gap: 8px; padding: 14px;
       background: linear-gradient(transparent, rgba(255,255,255,0.95));
-      transform: translateY(100%);
-      transition: transform 0.4s var(--transition);
+      transform: translateY(100%); transition: transform 0.4s var(--transition);
     }
     .product-card:hover .product-actions { transform: translateY(0); }
     .product-action-btn {
-      flex: 1;
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      transition: all 0.3s;
+      flex: 1; padding: 10px; border-radius: 8px; border: none;
+      font-size: 12px; font-weight: 600; letter-spacing: 0.05em;
+      text-transform: uppercase; transition: all 0.3s;
     }
-    .btn-add-cart {
-      background: var(--terracotta);
-      color: #fff;
-    }
+    .btn-add-cart { background: var(--terracotta); color: #fff; }
     .btn-add-cart:hover { background: var(--rust); }
     .btn-wishlist {
-      background: var(--light-gray);
-      color: var(--charcoal);
-      flex: 0 0 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      background: var(--light-gray); color: var(--charcoal); flex: 0 0 40px;
+      display: flex; align-items: center; justify-content: center;
     }
     .btn-wishlist:hover { background: var(--blush); color: var(--rust); }
     .btn-wishlist.active svg { fill: #C9614A; stroke: #C9614A; }
-    .product-info {
-      padding: 16px 18px 20px;
-    }
-    .product-brand {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--terracotta);
-      margin-bottom: 5px;
-    }
-    .product-name {
-      font-family: var(--font-display);
-      font-size: 17px;
-      font-weight: 500;
-      color: var(--soft-black);
-      margin-bottom: 8px;
-      line-height: 1.3;
-    }
-    .product-rating {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 10px;
-    }
+    .product-info { padding: 16px 18px 20px; }
+    .product-brand { font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 5px; }
+    .product-name { font-family: var(--font-display); font-size: 17px; font-weight: 500; color: var(--soft-black); margin-bottom: 8px; line-height: 1.3; }
+    .product-rating { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
     .stars { color: var(--gold); font-size: 11px; letter-spacing: 1px; }
     .rating-count { font-size: 11px; color: var(--medium-gray); }
-    .product-price {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .price-current {
-      font-size: 17px;
-      font-weight: 700;
-      color: var(--soft-black);
-    }
-    .price-original {
-      font-size: 13px;
-      color: var(--medium-gray);
-      text-decoration: line-through;
-    }
-    .price-save {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--sage);
-    }
-    .product-colors {
-      display: flex;
-      gap: 5px;
-      margin-top: 10px;
-    }
+    .product-price { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .price-current { font-size: 17px; font-weight: 700; color: var(--soft-black); }
+    .price-original { font-size: 13px; color: var(--medium-gray); text-decoration: line-through; }
+    .price-save { font-size: 11px; font-weight: 700; color: var(--sage); }
+    .product-colors { display: flex; gap: 5px; margin-top: 10px; }
     .color-swatch {
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      cursor: pointer;
-      border: 2px solid transparent;
-      transition: all 0.25s;
+      width: 14px; height: 14px; border-radius: 50%; cursor: pointer;
+      border: 2px solid transparent; transition: all 0.25s;
     }
-    .color-swatch.active, .color-swatch:hover {
-      border-color: var(--charcoal);
-      transform: scale(1.2);
-    }
+    .color-swatch.active, .color-swatch:hover { border-color: var(--charcoal); transform: scale(1.2); }
 
     /* ====== PAGINATION ====== */
-    .pagination {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      margin-top: 64px;
-    }
+    .pagination { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 64px; }
     .page-btn {
-      width: 42px;
-      height: 42px;
-      border-radius: 10px;
-      border: 1.5px solid var(--light-gray);
-      background: var(--warm-white);
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--charcoal);
-      cursor: pointer;
-      transition: all 0.25s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 42px; height: 42px; border-radius: 10px; border: 1.5px solid var(--light-gray);
+      background: var(--warm-white); font-size: 14px; font-weight: 600; color: var(--charcoal);
+      display: flex; align-items: center; justify-content: center; transition: all 0.25s;
     }
-    .page-btn.active {
-      background: var(--terracotta);
-      border-color: var(--terracotta);
-      color: #fff;
-    }
-    .page-btn:hover:not(.active) {
-      border-color: var(--terracotta);
-      color: var(--terracotta);
-    }
+    .page-btn.active { background: var(--terracotta); border-color: var(--terracotta); color: #fff; }
+    .page-btn:hover:not(.active) { border-color: var(--terracotta); color: var(--terracotta); }
     .page-btn.arrow { font-size: 18px; }
 
     /* ====== FILTER MOBILE TOGGLE ====== */
     .filter-toggle-btn {
-      display: none;
-      align-items: center;
-      gap: 8px;
-      background: var(--warm-white);
-      border: 1.5px solid var(--light-gray);
-      border-radius: 50px;
-      padding: 10px 20px;
-      font-family: var(--font-body);
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--charcoal);
-      cursor: pointer;
-      transition: all 0.25s;
+      display: none; align-items: center; gap: 8px;
+      background: var(--warm-white); border: 1.5px solid var(--light-gray); border-radius: 50px;
+      padding: 10px 20px; font-family: var(--font-body); font-size: 13px; font-weight: 600;
+      color: var(--charcoal); transition: all 0.25s; margin-bottom: 20px;
     }
-    .filter-toggle-btn:hover {
-      border-color: var(--terracotta);
-      color: var(--terracotta);
+    .filter-toggle-btn:hover { border-color: var(--terracotta); color: var(--terracotta); }
+
+    /* ====== SIZE GRID ====== */
+    .size-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .size-btn {
+      padding: 8px; border: 1.5px solid var(--light-gray); border-radius: 8px;
+      background: none; font-size: 13px; font-weight: 500; text-align: center; transition: all 0.25s;
     }
+    .size-btn:hover, .size-btn.active { border-color: var(--terracotta); background: var(--terracotta); color: #fff; }
 
     /* ====== RESPONSIVE ====== */
     @media (max-width: 1100px) {
@@ -551,619 +333,642 @@
     }
     @media (max-width: 480px) {
       .products-grid-4 { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .cart-drawer { width: 100%; right: -100%; }
     }
   </style>
 </head>
 <body>
-  <div id="header-mount"></div>
-  <main>
 
-    <!-- ===== SHOP HERO ===== -->
-    <div class="shop-hero">
-      <div class="shop-hero-inner">
-        <div>
-          <span class="section-label" style="text-align:left;display:block;margin-bottom:12px">Explore the Collection</span>
-          <h1 class="shop-hero-title">All <em>Styles</em>,<br>One Destination</h1>
+<!-- Cart Overlay & Drawer -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-drawer" id="cartDrawer" aria-label="Shopping cart">
+  <div class="cart-header">
+    <h2>Your Bag <span class="cart-count-badge" id="drawerBadge">0</span></h2>
+    <button class="cart-close-btn" id="cartCloseBtn">✕</button>
+  </div>
+  <div class="cart-body" id="cartBody">
+    <div class="cart-empty-state" id="cartEmptyState">
+      <div class="cart-empty-icon">🛍️</div>
+      <h3>Your bag is empty</h3>
+      <p>Add some gorgeous styles to get started!</p>
+    </div>
+    <div id="cartItemsList"></div>
+  </div>
+  <div class="cart-footer" id="cartFooterEl" style="display:none">
+    <div class="cart-line"><span>Subtotal</span><span id="cartSubtotalEl">₹0</span></div>
+    <div class="cart-line free"><span>Shipping</span><span>FREE</span></div>
+    <div class="cart-grand">
+      <span>Total</span><span id="cartTotalEl">₹0</span>
+    </div>
+    <button class="btn-checkout">Proceed to Checkout →</button>
+    <button class="btn-continue-shop" id="continueShopping">Continue Shopping</button>
+    <p class="cart-free-ship">✓ Free shipping on orders above ₹2,000</p>
+  </div>
+</aside>
+
+<div id="header-mount"></div>
+<main>
+
+  <!-- SHOP HERO -->
+  <div class="shop-hero">
+    <div class="shop-hero-inner">
+      <div>
+        <span class="section-label" style="text-align:left;display:block;margin-bottom:12px">Explore the Collection</span>
+        <h1 class="shop-hero-title">All <em>Styles</em>,<br>One Destination</h1>
+      </div>
+      <div>
+        <p class="shop-hero-count" style="margin-bottom:16px">Showing 1,240+ styles</p>
+        <div class="shop-hero-tags" id="heroCatTags">
+          <button class="shop-hero-tag active" data-cat="all">All</button>
+          <button class="shop-hero-tag" data-cat="women">Women</button>
+          <button class="shop-hero-tag" data-cat="men">Men</button>
+          <button class="shop-hero-tag" data-cat="accessories">Accessories</button>
+          <button class="shop-hero-tag" data-cat="footwear">Footwear</button>
+          <button class="shop-hero-tag" data-cat="ethnic">Ethnic</button>
+          <button class="shop-hero-tag" data-cat="sale">Sale</button>
         </div>
-        <div>
-          <p class="shop-hero-count" style="margin-bottom:16px">Showing 1,240+ styles</p>
-          <div class="shop-hero-tags">
-            <button class="shop-hero-tag active">All</button>
-            <button class="shop-hero-tag">Women</button>
-            <button class="shop-hero-tag">Men</button>
-            <button class="shop-hero-tag">Accessories</button>
-            <button class="shop-hero-tag">Footwear</button>
-            <button class="shop-hero-tag">Sale</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MARQUEE -->
+  <div class="marquee-section" aria-hidden="true">
+    <div class="marquee-track">
+      <span class="marquee-item">New Arrivals Every Week<span class="marquee-dot"></span></span>
+      <span class="marquee-item">Free Shipping on Orders Over ₹2000<span class="marquee-dot"></span></span>
+      <span class="marquee-item">Easy Returns Within 30 Days<span class="marquee-dot"></span></span>
+      <span class="marquee-item">Handpicked Premium Fabrics<span class="marquee-dot"></span></span>
+      <span class="marquee-item">Exclusive Member Discounts<span class="marquee-dot"></span></span>
+      <span class="marquee-item">New Arrivals Every Week<span class="marquee-dot"></span></span>
+      <span class="marquee-item">Free Shipping on Orders Over ₹2000<span class="marquee-dot"></span></span>
+      <span class="marquee-item">Easy Returns Within 30 Days<span class="marquee-dot"></span></span>
+      <span class="marquee-item">Handpicked Premium Fabrics<span class="marquee-dot"></span></span>
+      <span class="marquee-item">Exclusive Member Discounts<span class="marquee-dot"></span></span>
+    </div>
+  </div>
+
+  <!-- SHOP LAYOUT -->
+  <div class="shop-page-wrap">
+    <div class="shop-inner">
+
+      <!-- FILTER SIDEBAR -->
+      <aside class="filter-sidebar" id="filterSidebar" aria-label="Product filters">
+        <div class="filter-sidebar-title">
+          Filters
+          <button class="filter-clear" id="clearAllFilters">Clear All</button>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-title" onclick="toggleFilterSection(this)">
+            Category
+            <svg class="filter-title-arrow" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+          <div class="filter-body">
+            <label class="filter-checkbox"><div class="filter-checkbox-left"><input type="checkbox" checked> Women's Fashion</div><span class="filter-count">420</span></label>
+            <label class="filter-checkbox"><div class="filter-checkbox-left"><input type="checkbox"> Men's Collection</div><span class="filter-count">280</span></label>
+            <label class="filter-checkbox"><div class="filter-checkbox-left"><input type="checkbox"> Accessories</div><span class="filter-count">190</span></label>
+            <label class="filter-checkbox"><div class="filter-checkbox-left"><input type="checkbox"> Footwear</div><span class="filter-count">150</span></label>
+            <label class="filter-checkbox"><div class="filter-checkbox-left"><input type="checkbox"> Ethnic &amp; Festive</div><span class="filter-count">210</span></label>
+            <label class="filter-checkbox"><div class="filter-checkbox-left"><input type="checkbox"> Kids</div><span class="filter-count">88</span></label>
+          </div>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-title" onclick="toggleFilterSection(this)">
+            Price Range
+            <svg class="filter-title-arrow" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+          <div class="filter-body">
+            <div class="price-labels"><span>₹500</span><span id="price-display">₹8,500</span></div>
+            <input type="range" class="price-slider" min="500" max="15000" value="8500" id="price-slider">
+          </div>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-title" onclick="toggleFilterSection(this)">
+            Size
+            <svg class="filter-title-arrow" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+          <div class="filter-body">
+            <div class="size-grid">
+              <button class="size-btn">XS</button>
+              <button class="size-btn active">S</button>
+              <button class="size-btn active">M</button>
+              <button class="size-btn">L</button>
+              <button class="size-btn">XL</button>
+              <button class="size-btn">XXL</button>
+              <button class="size-btn">28</button>
+              <button class="size-btn">30</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-title" onclick="toggleFilterSection(this)">
+            Color
+            <svg class="filter-title-arrow" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+          <div class="filter-body">
+            <div class="filter-colors">
+              <div class="filter-color-swatch active" style="background:#F2C4B0" title="Blush" onclick="this.classList.toggle('active')"></div>
+              <div class="filter-color-swatch" style="background:#C9614A" title="Terracotta" onclick="this.classList.toggle('active')"></div>
+              <div class="filter-color-swatch" style="background:#8FA882" title="Sage" onclick="this.classList.toggle('active')"></div>
+              <div class="filter-color-swatch" style="background:#D4C5A9" title="Beige" onclick="this.classList.toggle('active')"></div>
+              <div class="filter-color-swatch" style="background:#2C2C2C" title="Black" onclick="this.classList.toggle('active')"></div>
+              <div class="filter-color-swatch" style="background:#FFFFFF;border:1.5px solid #ddd" title="White" onclick="this.classList.toggle('active')"></div>
+              <div class="filter-color-swatch" style="background:#C9A96E" title="Gold" onclick="this.classList.toggle('active')"></div>
+              <div class="filter-color-swatch" style="background:#5A7050" title="Dark Green" onclick="this.classList.toggle('active')"></div>
+              <div class="filter-color-swatch" style="background:#7B8FA1" title="Slate Blue" onclick="this.classList.toggle('active')"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-title" onclick="toggleFilterSection(this)">
+            Brand
+            <svg class="filter-title-arrow" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+          <div class="filter-body">
+            <label class="filter-checkbox"><div class="filter-checkbox-left"><input type="checkbox" checked> Stackly Essentials</div><span class="filter-count">132</span></label>
+            <label class="filter-checkbox"><div class="filter-checkbox-left"><input type="checkbox"> Studio Line</div><span class="filter-count">87</span></label>
+            <label class="filter-checkbox"><div class="filter-checkbox-left"><input type="checkbox"> Stackly Summer</div><span class="filter-count">64</span></label>
+            <label class="filter-checkbox"><div class="filter-checkbox-left"><input type="checkbox"> Luxe Edit</div><span class="filter-count">49</span></label>
+            <label class="filter-checkbox"><div class="filter-checkbox-left"><input type="checkbox"> Heritage Co.</div><span class="filter-count">38</span></label>
+          </div>
+        </div>
+
+        <div class="filter-section">
+          <div class="filter-title" onclick="toggleFilterSection(this)">
+            Customer Rating
+            <svg class="filter-title-arrow" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+          <div class="filter-body">
+            <label class="filter-checkbox"><div class="filter-checkbox-left"><input type="checkbox"> ★★★★★ (5)</div><span class="filter-count">412</span></label>
+            <label class="filter-checkbox"><div class="filter-checkbox-left"><input type="checkbox"> ★★★★☆ (4+)</div><span class="filter-count">630</span></label>
+            <label class="filter-checkbox"><div class="filter-checkbox-left"><input type="checkbox"> ★★★☆☆ (3+)</div><span class="filter-count">180</span></label>
+          </div>
+        </div>
+      </aside>
+
+      <!-- PRODUCTS AREA -->
+      <div class="shop-main">
+        <button class="filter-toggle-btn" id="filter-toggle-btn">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 3H2l8 9.46V19l4 2v-8.54z"/></svg>
+          Filters
+        </button>
+
+        <div class="shop-toolbar">
+          <p class="shop-result-info">Showing <strong id="resultCount">1–67</strong> of <strong>1,240</strong> styles</p>
+          <div class="shop-toolbar-right">
+            <div class="view-toggle">
+              <button class="view-btn" id="view-2" aria-label="2 column view">
+                <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><rect x="2" y="2" width="9" height="9" rx="1"/><rect x="13" y="2" width="9" height="9" rx="1"/><rect x="2" y="13" width="9" height="9" rx="1"/><rect x="13" y="13" width="9" height="9" rx="1"/></svg>
+              </button>
+              <button class="view-btn active" id="view-3" aria-label="3 column view">
+                <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><rect x="2" y="2" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><rect x="16" y="2" width="6" height="6" rx="1"/><rect x="2" y="10" width="6" height="6" rx="1"/><rect x="9" y="10" width="6" height="6" rx="1"/><rect x="16" y="10" width="6" height="6" rx="1"/><rect x="2" y="18" width="6" height="6" rx="1"/><rect x="9" y="18" width="6" height="6" rx="1"/><rect x="16" y="18" width="6" height="6" rx="1"/></svg>
+              </button>
+            </div>
+            <select class="sort-select" id="sortSelect" aria-label="Sort products">
+              <option>Sort: Featured</option>
+              <option>Price: Low to High</option>
+              <option>Price: High to Low</option>
+              <option>Newest Arrivals</option>
+              <option>Best Sellers</option>
+              <option>Top Rated</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="active-filters" id="activeFilters">
+          <span class="active-filter-tag" onclick="this.remove()">Women's Fashion ×</span>
+          <span class="active-filter-tag" onclick="this.remove()">Stackly Essentials ×</span>
+          <span class="active-filter-tag" onclick="this.remove()">Blush ×</span>
+          <span class="active-filter-tag" onclick="this.remove()">S, M ×</span>
+        </div>
+
+        <!-- Products Container (rendered by JS) -->
+        <div id="productsContainer"></div>
+
+        <nav class="pagination" aria-label="Shop pages">
+          <button class="page-btn arrow">‹</button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <button class="page-btn">4</button>
+          <span style="padding:0 8px;color:var(--medium-gray)">...</span>
+          <button class="page-btn">104</button>
+          <button class="page-btn arrow">›</button>
+        </nav>
+      </div>
+    </div>
+  </div>
+</main>
+<div id="footer-mount"></div>
+<script src="component.js"></script>
+<script src="main.js"></script>
+<script>
+// ================================================================
+//  IMAGE HELPER — wsrv.nl proxy, exact format from original shop.html
+// ================================================================
+function img(id, w, h) {
+  return `https://wsrv.nl/?url=images.unsplash.com/${id}?w=${w}&h=${h}&fit=crop&auto=format&q=72&output=webp`;
+}
+
+// ================================================================
+//  PRODUCT DATA — 6 categories × 10–12 items
+//  All image IDs verified present in the original shop.html or are
+//  well-known stable Unsplash fashion IDs
+// ================================================================
+const PRODUCTS = [
+  // ── WOMEN'S (12) ──────────────────────────────────────────────
+  { id:1,  cat:'women', badge:'new',  brand:'Stackly Essentials', name:'Floral Wrap Midi Dress',       price:2499, orig:3999,  stars:5, rev:128, colors:['#E8C4B0','#8FA882','#2C2C2C'],
+    img: img('photo-1539109136881-3be0616acf4b',480,640) },
+  { id:2,  cat:'women', badge:'',     brand:'Studio Line',        name:'Premium Linen Blazer',          price:4799, orig:0,    stars:4, rev:87,  colors:['#D4C5A9','#2C2C2C'],
+    img: img('photo-1591047139829-d91aecb6caea',480,640) },
+  { id:3,  cat:'women', badge:'sale', brand:'Stackly Summer',      name:'Boho Smocked Sundress',         price:1799, orig:2999, stars:5, rev:204, colors:['#F2C4B0','#C9A96E','#fff'],
+    img: img('photo-1485230895905-ec40ba36b9bc',480,640) },
+  { id:4,  cat:'women', badge:'new',  brand:'Luxe Edit',           name:'Silk Satin Relaxed Blouse',     price:3299, orig:0,    stars:4, rev:56,  colors:['#FAEBD7','#C9614A','#8FA882'],
+    img: img('photo-1434389677669-e08b4cac3105',480,640) },
+  { id:5,  cat:'women', badge:'hot',  brand:'Stackly Summer',      name:'Ruffled Off-Shoulder Dress',    price:2199, orig:3499, stars:5, rev:312, colors:['#F2C4B0','#fff'],
+    img: img('photo-1509631179647-0177331693ae',480,640) },
+  { id:6,  cat:'women', badge:'sale', brand:'Stackly Essentials',  name:'Pleated Midi Skirt',            price:1499, orig:2299, stars:5, rev:166, colors:['#D4C5A9','#8FA882','#2C2C2C'],
+    img: img('photo-1515886657613-9f3515b0c78f',480,640) },
+  { id:7,  cat:'women', badge:'new',  brand:'Stackly Summer',      name:'Resort Co-ord Set',             price:3799, orig:5499, stars:5, rev:231, colors:['#F2C4B0','#8FA882'],
+    img: img('photo-1558769132-cb1aea458c5e',480,640) },
+  { id:8,  cat:'women', badge:'sale', brand:'Luxe Edit',           name:'Sequin Evening Gown',           price:6999, orig:10999,stars:5, rev:44,  colors:['#C9A96E','#2C2C2C'],
+    img: img('photo-1469334031218-e382a71b716b',480,640) },
+  { id:9,  cat:'women', badge:'new',  brand:'Stackly Summer',      name:'Linen Crop Top & Trouser Set',  price:2799, orig:3799, stars:5, rev:87,  colors:['#FAEBD7','#8FA882'],
+    img: img('photo-1534126511673-b6899657816a',480,640) },
+  { id:10, cat:'women', badge:'',     brand:'Studio Line',         name:'Asymmetric Hem Maxi Dress',     price:3499, orig:0,    stars:4, rev:99,  colors:['#FAEBD7','#C9614A'],
+    img: img('photo-1496747611176-843222e1e57c',480,640) },
+  { id:11, cat:'women', badge:'sale', brand:'Stackly Essentials',  name:'Wide Leg Cargo Pants',          price:1999, orig:2999, stars:4, rev:78,  colors:['#D4C5A9','#2C2C2C','#8FA882'],
+    img: img('photo-1506629082955-511b1aa562c8',480,640) },
+  { id:12, cat:'women', badge:'hot',  brand:'Luxe Edit',           name:'Velvet Wrap Skirt',             price:4199, orig:5999, stars:5, rev:145, colors:['#7B8FA1','#2C2C2C'],
+    img: img('photo-1572804013309-59a88b7e92f1',480,640) },
+
+  // ── MEN'S (11) ────────────────────────────────────────────────
+  { id:13, cat:'men', badge:'',     brand:'Studio Line',        name:'Slim Fit Oxford Shirt',         price:1899, orig:0,    stars:4, rev:74,  colors:['#FAEBD7','#7B8FA1','#2C2C2C'],
+    img: img('photo-1516257984-b1b4d707412e',480,640) },
+  { id:14, cat:'men', badge:'new',  brand:'Stackly Essentials', name:'Premium Chino Trousers',        price:2299, orig:0,    stars:4, rev:93,  colors:['#D4C5A9','#2C2C2C','#7B8FA1'],
+    img: img('photo-1473966968600-fa801b869a1a',480,640) },
+  { id:15, cat:'men', badge:'sale', brand:'Studio Line',        name:'Structured Wool Blazer',        price:5499, orig:7999, stars:5, rev:62,  colors:['#2C2C2C','#D4C5A9'],
+    img: img('photo-1594938298603-c8148c4b4571',480,640) },
+  { id:16, cat:'men', badge:'hot',  brand:'Stackly Essentials', name:'Relaxed Linen Shirt',           price:1699, orig:2499, stars:5, rev:188, colors:['#FAEBD7','#8FA882','#7B8FA1'],
+    img: img('photo-1602810318383-e386cc2a3ccf',480,640) },
+  { id:17, cat:'men', badge:'new',  brand:'Studio Line',        name:'Technical Cargo Shorts',        price:1999, orig:0,    stars:4, rev:112, colors:['#D4C5A9','#2C2C2C','#8FA882'],
+    img: img('photo-1591195853828-11db59a44f43',480,640) },
+  { id:18, cat:'men', badge:'',     brand:'Stackly Essentials', name:'Classic Crew Neck Tee',         price:999,  orig:0,    stars:4, rev:254, colors:['#fff','#2C2C2C','#7B8FA1','#8FA882'],
+    img: img('photo-1583743814966-8936f5b7be1a',480,640) },
+  { id:19, cat:'men', badge:'sale', brand:'Studio Line',        name:'Merino Crewneck Sweater',       price:2999, orig:4499, stars:5, rev:67,  colors:['#D4C5A9','#2C2C2C','#7B8FA1'],
+    img: img('photo-1576566588028-4147f3842f27',480,640) },
+  { id:20, cat:'men', badge:'new',  brand:'Heritage Co.',       name:'Indigo Denim Jacket',           price:3799, orig:0,    stars:5, rev:136, colors:['#7B8FA1','#2C2C2C'],
+    img: img('photo-1551698618-1dfe5d97d256',480,640) },
+  { id:21, cat:'men', badge:'hot',  brand:'Stackly Essentials', name:'Jogger Sweatpants',             price:1499, orig:2199, stars:4, rev:201, colors:['#2C2C2C','#D4C5A9','#8FA882'],
+    img: img('photo-1552902865-b72c031ac5ea',480,640) },
+  { id:22, cat:'men', badge:'',     brand:'Heritage Co.',       name:'Tailored Formal Trousers',      price:2799, orig:0,    stars:4, rev:89,  colors:['#2C2C2C','#D4C5A9','#7B8FA1'],
+    img: img('photo-1507003211169-0a1dd7228f2d',480,640) },
+  { id:23, cat:'men', badge:'sale', brand:'Studio Line',        name:'Printed Camp Collar Shirt',     price:1799, orig:2699, stars:4, rev:78,  colors:['#FAEBD7','#C9614A','#8FA882'],
+    img: img('photo-1620012253295-c15cc3e65df4',480,640) },
+
+  // ── ACCESSORIES (11) ──────────────────────────────────────────
+  { id:24, cat:'accessories', badge:'',     brand:'Luxe Edit',          name:'Structured Tote Bag',         price:5499, orig:0,    stars:5, rev:93,  colors:['#D4C5A9','#2C2C2C','#C9614A'],
+    img: img('photo-1553062407-98eeb64c6a62',480,640) },
+  { id:25, cat:'accessories', badge:'new',  brand:'Luxe Edit',          name:'Leather Crossbody Bag',       price:4299, orig:0,    stars:5, rev:156, colors:['#D4C5A9','#2C2C2C'],
+    img: img('photo-1548036328-c9fa89d128fa',480,640) },
+  { id:26, cat:'accessories', badge:'sale', brand:'Stackly Essentials', name:'Woven Straw Hat',             price:999,  orig:1499, stars:4, rev:77,  colors:['#D4C5A9','#2C2C2C'],
+    img: img('photo-1521369909029-2afed882baee',480,640) },
+  { id:27, cat:'accessories', badge:'new',  brand:'Luxe Edit',          name:'Silk Square Scarf',           price:1299, orig:0,    stars:5, rev:44,  colors:['#F2C4B0','#C9614A','#8FA882','#2C2C2C'],
+    img: img('photo-1601924994987-69e26d50dc26',480,640) },
+  { id:28, cat:'accessories', badge:'hot',  brand:'Luxe Edit',          name:'Layered Gold Necklace',       price:2499, orig:3499, stars:5, rev:211, colors:['#C9A96E'],
+    img: img('photo-1515562141207-7a88fb7ce338',480,640) },
+  { id:29, cat:'accessories', badge:'',     brand:'Stackly Essentials', name:'Minimalist Leather Belt',     price:799,  orig:0,    stars:4, rev:58,  colors:['#2C2C2C','#D4C5A9','#C9614A'],
+    img: img('photo-1553456558-aff63285bdd1',480,640) },
+  { id:30, cat:'accessories', badge:'sale', brand:'Luxe Edit',          name:'Cat-Eye Sunglasses',          price:1799, orig:2499, stars:5, rev:134, colors:['#2C2C2C','#C9A96E'],
+    img: img('photo-1572635196237-14b3f281503f',480,640) },
+  { id:31, cat:'accessories', badge:'new',  brand:'Luxe Edit',          name:'Beaded Wrist Cuff',           price:1199, orig:0,    stars:4, rev:63,  colors:['#C9A96E','#F2C4B0','#2C2C2C'],
+    img: img('photo-1611591437281-460bfbe1220a',480,640) },
+  { id:32, cat:'accessories', badge:'hot',  brand:'Stackly Essentials', name:'Canvas Shopper Tote',         price:699,  orig:999,  stars:4, rev:187, colors:['#FAEBD7','#2C2C2C','#8FA882'],
+    img: img('photo-1622560480654-d96214fdc887',480,640) },
+  { id:33, cat:'accessories', badge:'sale', brand:'Luxe Edit',          name:'Embroidered Clutch',          price:2199, orig:3199, stars:5, rev:49,  colors:['#C9614A','#D4C5A9','#2C2C2C'],
+    img: img('photo-1584917865442-de89df76afd3',480,640) },
+  { id:34, cat:'accessories', badge:'new',  brand:'Luxe Edit',          name:'Pearl Drop Earrings',         price:1599, orig:0,    stars:5, rev:92,  colors:['#fff','#C9A96E'],
+    img: img('photo-1535632066927-ab7c9ab60908',480,640) },
+
+  // ── FOOTWEAR (11) ─────────────────────────────────────────────
+  { id:35, cat:'footwear', badge:'',     brand:'Stackly Essentials', name:'Minimal Canvas Sneakers',     price:2999, orig:0,    stars:4, rev:148, colors:['#fff','#2C2C2C','#F2C4B0'],
+    img: img('photo-1542291026-7eec264c27ff',480,640) },
+  { id:36, cat:'footwear', badge:'new',  brand:'Studio Line',        name:'Block Heel Mules',            price:3499, orig:0,    stars:5, rev:107, colors:['#D4C5A9','#2C2C2C','#C9614A'],
+    img: img('photo-1543163521-1bf539c55dd2',480,640) },
+  { id:37, cat:'footwear', badge:'sale', brand:'Stackly Essentials', name:'Leather Chelsea Boots',      price:4299, orig:6499, stars:5, rev:89,  colors:['#2C2C2C','#D4C5A9'],
+    img: img('photo-1608256246200-53e635b5b65f',480,640) },
+  { id:38, cat:'footwear', badge:'hot',  brand:'Studio Line',        name:'Platform Espadrilles',       price:2199, orig:3299, stars:4, rev:176, colors:['#D4C5A9','#2C2C2C','#C9614A'],
+    img: img('photo-1595950653106-6c9ebd614d3a',480,640) },
+  { id:39, cat:'footwear', badge:'new',  brand:'Stackly Essentials', name:'Strappy Heeled Sandals',     price:2799, orig:0,    stars:4, rev:118, colors:['#FAEBD7','#C9614A','#2C2C2C'],
+    img: img('photo-1566150905458-1bf1fc113f0d',480,640) },
+  { id:40, cat:'footwear', badge:'',     brand:'Heritage Co.',       name:'Derby Oxford Shoes',         price:3999, orig:0,    stars:5, rev:64,  colors:['#2C2C2C','#D4C5A9'],
+    img: img('photo-1449505278894-297fdb3edbc1',480,640) },
+  { id:41, cat:'footwear', badge:'sale', brand:'Stackly Essentials', name:'Flat Leather Loafers',       price:2499, orig:3799, stars:4, rev:99,  colors:['#D4C5A9','#2C2C2C','#C9614A'],
+    img: img('photo-1561861422-a549073e547a',480,640) },
+  { id:42, cat:'footwear', badge:'new',  brand:'Studio Line',        name:'Chunky Platform Boots',      price:4899, orig:0,    stars:5, rev:143, colors:['#2C2C2C','#D4C5A9'],
+    img: img('photo-1638247025967-b4e38f787b76',480,640) },
+  { id:43, cat:'footwear', badge:'hot',  brand:'Stackly Essentials', name:'Slip-On Sport Shoes',        price:1899, orig:2699, stars:4, rev:225, colors:['#fff','#2C2C2C','#F2C4B0','#7B8FA1'],
+    img: img('photo-1539185441755-769473a23570',480,640) },
+  { id:44, cat:'footwear', badge:'',     brand:'Heritage Co.',       name:'Suede Ankle Boots',          price:3699, orig:0,    stars:5, rev:71,  colors:['#D4C5A9','#2C2C2C','#C9614A'],
+    img: img('photo-1531217257604-de69b2a5e1be',480,640) },
+  { id:45, cat:'footwear', badge:'sale', brand:'Studio Line',        name:'Embroidered Juttis',         price:1299, orig:1999, stars:5, rev:188, colors:['#C9614A','#C9A96E','#2C2C2C'],
+    img: img('photo-1562273138-f46be4ebdf33',480,640) },
+
+  // ── ETHNIC & FESTIVE (11) ────────────────────────────────────
+  { id:46, cat:'ethnic', badge:'new',  brand:'Heritage Co.', name:'Anarkali Embroidered Kurta',    price:3999, orig:5999, stars:5, rev:201, colors:['#C9614A','#C9A96E','#7B8FA1'],
+    img: img('photo-1583391733956-6c78276477e2',480,640) },
+  { id:47, cat:'ethnic', badge:'hot',  brand:'Heritage Co.', name:'Banarasi Silk Saree',           price:8999, orig:12999,stars:5, rev:87,  colors:['#C9A96E','#C9614A','#7B8FA1'],
+    img: img('photo-1610189352649-6e773b9f6754',480,640) },
+  { id:48, cat:'ethnic', badge:'sale', brand:'Heritage Co.', name:'Chanderi Palazzo Set',          price:2799, orig:3999, stars:4, rev:133, colors:['#F2C4B0','#8FA882','#FAEBD7'],
+    img: img('photo-1593030761757-71fae45fa0e7',480,640) },
+  { id:49, cat:'ethnic', badge:'new',  brand:'Heritage Co.', name:'Phulkari Embroidered Dupatta',  price:1499, orig:0,    stars:5, rev:68,  colors:['#C9614A','#C9A96E','#7B8FA1'],
+    img: img('photo-1617627143750-d86bc21e42bb',480,640) },
+  { id:50, cat:'ethnic', badge:'hot',  brand:'Heritage Co.', name:'Lehenga Choli Set',             price:7499, orig:9999, stars:5, rev:156, colors:['#C9A96E','#C9614A','#2C2C2C'],
+    img: img('photo-1595777457583-95e059d581b8',480,640) },
+  { id:51, cat:'ethnic', badge:'',     brand:'Heritage Co.', name:'Block Print Cotton Kurta',      price:1899, orig:0,    stars:4, rev:112, colors:['#C9614A','#8FA882','#FAEBD7'],
+    img: img('photo-1606503153255-59d8b8b82176',480,640) },
+  { id:52, cat:'ethnic', badge:'new',  brand:'Heritage Co.', name:'Mirror Work Festive Blouse',    price:2299, orig:0,    stars:5, rev:79,  colors:['#C9A96E','#C9614A','#7B8FA1'],
+    img: img('photo-1585386959984-a4155224a1ad',480,640) },
+  { id:53, cat:'ethnic', badge:'sale', brand:'Heritage Co.', name:'Chikankari Straight Kurta',     price:2499, orig:3499, stars:4, rev:95,  colors:['#FAEBD7','#F2C4B0','#8FA882'],
+    img: img('photo-1588444837495-c6cfeb53f32d',480,640) },
+  { id:54, cat:'ethnic', badge:'hot',  brand:'Heritage Co.', name:'Zardozi Festive Suit',          price:6499, orig:8999, stars:5, rev:44,  colors:['#C9A96E','#C9614A'],
+    img: img('photo-1546961342-ea5f62d951f0',480,640) },
+  { id:55, cat:'ethnic', badge:'new',  brand:'Heritage Co.', name:'Ikat Print Co-ord Set',         price:3299, orig:0,    stars:4, rev:61,  colors:['#C9614A','#8FA882','#2C2C2C'],
+    img: img('photo-1593030761757-71fae45fa0e7',480,640) },
+  { id:56, cat:'ethnic', badge:'sale', brand:'Heritage Co.', name:'Organza Party Saree',           price:4999, orig:6999, stars:5, rev:72,  colors:['#7B8FA1','#C9614A','#C9A96E'],
+    img: img('photo-1617627143750-d86bc21e42bb',480,640) },
+
+  // ── SALE PICKS (11) ──────────────────────────────────────────
+  { id:57, cat:'sale', badge:'sale', brand:'Stackly Essentials', name:'Summer Floral Mini Dress',    price:1299, orig:2499, stars:5, rev:334, colors:['#F2C4B0','#8FA882','#fff'],
+    img: img('photo-1485230895905-ec40ba36b9bc',480,640) },
+  { id:58, cat:'sale', badge:'sale', brand:'Studio Line',        name:'Classic Denim Jacket',        price:2199, orig:3999, stars:4, rev:167, colors:['#7B8FA1','#2C2C2C'],
+    img: img('photo-1551698618-1dfe5d97d256',480,640) },
+  { id:59, cat:'sale', badge:'sale', brand:'Stackly Summer',     name:'Tie-Dye Oversized Tee',       price:799,  orig:1499, stars:4, rev:289, colors:['#F2C4B0','#8FA882','#7B8FA1'],
+    img: img('photo-1503342394128-c104d54dba01',480,640) },
+  { id:60, cat:'sale', badge:'sale', brand:'Luxe Edit',          name:'Satin Slip Dress',            price:1999, orig:3999, stars:5, rev:122, colors:['#D4C5A9','#C9614A','#2C2C2C'],
+    img: img('photo-1572804013309-59a88b7e92f1',480,640) },
+  { id:61, cat:'sale', badge:'sale', brand:'Stackly Essentials', name:'Cosy Knit Cardigan',          price:1499, orig:2799, stars:4, rev:198, colors:['#FAEBD7','#D4C5A9','#8FA882'],
+    img: img('photo-1576566588028-4147f3842f27',480,640) },
+  { id:62, cat:'sale', badge:'sale', brand:'Studio Line',        name:'Pleated Palazzo Pants',       price:999,  orig:1999, stars:4, rev:211, colors:['#2C2C2C','#D4C5A9','#8FA882'],
+    img: img('photo-1506629082955-511b1aa562c8',480,640) },
+  { id:63, cat:'sale', badge:'sale', brand:'Stackly Summer',     name:'Embroidered Shorts',          price:699,  orig:1299, stars:3, rev:89,  colors:['#FAEBD7','#F2C4B0','#8FA882'],
+    img: img('photo-1534126511673-b6899657816a',480,640) },
+  { id:64, cat:'sale', badge:'sale', brand:'Heritage Co.',       name:'Embellished Jutti Flats',     price:999,  orig:1799, stars:5, rev:304, colors:['#C9614A','#C9A96E','#7B8FA1'],
+    img: img('photo-1562273138-f46be4ebdf33',480,640) },
+  { id:65, cat:'sale', badge:'sale', brand:'Stackly Essentials', name:'Printed Wrap Skirt',          price:899,  orig:1699, stars:4, rev:143, colors:['#F2C4B0','#8FA882','#FAEBD7'],
+    img: img('photo-1515886657613-9f3515b0c78f',480,640) },
+  { id:66, cat:'sale', badge:'sale', brand:'Studio Line',        name:'Mesh Layer Top',              price:749,  orig:1299, stars:4, rev:76,  colors:['#2C2C2C','#FAEBD7','#F2C4B0'],
+    img: img('photo-1434389677669-e08b4cac3105',480,640) },
+  { id:67, cat:'sale', badge:'sale', brand:'Stackly Essentials', name:'Relaxed Cotton Tee Dress',    price:1199, orig:2099, stars:4, rev:192, colors:['#FAEBD7','#F2C4B0','#8FA882','#2C2C2C'],
+    img: img('photo-1539109136881-3be0616acf4b',480,640) },
+];
+
+const SECTION_META = {
+  women:       'Women\'s Fashion',
+  men:         'Men\'s Collection',
+  accessories: 'Accessories',
+  footwear:    'Footwear',
+  ethnic:      'Ethnic & Festive',
+  sale:        'Sale Picks',
+};
+
+// ── CART STATE ─────────────────────────────────────────────────
+let cart = [];
+
+function cartTotal() { return cart.reduce((s,i)=>s+i.price*i.qty,0); }
+function cartCount() { return cart.reduce((s,i)=>s+i.qty,0); }
+
+function addToCart(pid) {
+  const p = PRODUCTS.find(x=>x.id===pid); if(!p) return;
+  const ex = cart.find(x=>x.id===pid);
+  if(ex) ex.qty++; else cart.push({...p, qty:1});
+  renderCart();
+  animateBadge();
+  // Use main.js showToast if available, else own
+  if(typeof showToast === 'function') showToast('🛍️ '+p.name+' added to bag!');
+  else _toast('🛍️ '+p.name+' added to bag!');
+}
+function removeCI(pid) { cart = cart.filter(x=>x.id!==pid); renderCart(); }
+function changeQty(pid, d) {
+  const it = cart.find(x=>x.id===pid); if(!it) return;
+  it.qty = Math.max(1, it.qty+d); renderCart();
+}
+
+function renderCart() {
+  const cnt = cartCount();
+  // Update both header badge (injected by component.js) and drawer badge
+  const hBadge = document.querySelector('.cart-count');
+  if(hBadge) hBadge.textContent = cnt;
+  document.getElementById('drawerBadge').textContent = cnt;
+
+  const emptyEl  = document.getElementById('cartEmptyState');
+  const listEl   = document.getElementById('cartItemsList');
+  const footerEl = document.getElementById('cartFooterEl');
+
+  if(!cart.length) {
+    emptyEl.style.display='flex'; listEl.innerHTML=''; footerEl.style.display='none'; return;
+  }
+  emptyEl.style.display='none'; footerEl.style.display='block';
+
+  listEl.innerHTML = cart.map(it=>`
+    <div class="cart-item">
+      <img class="cart-item-img" src="${it.img}" alt="${it.name}" loading="lazy"
+           onerror="this.style.background='var(--light-gray)';this.src=''">
+      <div class="cart-item-info">
+        <p class="ci-brand">${it.brand}</p>
+        <p class="ci-name">${it.name}</p>
+        <p class="ci-meta">Size: M · ${SECTION_META[it.cat]||it.cat}</p>
+        <div class="ci-bottom">
+          <span class="ci-price">₹${(it.price*it.qty).toLocaleString('en-IN')}</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="ci-qty">
+              <button class="ci-qty-btn" onclick="changeQty(${it.id},-1)">−</button>
+              <span class="ci-qty-val">${it.qty}</span>
+              <button class="ci-qty-btn" onclick="changeQty(${it.id},+1)">+</button>
+            </div>
+            <button class="ci-remove" onclick="removeCI(${it.id})" title="Remove">✕</button>
           </div>
         </div>
       </div>
     </div>
+  `).join('');
 
-    <!-- ===== MARQUEE ===== -->
-    <div class="marquee-section" aria-hidden="true">
-      <div class="marquee-track">
-        <span class="marquee-item">New Arrivals Every Week<span class="marquee-dot"></span></span>
-        <span class="marquee-item">Free Shipping on Orders Over ₹2000<span class="marquee-dot"></span></span>
-        <span class="marquee-item">Easy Returns Within 30 Days<span class="marquee-dot"></span></span>
-        <span class="marquee-item">Handpicked Premium Fabrics<span class="marquee-dot"></span></span>
-        <span class="marquee-item">Exclusive Member Discounts<span class="marquee-dot"></span></span>
-        <span class="marquee-item">New Arrivals Every Week<span class="marquee-dot"></span></span>
-        <span class="marquee-item">Free Shipping on Orders Over ₹2000<span class="marquee-dot"></span></span>
-        <span class="marquee-item">Easy Returns Within 30 Days<span class="marquee-dot"></span></span>
-        <span class="marquee-item">Handpicked Premium Fabrics<span class="marquee-dot"></span></span>
-        <span class="marquee-item">Exclusive Member Discounts<span class="marquee-dot"></span></span>
+  const sub = cartTotal();
+  document.getElementById('cartSubtotalEl').textContent='₹'+sub.toLocaleString('en-IN');
+  document.getElementById('cartTotalEl').textContent='₹'+sub.toLocaleString('en-IN');
+}
+
+function animateBadge() {
+  const b = document.querySelector('.cart-count');
+  if(!b) return;
+  b.style.transform='scale(1.7)'; b.style.transition='transform 0.3s';
+  setTimeout(()=>{ b.style.transform='scale(1)'; },350);
+}
+
+function openCart()  { document.getElementById('cartDrawer').classList.add('open');  document.getElementById('cartOverlay').classList.add('open');  document.body.style.overflow='hidden'; }
+function closeCart() { document.getElementById('cartDrawer').classList.remove('open'); document.getElementById('cartOverlay').classList.remove('open'); document.body.style.overflow=''; }
+
+// Wire cart open to header cart button (injected by component.js)
+document.addEventListener('click', function(e){
+  const btn = e.target.closest('[aria-label="Cart"]');
+  if(btn) { e.preventDefault(); openCart(); }
+});
+document.getElementById('cartCloseBtn').addEventListener('click', closeCart);
+document.getElementById('cartOverlay').addEventListener('click', closeCart);
+document.getElementById('continueShopping').addEventListener('click', closeCart);
+
+// ── RENDER PRODUCTS ────────────────────────────────────────────
+function stars(n) { return '★'.repeat(n)+'☆'.repeat(5-n); }
+
+function buildCard(p) {
+  const disc = p.orig ? Math.round((1-p.price/p.orig)*100) : 0;
+  const sw = p.colors.map((c,i)=>
+    `<div class="color-swatch${i===0?' active':''}" style="background:${c};${c==='#fff'||c==='#ffffff'?'border:1.5px solid #ddd;':''}"
+      onclick="event.stopPropagation();this.closest('.product-colors').querySelectorAll('.color-swatch').forEach(s=>s.classList.remove('active'));this.classList.add('active')"></div>`
+  ).join('');
+  return `
+  <article class="product-card stagger" data-cat="${p.cat}" data-id="${p.id}">
+    <div class="product-img-wrap">
+      ${p.badge?`<span class="product-badge ${p.badge}">${p.badge==='new'?'New':p.badge==='sale'?'Sale':p.badge==='hot'?'Hot':p.badge}</span>`:''}
+      <img class="product-img" src="${p.img}" alt="${p.name}" width="480" height="640" loading="lazy"
+           onerror="this.parentElement.style.background='var(--light-gray)'">
+      <div class="product-actions">
+        <button class="product-action-btn btn-add-cart" onclick="event.stopPropagation();addToCart(${p.id})">Add to Bag</button>
+        <button class="product-action-btn btn-wishlist" aria-label="Wishlist" onclick="event.stopPropagation();toggleWish(this)">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </button>
       </div>
     </div>
-
-    <!-- ===== SHOP LAYOUT ===== -->
-    <div class="shop-page-wrap">
-      <div class="shop-inner">
-
-        <!-- FILTER SIDEBAR -->
-        <aside class="filter-sidebar" aria-label="Product filters">
-          <div class="filter-sidebar-title">
-            Filters
-            <span class="filter-clear">Clear All</span>
-          </div>
-
-          <!-- Category -->
-          <div class="filter-section">
-            <div class="filter-title">
-              Category
-              <svg class="filter-title-arrow" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
-            </div>
-            <div class="filter-body">
-              <label class="filter-checkbox">
-                <div class="filter-checkbox-left"><input type="checkbox" checked> Women's Fashion</div>
-                <span class="filter-count">420</span>
-              </label>
-              <label class="filter-checkbox">
-                <div class="filter-checkbox-left"><input type="checkbox"> Men's Collection</div>
-                <span class="filter-count">280</span>
-              </label>
-              <label class="filter-checkbox">
-                <div class="filter-checkbox-left"><input type="checkbox"> Accessories</div>
-                <span class="filter-count">190</span>
-              </label>
-              <label class="filter-checkbox">
-                <div class="filter-checkbox-left"><input type="checkbox"> Footwear</div>
-                <span class="filter-count">150</span>
-              </label>
-              <label class="filter-checkbox">
-                <div class="filter-checkbox-left"><input type="checkbox"> Kids</div>
-                <span class="filter-count">88</span>
-              </label>
-            </div>
-          </div>
-
-          <!-- Price Range -->
-          <div class="filter-section">
-            <div class="filter-title">
-              Price Range
-              <svg class="filter-title-arrow" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
-            </div>
-            <div class="filter-body">
-              <div class="price-labels">
-                <span>₹500</span>
-                <span id="price-display">₹8,500</span>
-              </div>
-              <input type="range" class="price-slider" min="500" max="15000" value="8500" id="price-slider">
-            </div>
-          </div>
-
-          <!-- Size -->
-          <div class="filter-section">
-            <div class="filter-title">
-              Size
-              <svg class="filter-title-arrow" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
-            </div>
-            <div class="filter-body">
-              <div class="size-grid">
-                <button class="size-btn">XS</button>
-                <button class="size-btn active">S</button>
-                <button class="size-btn active">M</button>
-                <button class="size-btn">L</button>
-                <button class="size-btn">XL</button>
-                <button class="size-btn">XXL</button>
-                <button class="size-btn">28</button>
-                <button class="size-btn">30</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Color -->
-          <div class="filter-section">
-            <div class="filter-title">
-              Color
-              <svg class="filter-title-arrow" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
-            </div>
-            <div class="filter-body">
-              <div class="filter-colors">
-                <div class="filter-color-swatch active" style="background:#F2C4B0" title="Blush"></div>
-                <div class="filter-color-swatch" style="background:#C9614A" title="Terracotta"></div>
-                <div class="filter-color-swatch" style="background:#8FA882" title="Sage"></div>
-                <div class="filter-color-swatch" style="background:#D4C5A9" title="Beige"></div>
-                <div class="filter-color-swatch" style="background:#2C2C2C" title="Black"></div>
-                <div class="filter-color-swatch" style="background:#FFFFFF;border:1.5px solid #ddd" title="White"></div>
-                <div class="filter-color-swatch" style="background:#C9A96E" title="Gold"></div>
-                <div class="filter-color-swatch" style="background:#5A7050" title="Dark Green"></div>
-                <div class="filter-color-swatch" style="background:#7B8FA1" title="Slate Blue"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Brand -->
-          <div class="filter-section">
-            <div class="filter-title">
-              Brand
-              <svg class="filter-title-arrow" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
-            </div>
-            <div class="filter-body">
-              <label class="filter-checkbox">
-                <div class="filter-checkbox-left"><input type="checkbox" checked> Stackly Essentials</div>
-                <span class="filter-count">132</span>
-              </label>
-              <label class="filter-checkbox">
-                <div class="filter-checkbox-left"><input type="checkbox"> Studio Line</div>
-                <span class="filter-count">87</span>
-              </label>
-              <label class="filter-checkbox">
-                <div class="filter-checkbox-left"><input type="checkbox"> Stackly Summer</div>
-                <span class="filter-count">64</span>
-              </label>
-              <label class="filter-checkbox">
-                <div class="filter-checkbox-left"><input type="checkbox"> Luxe Edit</div>
-                <span class="filter-count">49</span>
-              </label>
-            </div>
-          </div>
-
-          <!-- Rating -->
-          <div class="filter-section">
-            <div class="filter-title">
-              Customer Rating
-              <svg class="filter-title-arrow" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
-            </div>
-            <div class="filter-body">
-              <label class="filter-checkbox">
-                <div class="filter-checkbox-left"><input type="checkbox"> ★★★★★ (5)</div>
-                <span class="filter-count">412</span>
-              </label>
-              <label class="filter-checkbox">
-                <div class="filter-checkbox-left"><input type="checkbox"> ★★★★☆ (4+)</div>
-                <span class="filter-count">630</span>
-              </label>
-              <label class="filter-checkbox">
-                <div class="filter-checkbox-left"><input type="checkbox"> ★★★☆☆ (3+)</div>
-                <span class="filter-count">180</span>
-              </label>
-            </div>
-          </div>
-        </aside>
-
-        <!-- PRODUCTS AREA -->
-        <div class="shop-main">
-          <!-- Mobile filter toggle -->
-          <button class="filter-toggle-btn" id="filter-toggle-btn">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 3H2l8 9.46V19l4 2v-8.54z"/></svg>
-            Filters
-          </button>
-
-          <div class="shop-toolbar">
-            <p class="shop-result-info">Showing <strong>1–12</strong> of <strong>1,240</strong> styles</p>
-            <div class="shop-toolbar-right">
-              <div class="view-toggle">
-                <button class="view-btn" id="view-2" aria-label="2 column view">
-                  <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><rect x="2" y="2" width="9" height="9" rx="1"/><rect x="13" y="2" width="9" height="9" rx="1"/><rect x="2" y="13" width="9" height="9" rx="1"/><rect x="13" y="13" width="9" height="9" rx="1"/></svg>
-                </button>
-                <button class="view-btn active" id="view-3" aria-label="3 column view">
-                  <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><rect x="2" y="2" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><rect x="16" y="2" width="6" height="6" rx="1"/><rect x="2" y="10" width="6" height="6" rx="1"/><rect x="9" y="10" width="6" height="6" rx="1"/><rect x="16" y="10" width="6" height="6" rx="1"/><rect x="2" y="18" width="6" height="6" rx="1"/><rect x="9" y="18" width="6" height="6" rx="1"/><rect x="16" y="18" width="6" height="6" rx="1"/></svg>
-                </button>
-              </div>
-              <select class="sort-select" aria-label="Sort products">
-                <option>Sort: Featured</option>
-                <option>Price: Low to High</option>
-                <option>Price: High to Low</option>
-                <option>Newest Arrivals</option>
-                <option>Best Sellers</option>
-                <option>Top Rated</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Active Filters -->
-          <div class="active-filters">
-            <span class="active-filter-tag">Women's Fashion <span class="active-filter-tag-x">×</span></span>
-            <span class="active-filter-tag">Stackly Essentials <span class="active-filter-tag-x">×</span></span>
-            <span class="active-filter-tag">Blush <span class="active-filter-tag-x">×</span></span>
-            <span class="active-filter-tag">S, M <span class="active-filter-tag-x">×</span></span>
-          </div>
-
-          <!-- Products Grid -->
-          <div class="products-grid-4 stagger" id="products-grid">
-
-            <!-- 1 -->
-            <article class="product-card">
-              <div class="product-img-wrap">
-                <span class="product-badge new">New</span>
-                <img class="product-img" src="https://wsrv.nl/?url=images.unsplash.com/photo-1539109136881-3be0616acf4b?w=480&h=640&fit=crop&auto=format&q=72&output=webp" alt="Floral Wrap Midi Dress" width="480" height="640" loading="lazy">
-                <div class="product-actions">
-                  <button class="product-action-btn btn-add-cart">Add to Cart</button>
-                  <button class="product-action-btn btn-wishlist" aria-label="Wishlist"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-                </div>
-              </div>
-              <div class="product-info">
-                <p class="product-brand">Stackly Essentials</p>
-                <h3 class="product-name">Floral Wrap Midi Dress</h3>
-                <div class="product-rating"><div class="stars">★★★★★</div><span class="rating-count">(128)</span></div>
-                <div class="product-price">
-                  <span class="price-current">₹2,499</span>
-                  <span class="price-original">₹3,999</span>
-                  <span class="price-save">-37%</span>
-                </div>
-                <div class="product-colors">
-                  <div class="color-swatch active" style="background:#E8C4B0"></div>
-                  <div class="color-swatch" style="background:#8FA882"></div>
-                  <div class="color-swatch" style="background:#2C2C2C"></div>
-                </div>
-              </div>
-            </article>
-
-            <!-- 2 -->
-            <article class="product-card">
-              <div class="product-img-wrap">
-                <img class="product-img" src="https://wsrv.nl/?url=images.unsplash.com/photo-1591047139829-d91aecb6caea?w=480&h=640&fit=crop&auto=format&q=72&output=webp" alt="Linen Blazer" width="480" height="640" loading="lazy">
-                <div class="product-actions">
-                  <button class="product-action-btn btn-add-cart">Add to Cart</button>
-                  <button class="product-action-btn btn-wishlist" aria-label="Wishlist"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-                </div>
-              </div>
-              <div class="product-info">
-                <p class="product-brand">Studio Line</p>
-                <h3 class="product-name">Premium Linen Blazer</h3>
-                <div class="product-rating"><div class="stars">★★★★☆</div><span class="rating-count">(87)</span></div>
-                <div class="product-price"><span class="price-current">₹4,799</span></div>
-                <div class="product-colors">
-                  <div class="color-swatch active" style="background:#D4C5A9"></div>
-                  <div class="color-swatch" style="background:#2C2C2C"></div>
-                </div>
-              </div>
-            </article>
-
-            <!-- 3 -->
-            <article class="product-card">
-              <div class="product-img-wrap">
-                <span class="product-badge sale">Sale</span>
-                <img class="product-img" src="https://wsrv.nl/?url=images.unsplash.com/photo-1485230895905-ec40ba36b9bc?w=480&h=640&fit=crop&auto=format&q=72&output=webp" alt="Boho Sundress" width="480" height="640" loading="lazy">
-                <div class="product-actions">
-                  <button class="product-action-btn btn-add-cart">Add to Cart</button>
-                  <button class="product-action-btn btn-wishlist" aria-label="Wishlist"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-                </div>
-              </div>
-              <div class="product-info">
-                <p class="product-brand">Stackly Summer</p>
-                <h3 class="product-name">Boho Smocked Sundress</h3>
-                <div class="product-rating"><div class="stars">★★★★★</div><span class="rating-count">(204)</span></div>
-                <div class="product-price">
-                  <span class="price-current">₹1,799</span>
-                  <span class="price-original">₹2,999</span>
-                  <span class="price-save">-40%</span>
-                </div>
-                <div class="product-colors">
-                  <div class="color-swatch active" style="background:#F2C4B0"></div>
-                  <div class="color-swatch" style="background:#C9A96E"></div>
-                  <div class="color-swatch" style="background:#fff;border:1px solid #ddd"></div>
-                </div>
-              </div>
-            </article>
-
-            <!-- 4 -->
-            <article class="product-card">
-              <div class="product-img-wrap">
-                <span class="product-badge new">New</span>
-                <img class="product-img" src="https://wsrv.nl/?url=images.unsplash.com/photo-1434389677669-e08b4cac3105?w=480&h=640&fit=crop&auto=format&q=72&output=webp" alt="Silk Blouse" width="480" height="640" loading="lazy">
-                <div class="product-actions">
-                  <button class="product-action-btn btn-add-cart">Add to Cart</button>
-                  <button class="product-action-btn btn-wishlist" aria-label="Wishlist"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-                </div>
-              </div>
-              <div class="product-info">
-                <p class="product-brand">Luxe Edit</p>
-                <h3 class="product-name">Silk Satin Relaxed Blouse</h3>
-                <div class="product-rating"><div class="stars">★★★★☆</div><span class="rating-count">(56)</span></div>
-                <div class="product-price"><span class="price-current">₹3,299</span></div>
-                <div class="product-colors">
-                  <div class="color-swatch active" style="background:#FAEBD7"></div>
-                  <div class="color-swatch" style="background:#C9614A"></div>
-                  <div class="color-swatch" style="background:#8FA882"></div>
-                </div>
-              </div>
-            </article>
-
-            <!-- 5 -->
-            <article class="product-card">
-              <div class="product-img-wrap">
-                <span class="product-badge hot">Hot</span>
-                <img class="product-img" src="https://wsrv.nl/?url=images.unsplash.com/photo-1509631179647-0177331693ae?w=480&h=640&fit=crop&auto=format&q=72&output=webp" alt="Summer Floral" width="480" height="640" loading="lazy">
-                <div class="product-actions">
-                  <button class="product-action-btn btn-add-cart">Add to Cart</button>
-                  <button class="product-action-btn btn-wishlist" aria-label="Wishlist"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-                </div>
-              </div>
-              <div class="product-info">
-                <p class="product-brand">Stackly Summer</p>
-                <h3 class="product-name">Ruffled Off-Shoulder Dress</h3>
-                <div class="product-rating"><div class="stars">★★★★★</div><span class="rating-count">(312)</span></div>
-                <div class="product-price">
-                  <span class="price-current">₹2,199</span>
-                  <span class="price-original">₹3,499</span>
-                  <span class="price-save">-37%</span>
-                </div>
-                <div class="product-colors">
-                  <div class="color-swatch active" style="background:#F2C4B0"></div>
-                  <div class="color-swatch" style="background:#fff;border:1px solid #ddd"></div>
-                </div>
-              </div>
-            </article>
-
-            <!-- 6 -->
-            <article class="product-card">
-              <div class="product-img-wrap">
-                <img class="product-img" src="https://wsrv.nl/?url=images.unsplash.com/photo-1516257984-b1b4d707412e?w=480&h=640&fit=crop&auto=format&q=72&output=webp" alt="Men Casual" width="480" height="640" loading="lazy">
-                <div class="product-actions">
-                  <button class="product-action-btn btn-add-cart">Add to Cart</button>
-                  <button class="product-action-btn btn-wishlist" aria-label="Wishlist"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-                </div>
-              </div>
-              <div class="product-info">
-                <p class="product-brand">Studio Line</p>
-                <h3 class="product-name">Slim Fit Oxford Shirt</h3>
-                <div class="product-rating"><div class="stars">★★★★☆</div><span class="rating-count">(74)</span></div>
-                <div class="product-price"><span class="price-current">₹1,899</span></div>
-                <div class="product-colors">
-                  <div class="color-swatch active" style="background:#FAEBD7"></div>
-                  <div class="color-swatch" style="background:#7B8FA1"></div>
-                  <div class="color-swatch" style="background:#2C2C2C"></div>
-                </div>
-              </div>
-            </article>
-
-            <!-- 7 -->
-            <article class="product-card">
-              <div class="product-img-wrap">
-                <span class="product-badge sale">Sale</span>
-                <img class="product-img" src="https://wsrv.nl/?url=images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=480&h=640&fit=crop&auto=format&q=72&output=webp" alt="Women Fashion" width="480" height="640" loading="lazy">
-                <div class="product-actions">
-                  <button class="product-action-btn btn-add-cart">Add to Cart</button>
-                  <button class="product-action-btn btn-wishlist" aria-label="Wishlist"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-                </div>
-              </div>
-              <div class="product-info">
-                <p class="product-brand">Stackly Essentials</p>
-                <h3 class="product-name">Pleated Midi Skirt</h3>
-                <div class="product-rating"><div class="stars">★★★★★</div><span class="rating-count">(166)</span></div>
-                <div class="product-price">
-                  <span class="price-current">₹1,499</span>
-                  <span class="price-original">₹2,299</span>
-                  <span class="price-save">-35%</span>
-                </div>
-                <div class="product-colors">
-                  <div class="color-swatch active" style="background:#D4C5A9"></div>
-                  <div class="color-swatch" style="background:#8FA882"></div>
-                  <div class="color-swatch" style="background:#2C2C2C"></div>
-                </div>
-              </div>
-            </article>
-
-            <!-- 8 -->
-            <article class="product-card">
-              <div class="product-img-wrap">
-                <img class="product-img" src="https://wsrv.nl/?url=images.unsplash.com/photo-1553062407-98eeb64c6a62?w=480&h=640&fit=crop&auto=format&q=72&output=webp" alt="Accessories Bag" width="480" height="640" loading="lazy">
-                <div class="product-actions">
-                  <button class="product-action-btn btn-add-cart">Add to Cart</button>
-                  <button class="product-action-btn btn-wishlist" aria-label="Wishlist"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-                </div>
-              </div>
-              <div class="product-info">
-                <p class="product-brand">Luxe Edit</p>
-                <h3 class="product-name">Structured Tote Bag</h3>
-                <div class="product-rating"><div class="stars">★★★★★</div><span class="rating-count">(93)</span></div>
-                <div class="product-price"><span class="price-current">₹5,499</span></div>
-                <div class="product-colors">
-                  <div class="color-swatch active" style="background:#D4C5A9"></div>
-                  <div class="color-swatch" style="background:#2C2C2C"></div>
-                  <div class="color-swatch" style="background:#C9614A"></div>
-                </div>
-              </div>
-            </article>
-
-            <!-- 9 -->
-            <article class="product-card">
-              <div class="product-img-wrap">
-                <span class="product-badge new">New</span>
-                <img class="product-img" src="https://wsrv.nl/?url=images.unsplash.com/photo-1558769132-cb1aea458c5e?w=480&h=640&fit=crop&auto=format&q=72&output=webp" alt="Summer Look" width="480" height="640" loading="lazy">
-                <div class="product-actions">
-                  <button class="product-action-btn btn-add-cart">Add to Cart</button>
-                  <button class="product-action-btn btn-wishlist" aria-label="Wishlist"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-                </div>
-              </div>
-              <div class="product-info">
-                <p class="product-brand">Stackly Summer</p>
-                <h3 class="product-name">Resort Co-ord Set</h3>
-                <div class="product-rating"><div class="stars">★★★★★</div><span class="rating-count">(231)</span></div>
-                <div class="product-price">
-                  <span class="price-current">₹3,799</span>
-                  <span class="price-original">₹5,499</span>
-                  <span class="price-save">-31%</span>
-                </div>
-                <div class="product-colors">
-                  <div class="color-swatch active" style="background:#F2C4B0"></div>
-                  <div class="color-swatch" style="background:#8FA882"></div>
-                </div>
-              </div>
-            </article>
-
-            <!-- 10 -->
-            <article class="product-card">
-              <div class="product-img-wrap">
-                <img class="product-img" src="https://wsrv.nl/?url=images.unsplash.com/photo-1542291026-7eec264c27ff?w=480&h=640&fit=crop&auto=format&q=72&output=webp" alt="Sneakers" width="480" height="640" loading="lazy">
-                <div class="product-actions">
-                  <button class="product-action-btn btn-add-cart">Add to Cart</button>
-                  <button class="product-action-btn btn-wishlist" aria-label="Wishlist"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-                </div>
-              </div>
-              <div class="product-info">
-                <p class="product-brand">Stackly Essentials</p>
-                <h3 class="product-name">Minimal Canvas Sneakers</h3>
-                <div class="product-rating"><div class="stars">★★★★☆</div><span class="rating-count">(148)</span></div>
-                <div class="product-price"><span class="price-current">₹2,999</span></div>
-                <div class="product-colors">
-                  <div class="color-swatch active" style="background:#fff;border:1px solid #ddd"></div>
-                  <div class="color-swatch" style="background:#2C2C2C"></div>
-                  <div class="color-swatch" style="background:#F2C4B0"></div>
-                </div>
-              </div>
-            </article>
-
-            <!-- 11 -->
-            <article class="product-card">
-              <div class="product-img-wrap">
-                <span class="product-badge sale">Sale</span>
-                <img class="product-img" src="https://wsrv.nl/?url=images.unsplash.com/photo-1469334031218-e382a71b716b?w=480&h=640&fit=crop&auto=format&q=72&output=webp" alt="Party Dress" width="480" height="640" loading="lazy">
-                <div class="product-actions">
-                  <button class="product-action-btn btn-add-cart">Add to Cart</button>
-                  <button class="product-action-btn btn-wishlist" aria-label="Wishlist"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-                </div>
-              </div>
-              <div class="product-info">
-                <p class="product-brand">Luxe Edit</p>
-                <h3 class="product-name">Sequin Evening Gown</h3>
-                <div class="product-rating"><div class="stars">★★★★★</div><span class="rating-count">(44)</span></div>
-                <div class="product-price">
-                  <span class="price-current">₹6,999</span>
-                  <span class="price-original">₹10,999</span>
-                  <span class="price-save">-36%</span>
-                </div>
-                <div class="product-colors">
-                  <div class="color-swatch active" style="background:#C9A96E"></div>
-                  <div class="color-swatch" style="background:#2C2C2C"></div>
-                </div>
-              </div>
-            </article>
-
-            <!-- 12 -->
-            <article class="product-card">
-              <div class="product-img-wrap">
-                <span class="product-badge new">New</span>
-                <img class="product-img" src="https://wsrv.nl/?url=images.unsplash.com/photo-1534126511673-b6899657816a?w=480&h=640&fit=crop&auto=format&q=72&output=webp" alt="Summer Top" width="480" height="640" loading="lazy">
-                <div class="product-actions">
-                  <button class="product-action-btn btn-add-cart">Add to Cart</button>
-                  <button class="product-action-btn btn-wishlist" aria-label="Wishlist"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-                </div>
-              </div>
-              <div class="product-info">
-                <p class="product-brand">Stackly Summer</p>
-                <h3 class="product-name">Linen Crop Top & Trouser Set</h3>
-                <div class="product-rating"><div class="stars">★★★★★</div><span class="rating-count">(87)</span></div>
-                <div class="product-price">
-                  <span class="price-current">₹2,799</span>
-                  <span class="price-original">₹3,799</span>
-                  <span class="price-save">-26%</span>
-                </div>
-                <div class="product-colors">
-                  <div class="color-swatch active" style="background:#FAEBD7"></div>
-                  <div class="color-swatch" style="background:#8FA882"></div>
-                </div>
-              </div>
-            </article>
-
-          </div><!-- /products-grid -->
-
-          <!-- Pagination -->
-          <nav class="pagination" aria-label="Shop pages">
-            <button class="page-btn arrow">‹</button>
-            <button class="page-btn active">1</button>
-            <button class="page-btn">2</button>
-            <button class="page-btn">3</button>
-            <button class="page-btn">4</button>
-            <span style="padding:0 8px;color:var(--medium-gray)">...</span>
-            <button class="page-btn">104</button>
-            <button class="page-btn arrow">›</button>
-          </nav>
-
-        </div><!-- /shop-main -->
-      </div><!-- /shop-inner -->
+    <div class="product-info">
+      <p class="product-brand">${p.brand}</p>
+      <h3 class="product-name">${p.name}</h3>
+      <div class="product-rating"><span class="stars">${stars(p.stars)}</span><span class="rating-count">(${p.rev})</span></div>
+      <div class="product-price">
+        <span class="price-current">₹${p.price.toLocaleString('en-IN')}</span>
+        ${p.orig?`<span class="price-original">₹${p.orig.toLocaleString('en-IN')}</span><span class="price-save">-${disc}%</span>`:''}
+      </div>
+      <div class="product-colors">${sw}</div>
     </div>
+  </article>`;
+}
 
-  </main>
-  <div id="footer-mount"></div>
-  <script src="component.js"></script>
-  <script src="main.js"></script>
-  <script>
-    // Price slider
-    const priceSlider = document.getElementById('price-slider');
-    const priceDisplay = document.getElementById('price-display');
-    if (priceSlider) {
-      priceSlider.addEventListener('input', function() {
-        const val = parseInt(this.value);
-        priceDisplay.textContent = '₹' + val.toLocaleString('en-IN');
-        const pct = ((val - 500) / (15000 - 500)) * 100;
-        this.style.background = `linear-gradient(to right, var(--terracotta) 0%, var(--terracotta) ${pct}%, var(--light-gray) ${pct}%)`;
-      });
-    }
-    // View toggle
-    const view2 = document.getElementById('view-2');
-    const view3 = document.getElementById('view-3');
-    const grid = document.getElementById('products-grid');
-    if (view2 && view3 && grid) {
-      view2.addEventListener('click', function() {
-        grid.classList.add('view-2col');
-        view2.classList.add('active'); view3.classList.remove('active');
-      });
-      view3.addEventListener('click', function() {
-        grid.classList.remove('view-2col');
-        view3.classList.add('active'); view2.classList.remove('active');
-      });
-    }
-    // Hero category filter
-    document.querySelectorAll('.shop-hero-tag').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        document.querySelectorAll('.shop-hero-tag').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-      });
-    });
-    // Filter toggle mobile
-    const filterToggleBtn = document.getElementById('filter-toggle-btn');
-    const filterSidebar = document.querySelector('.filter-sidebar');
-    if (filterToggleBtn && filterSidebar) {
-      filterToggleBtn.addEventListener('click', function() {
-        filterSidebar.classList.toggle('show');
-        filterToggleBtn.innerHTML = filterSidebar.classList.contains('show')
-          ? '<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg> Close'
-          : '<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 3H2l8 9.46V19l4 2v-8.54z"/></svg> Filters';
-      });
-    }
-    // Filter accordion
-    document.querySelectorAll('.filter-title').forEach(function(title) {
-      title.addEventListener('click', function() {
-        title.closest('.filter-section').classList.toggle('collapsed');
-      });
-    });
-    // Active filter tags remove
-    document.querySelectorAll('.active-filter-tag').forEach(function(tag) {
-      tag.addEventListener('click', function() { tag.remove(); });
-    });
-    // Filter color swatches
-    document.querySelectorAll('.filter-color-swatch').forEach(function(sw) {
-      sw.addEventListener('click', function() { sw.classList.toggle('active'); });
-    });
-    // Pagination
-    document.querySelectorAll('.page-btn:not(.arrow)').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        document.querySelectorAll('.page-btn:not(.arrow)').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-      });
-    });
-  </script>
+function renderProducts(catFilter) {
+  const container = document.getElementById('productsContainer');
+  const cats = catFilter==='all' ? Object.keys(SECTION_META) : [catFilter];
+  let html='', total=0;
+  cats.forEach(cat=>{
+    const items = PRODUCTS.filter(p=>p.cat===cat);
+    if(!items.length) return;
+    total+=items.length;
+    html+=`<h2 class="collection-section-head">${SECTION_META[cat]} <span class="coll-pill">${items.length} Items</span></h2>`;
+    html+=`<div class="products-grid-4" id="grid-${cat}">`;
+    items.forEach(p=>{ html+=buildCard(p); });
+    html+='</div>';
+  });
+  container.innerHTML = html;
+  document.getElementById('resultCount').textContent='1–'+total;
+  // re-observe for scroll reveal
+  if(typeof IntersectionObserver!=='undefined'){
+    const io = new IntersectionObserver(entries=>entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in-view'); io.unobserve(e.target); }
+    }),{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+    container.querySelectorAll('.stagger').forEach(el=>io.observe(el));
+  }
+}
+
+// ── WISHLIST ───────────────────────────────────────────────────
+function toggleWish(btn) {
+  btn.classList.toggle('active');
+  const svg = btn.querySelector('svg');
+  if(btn.classList.contains('active')){ svg.setAttribute('fill','#C9614A'); svg.setAttribute('stroke','#C9614A'); }
+  else { svg.setAttribute('fill','none'); svg.setAttribute('stroke','currentColor'); }
+  const msg = btn.classList.contains('active') ? '❤️ Added to wishlist!' : '💔 Removed from wishlist';
+  if(typeof showToast==='function') showToast(msg); else _toast(msg);
+}
+
+// ── FALLBACK TOAST (if main.js not loaded) ─────────────────────
+function _toast(msg) {
+  let wrap = document.querySelector('.toast-container');
+  if(!wrap){ wrap=document.createElement('div'); wrap.className='toast-container'; document.body.appendChild(wrap); }
+  const t = document.createElement('div');
+  t.className='toast'; t.innerHTML=`<span class="toast-icon">✓</span><span>${msg}</span>`;
+  wrap.appendChild(t);
+  requestAnimationFrame(()=>t.classList.add('show'));
+  setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),400); },3200);
+}
+
+// ── HERO CATEGORY TAGS ─────────────────────────────────────────
+document.getElementById('heroCatTags').addEventListener('click', function(e){
+  const tag = e.target.closest('.shop-hero-tag'); if(!tag) return;
+  document.querySelectorAll('.shop-hero-tag').forEach(b=>b.classList.remove('active'));
+  tag.classList.add('active');
+  renderProducts(tag.dataset.cat);
+});
+
+// ── VIEW TOGGLE ────────────────────────────────────────────────
+document.getElementById('view-2').addEventListener('click',function(){
+  document.querySelectorAll('.products-grid-4').forEach(g=>g.classList.add('view-2col'));
+  this.classList.add('active'); document.getElementById('view-3').classList.remove('active');
+});
+document.getElementById('view-3').addEventListener('click',function(){
+  document.querySelectorAll('.products-grid-4').forEach(g=>g.classList.remove('view-2col'));
+  this.classList.add('active'); document.getElementById('view-2').classList.remove('active');
+});
+
+// ── FILTER SIDEBAR ─────────────────────────────────────────────
+function toggleFilterSection(el) { el.closest('.filter-section').classList.toggle('collapsed'); }
+
+document.getElementById('filter-toggle-btn').addEventListener('click',function(){
+  const sb=document.getElementById('filterSidebar');
+  sb.classList.toggle('show');
+  this.innerHTML=sb.classList.contains('show')
+    ?'<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg> Close'
+    :'<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 3H2l8 9.46V19l4 2v-8.54z"/></svg> Filters';
+});
+
+document.getElementById('clearAllFilters').addEventListener('click',function(){
+  document.querySelectorAll('.filter-sidebar input[type="checkbox"]').forEach(c=>c.checked=false);
+  document.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.filter-color-swatch').forEach(s=>s.classList.remove('active'));
+  if(typeof showToast==='function') showToast('✓ Filters cleared'); else _toast('✓ Filters cleared');
+});
+
+// Price slider
+const priceSlider=document.getElementById('price-slider');
+const priceDisplay=document.getElementById('price-display');
+priceSlider.addEventListener('input',function(){
+  const v=parseInt(this.value);
+  priceDisplay.textContent='₹'+v.toLocaleString('en-IN');
+  const pct=((v-500)/(15000-500))*100;
+  this.style.background=`linear-gradient(to right,var(--terracotta) 0%,var(--terracotta) ${pct}%,var(--light-gray) ${pct}%)`;
+});
+
+// Size buttons
+document.querySelectorAll('.size-btn').forEach(btn=>{
+  btn.addEventListener('click',function(){ this.classList.toggle('active'); });
+});
+
+// Pagination
+document.querySelectorAll('.page-btn:not(.arrow)').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.page-btn:not(.arrow)').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+// Sort
+document.getElementById('sortSelect').addEventListener('change',function(){
+  if(typeof showToast==='function') showToast('✓ Sorted: '+this.value.replace('Sort: ',''));
+});
+
+// ── INIT ───────────────────────────────────────────────────────
+renderProducts('all');
+renderCart();
+</script>
 </body>
 </html>

@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Store Dashboard — Stackly</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --cream:#FAF7F2;--warm-white:#FFFDF9;--blush:#F2C4B0;
+      --terracotta:#C9614A;--rust:#A8432A;--caramel:#D4956A;
+      --sage:#8FA882;--deep-sage:#5A7050;--charcoal:#2C2C2C;
+      --soft-black:#1A1A1A;--medium-gray:#888;--light-gray:#E8E4DF;
+      --gold:#C9A96E;--sidebar:#1C1410;--sidebar-w:240px;
+      --font-display:'Cormorant Garamond',serif;
+      --font-body:'DM Sans',sans-serif;
+      --font-accent:'Bebas Neue',sans-serif;
+      --ease:cubic-bezier(.25,.46,.45,.94);
+      --bounce:cubic-bezier(.34,1.56,.64,1);
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html,body{height:100%;font-family:var(--font-body);background:var(--cream);color:var(--charcoal);overflow:hidden}
+    a{text-decoration:none;color:inherit}
+    button{cursor:pointer;border:none;background:none;font-family:var(--font-body)}
+
+    /* LAYOUT */
+    .app{display:flex;height:100vh;overflow:hidden}
+
+    /* SIDEBAR */
+    .sidebar{width:var(--sidebar-w);background:var(--sidebar);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;position:relative;z-index:20;transition:transform .3s var(--ease)}
+    .sb-logo{padding:22px 20px 18px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:10px}
+    .sb-logo img {
+    width: 90px;
+    filter: brightness(0) saturate(100%) invert(50%) sepia(34%) saturate(1074%) hue-rotate(325deg) brightness(93%) contrast(91%);
+    opacity: .9;
+}
+    .sb-badge{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:var(--terracotta);color:#fff;padding:2px 7px;border-radius:20px;margin-left:2px}
+    .sb-user{padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:10px}
+    .sb-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--terracotta),var(--caramel));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;text-transform:uppercase}
+    .sb-user-info{overflow:hidden}
+    .sb-name{font-size:13px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .sb-email{font-size:10px;color:rgba(255,255,255,.4);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .sb-role-tag{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--caramel);font-weight:600;display:block;margin-top:1px}
+
+    .sb-nav{flex:1;overflow-y:auto;padding:12px 0}
+    .sb-section-label{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.25);padding:14px 20px 6px;font-weight:600}
+    .sb-item{display:flex;align-items:center;gap:11px;padding:10px 20px;font-size:13px;color:rgba(255,255,255,.55);transition:all .25s var(--ease);cursor:pointer;position:relative;border-radius:0}
+    .sb-item:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.85)}
+    .sb-item.active{background:rgba(201,97,74,.15);color:#fff}
+    .sb-item.active::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--terracotta);border-radius:0 3px 3px 0}
+    .sb-item svg{flex-shrink:0;opacity:.7}
+    .sb-item.active svg{opacity:1}
+    .sb-badge-count{margin-left:auto;background:var(--terracotta);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;min-width:20px;text-align:center}
+
+    .sb-bottom{padding:14px 20px;border-top:1px solid rgba(255,255,255,.07)}
+    .btn-logout{display:flex;align-items:center;gap:9px;font-size:12px;color:rgba(255,255,255,.4);transition:color .25s;width:100%;padding:8px 0}
+    .btn-logout:hover{color:rgba(255,255,255,.7)}
+
+    /* MOBILE SIDEBAR OVERLAY */
+    .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:19;backdrop-filter:blur(2px)}
+    .sidebar-overlay.open{display:block}
+
+    /* MAIN */
+    .main{flex:1;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+
+    /* TOP BAR */
+    .topbar{height:62px;background:var(--warm-white);border-bottom:1px solid var(--light-gray);display:flex;align-items:center;justify-content:space-between;padding:0 20px;flex-shrink:0;gap:12px}
+    .tb-left{display:flex;align-items:center;gap:12px;min-width:0;flex:1}
+    .tb-menu-btn{width:36px;height:36px;border-radius:10px;background:var(--cream);border:1px solid var(--light-gray);display:none;align-items:center;justify-content:center;color:var(--charcoal);cursor:pointer;flex-shrink:0;transition:all .25s}
+    .tb-menu-btn:hover{border-color:var(--terracotta);color:var(--terracotta)}
+    .tb-title{font-family:var(--font-display);font-size:22px;font-weight:400;color:var(--soft-black);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .tb-title em{font-style:italic;color:var(--terracotta)}
+    .tb-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+    .tb-icon-btn{width:36px;height:36px;border-radius:10px;background:var(--cream);border:1px solid var(--light-gray);display:flex;align-items:center;justify-content:center;color:var(--medium-gray);transition:all .25s;cursor:pointer;position:relative}
+    .tb-icon-btn:hover{border-color:var(--terracotta);color:var(--terracotta)}
+    .tb-notif-dot{position:absolute;top:6px;right:6px;width:7px;height:7px;background:var(--terracotta);border-radius:50%;border:2px solid var(--warm-white)}
+    .tb-date{font-size:12px;color:var(--medium-gray);white-space:nowrap}
+
+    /* CONTENT */
+    .content{flex:1;overflow-y:auto;padding:20px}
+
+    /* SECTION */
+    .section{display:none}
+    .section.active{display:block}
+
+    /* STATS GRID */
+    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+    .stat-card{background:var(--warm-white);border:1px solid var(--light-gray);border-radius:16px;padding:20px 22px;position:relative;overflow:hidden;transition:transform .25s,box-shadow .25s}
+    .stat-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.07)}
+    .stat-card::after{content:'';position:absolute;right:-10px;bottom:-10px;width:70px;height:70px;border-radius:50%;opacity:.07}
+    .stat-card.orange::after{background:var(--terracotta)}
+    .stat-card.green::after{background:var(--sage)}
+    .stat-card.gold::after{background:var(--gold)}
+    .stat-card.blue::after{background:#6B8CBE}
+    .stat-label{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--medium-gray);margin-bottom:8px}
+    .stat-value{font-family:var(--font-display);font-size:34px;font-weight:600;color:var(--soft-black);line-height:1}
+    .stat-sub{font-size:12px;color:var(--sage);margin-top:6px;font-weight:500}
+    .stat-sub.down{color:#e05252}
+    .stat-icon{position:absolute;top:18px;right:18px;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px}
+    .stat-icon.orange{background:rgba(201,97,74,.1)}
+    .stat-icon.green{background:rgba(143,168,130,.12)}
+    .stat-icon.gold{background:rgba(201,169,110,.12)}
+    .stat-icon.blue{background:rgba(107,140,190,.1)}
+
+    /* CARDS */
+    .card{background:var(--warm-white);border:1px solid var(--light-gray);border-radius:16px;overflow:hidden;margin-bottom:20px}
+    .card-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--light-gray);gap:10px;flex-wrap:wrap}
+    .card-title{font-size:14px;font-weight:600;color:var(--soft-black)}
+    .card-action{font-size:12px;color:var(--terracotta);font-weight:500;cursor:pointer;transition:color .2s;white-space:nowrap}
+    .card-action:hover{color:var(--rust)}
+
+    /* TABLE WRAPPER */
+    .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .tbl{width:100%;border-collapse:collapse;min-width:600px}
+    .tbl th{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--medium-gray);padding:10px 16px;text-align:left;background:rgba(250,247,242,.7);white-space:nowrap}
+    .tbl td{padding:12px 16px;font-size:13px;border-bottom:1px solid var(--light-gray);vertical-align:middle}
+    .tbl tr:last-child td{border-bottom:none}
+    .tbl tr:hover td{background:rgba(201,97,74,.03)}
+
+    /* STATUS BADGES */
+    .badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap}
+    .badge::before{content:'';width:5px;height:5px;border-radius:50%;flex-shrink:0}
+    .badge-delivered{background:rgba(143,168,130,.15);color:var(--deep-sage)}.badge-delivered::before{background:var(--sage)}
+    .badge-processing{background:rgba(212,149,106,.15);color:#8B5E3C}.badge-processing::before{background:var(--caramel)}
+    .badge-shipped{background:rgba(107,140,190,.15);color:#2C4A7A}.badge-shipped::before{background:#6B8CBE}
+    .badge-pending{background:rgba(201,97,74,.1);color:var(--terracotta)}.badge-pending::before{background:var(--terracotta)}
+    .badge-returned{background:rgba(224,82,82,.1);color:#C0392B}.badge-returned::before{background:#e05252}
+    .badge-active{background:rgba(143,168,130,.15);color:var(--deep-sage)}.badge-active::before{background:var(--sage)}
+    .badge-low{background:rgba(201,97,74,.1);color:var(--terracotta)}.badge-low::before{background:var(--terracotta)}
+    .badge-out{background:rgba(224,82,82,.1);color:#C0392B}.badge-out::before{background:#e05252}
+
+    /* PRODUCT THUMB */
+    .prod-cell{display:flex;align-items:center;gap:10px}
+    .prod-thumb{width:36px;height:36px;border-radius:8px;object-fit:cover;background:var(--light-gray);flex-shrink:0}
+    .prod-name{font-weight:500;font-size:13px}
+    .prod-sku{font-size:11px;color:var(--medium-gray)}
+
+    /* 2-col grid */
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+
+    /* CHART BAR */
+    .chart-bars{padding:10px 20px 16px;display:flex;align-items:flex-end;gap:8px;height:140px}
+    .bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+    .bar{width:100%;border-radius:6px 6px 0 0;background:linear-gradient(180deg,var(--terracotta),var(--caramel));transition:height .6s var(--bounce);min-height:4px}
+    .bar-label{font-size:10px;color:var(--medium-gray);font-weight:500}
+    .bar-val{font-size:10px;color:var(--charcoal);font-weight:600}
+
+    /* DONUT */
+    .donut-wrap{padding:16px 20px;display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+    .donut-svg{flex-shrink:0}
+    .donut-legend{flex:1;display:flex;flex-direction:column;gap:9px;min-width:150px}
+    .legend-item{display:flex;align-items:center;gap:8px;font-size:12px}
+    .legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+    .legend-label{flex:1;color:var(--charcoal)}
+    .legend-val{font-weight:600;color:var(--soft-black)}
+    .legend-pct{color:var(--medium-gray);font-size:11px}
+
+    /* FORM elements */
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+    .f-field label{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--charcoal);display:block;margin-bottom:6px}
+    .f-field input,.f-field select,.f-field textarea{width:100%;padding:10px 14px;border:1.5px solid var(--light-gray);border-radius:10px;background:var(--cream);font-family:var(--font-body);font-size:13px;color:var(--charcoal);outline:none;transition:border-color .25s}
+    .f-field input:focus,.f-field select:focus,.f-field textarea:focus{border-color:var(--terracotta)}
+    .f-field textarea{resize:vertical;min-height:80px}
+    .btn-primary{padding:11px 22px;background:var(--terracotta);color:#fff;border-radius:10px;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;transition:all .3s var(--bounce)}
+    .btn-primary:hover{background:var(--rust);transform:translateY(-1px);box-shadow:0 8px 20px rgba(201,97,74,.35)}
+    .btn-outline{padding:11px 22px;border:1.5px solid var(--light-gray);border-radius:10px;font-size:13px;font-weight:600;color:var(--medium-gray);transition:all .25s}
+    .btn-outline:hover{border-color:var(--charcoal);color:var(--charcoal)}
+
+    /* CUSTOMER cards */
+    .customer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .cust-card{background:var(--warm-white);border:1px solid var(--light-gray);border-radius:14px;padding:18px;transition:transform .25s,box-shadow .25s}
+    .cust-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.07)}
+    .cust-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;margin-bottom:10px}
+    .cust-name{font-weight:600;font-size:14px;margin-bottom:2px}
+    .cust-email{font-size:11px;color:var(--medium-gray);margin-bottom:8px}
+    .cust-stats{display:flex;gap:14px}
+    .cust-stat{font-size:11px;color:var(--medium-gray)}.cust-stat span{display:block;font-weight:700;font-size:14px;color:var(--charcoal)}
+
+    /* SETTINGS */
+    .settings-section{margin-bottom:28px}
+    .settings-section h3{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--medium-gray);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--light-gray)}
+    .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(232,228,223,.5);gap:12px}
+    .toggle-info .tgl-label{font-size:13px;font-weight:500;color:var(--charcoal)}
+    .toggle-info .tgl-desc{font-size:12px;color:var(--medium-gray);margin-top:2px}
+    .toggle{width:40px;height:22px;background:var(--light-gray);border-radius:11px;position:relative;cursor:pointer;transition:background .3s;flex-shrink:0}
+    .toggle.on{background:var(--terracotta)}
+    .toggle::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .3s var(--bounce);box-shadow:0 1px 4px rgba(0,0,0,.2)}
+    .toggle.on::after{transform:translateX(18px)}
+
+    /* REVIEW CARDS */
+    .review-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .review-card{background:var(--warm-white);border:1px solid var(--light-gray);border-radius:14px;padding:18px}
+    .rev-hdr{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+    .rev-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0}
+    .rev-name{font-weight:600;font-size:13px}
+    .rev-product{font-size:11px;color:var(--medium-gray)}
+    .rev-stars{font-size:12px;color:var(--gold);margin-left:auto;white-space:nowrap}
+    .rev-text{font-size:13px;color:var(--charcoal);line-height:1.6;font-style:italic}
+    .rev-date{font-size:11px;color:var(--medium-gray);margin-top:8px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+
+    /* NOTIFICATION items */
+    .notif-list{padding:4px 0}
+    .notif-item{display:flex;align-items:flex-start;gap:12px;padding:14px 20px;border-bottom:1px solid var(--light-gray);cursor:pointer;transition:background .2s}
+    .notif-item:hover{background:rgba(201,97,74,.03)}
+    .notif-item:last-child{border-bottom:none}
+    .notif-dot{width:8px;height:8px;border-radius:50%;background:var(--terracotta);margin-top:4px;flex-shrink:0}
+    .notif-dot.read{background:var(--light-gray)}
+    .notif-text{font-size:13px;color:var(--charcoal);line-height:1.5;flex:1}
+    .notif-text strong{font-weight:600}
+    .notif-time{font-size:11px;color:var(--medium-gray);margin-top:2px}
+
+    /* PAGE HEADER */
+    .page-hdr{margin-bottom:20px}
+    .page-hdr h2{font-family:var(--font-display);font-size:28px;font-weight:400;color:var(--soft-black)}
+    .page-hdr h2 em{font-style:italic;color:var(--terracotta)}
+    .page-hdr p{font-size:13px;color:var(--medium-gray);margin-top:4px}
+
+    /* COUPON */
+    .coupon-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:20px}
+    .coupon-card{border:2px dashed var(--light-gray);border-radius:12px;padding:16px;position:relative;transition:border-color .25s}
+    .coupon-card:hover{border-color:var(--terracotta)}
+    .coupon-code{font-family:var(--font-accent);font-size:22px;color:var(--terracotta);letter-spacing:.05em}
+    .coupon-off{font-size:24px;font-weight:700;color:var(--soft-black);margin:4px 0}
+    .coupon-desc{font-size:12px;color:var(--medium-gray)}
+    .coupon-uses{font-size:11px;color:var(--medium-gray);margin-top:8px}
+    .coupon-status{position:absolute;top:10px;right:10px}
+
+    /* TOAST */
+    .toast{position:fixed;bottom:24px;right:20px;left:20px;max-width:360px;margin:0 auto;background:var(--soft-black);color:#fff;padding:13px 20px;border-radius:12px;font-size:13px;font-weight:500;z-index:9000;transition:transform .4s var(--bounce),opacity .35s;opacity:0;transform:translateY(20px);pointer-events:none;display:flex;align-items:center;gap:9px}
+    .toast.show{opacity:1;transform:translateY(0)}
+
+    /* Modal */
+    .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:1000;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
+    .modal-bg.open{display:flex}
+    .modal{background:var(--warm-white);border-radius:20px 20px 0 0;padding:24px 20px;width:100%;max-width:540px;max-height:90vh;overflow-y:auto}
+    .modal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+    .modal-hdr h3{font-family:var(--font-display);font-size:24px}
+    .modal-hdr h3 em{font-style:italic;color:var(--terracotta)}
+    .modal-close{width:32px;height:32px;border-radius:8px;background:var(--cream);border:1px solid var(--light-gray);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:var(--medium-gray);transition:all .2s}
+    .modal-close:hover{background:var(--light-gray)}
+
+    /* BOTTOM NAV (mobile only) */
+    .bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--sidebar);border-top:1px solid rgba(255,255,255,.08);z-index:18;padding:8px 0 env(safe-area-inset-bottom,8px)}
+    .bn-items{display:flex;align-items:stretch}
+    .bn-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:6px 4px;cursor:pointer;color:rgba(255,255,255,.45);transition:color .2s;position:relative;min-width:0}
+    .bn-item.active{color:#fff}
+    .bn-item.active::after{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:20px;height:2px;background:var(--terracotta);border-radius:0 0 3px 3px}
+    .bn-item svg{flex-shrink:0}
+    .bn-label{font-size:9px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+    .bn-dot{position:absolute;top:4px;right:calc(50% - 16px);width:6px;height:6px;background:var(--terracotta);border-radius:50%;border:1.5px solid var(--sidebar)}
+
+    /* scrollbar */
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--light-gray);border-radius:99px}
+
+    /* === RESPONSIVE === */
+    @media(max-width:1100px){
+      .stats-grid{grid-template-columns:repeat(2,1fr)}
+      .two-col{grid-template-columns:1fr}
+      .customer-grid{grid-template-columns:1fr 1fr}
+    }
+
+    @media(max-width:768px){
+      /* Sidebar: slide-in drawer */
+      .sidebar{
+        position:fixed;top:0;left:0;height:100%;
+        transform:translateX(-100%);
+        z-index:20;
+      }
+      .sidebar.open{transform:translateX(0)}
+
+      /* Show hamburger */
+      .tb-menu-btn{display:flex}
+
+      /* Hide date on small screens */
+      .tb-date{display:none}
+
+      .content{padding:16px;padding-bottom:80px}
+
+      /* Stats: 2 col */
+      .stats-grid{grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}
+      .stat-card{padding:16px}
+      .stat-value{font-size:26px}
+
+      /* Two col: single */
+      .two-col{grid-template-columns:1fr;gap:14px;margin-bottom:14px}
+
+      /* Customer grid: 1 col */
+      .customer-grid{grid-template-columns:1fr}
+
+      /* Review grid: 1 col */
+      .review-grid{grid-template-columns:1fr}
+
+      /* Coupon grid: 1 col */
+      .coupon-grid{grid-template-columns:1fr;padding:14px}
+
+      /* Analytics stats: 2 col */
+      .analytics-stats{grid-template-columns:repeat(2,1fr) !important}
+
+      /* Form rows: 1 col */
+      .form-row{grid-template-columns:1fr}
+
+      /* Page header */
+      .page-hdr h2{font-size:22px}
+      .page-hdr{margin-bottom:14px}
+
+      /* Card header wrapping */
+      .card-hdr{padding:14px 16px;flex-wrap:wrap;gap:8px}
+
+      /* Table inside card */
+      .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+      /* Topbar title smaller */
+      .tb-title{font-size:18px}
+      .topbar{padding:0 14px}
+
+      /* Bottom nav */
+      .bottom-nav{display:block}
+
+      /* Modal bottom sheet */
+      .modal-bg{align-items:flex-end}
+      .modal{border-radius:20px 20px 0 0;max-height:85vh}
+
+      /* Donut wrap */
+      .donut-wrap{justify-content:center}
+
+      /* Chart bars */
+      .chart-bars{height:120px}
+    }
+
+    @media(max-width:480px){
+      .stats-grid{grid-template-columns:1fr 1fr;gap:10px}
+      .stat-card{padding:12px 14px}
+      .stat-value{font-size:22px}
+      .stat-sub{font-size:11px}
+      .stat-icon{width:30px;height:30px;font-size:14px}
+      .cust-stats{flex-wrap:wrap;gap:8px}
+    }
+  </style>
+</head>
+<body>
+
+<div class="toast" id="toast">
+  <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toastMsg">Action complete</span>
+</div>
+
+<!-- Sidebar overlay -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<!-- Add Product Modal -->
+<div class="modal-bg" id="addProductModal">
+  <div class="modal">
+    <div class="modal-hdr">
+      <h3>Add <em>Product</em></h3>
+      <button class="modal-close" onclick="closeModal('addProductModal')">✕</button>
+    </div>
+    <div class="form-row">
+      <div class="f-field"><label>Product Name</label><input type="text" placeholder="e.g. Silk Wrap Dress"></div>
+      <div class="f-field"><label>SKU</label><input type="text" placeholder="STK-0099"></div>
+    </div>
+    <div class="form-row">
+      <div class="f-field"><label>Category</label><select><option>Dresses</option><option>Tops</option><option>Bottoms</option><option>Outerwear</option><option>Accessories</option></select></div>
+      <div class="f-field"><label>Price (₹)</label><input type="number" placeholder="2499"></div>
+    </div>
+    <div class="form-row">
+      <div class="f-field"><label>Stock Qty</label><input type="number" placeholder="50"></div>
+      <div class="f-field"><label>Size</label><select><option>XS–XL</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option></select></div>
+    </div>
+    <div class="f-field" style="margin-bottom:16px"><label>Description</label><textarea placeholder="Describe the product…"></textarea></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button class="btn-outline" onclick="closeModal('addProductModal')">Cancel</button>
+      <button class="btn-primary" onclick="saveProduct()">Save Product</button>
+    </div>
+  </div>
+</div>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-logo"> <a href="index.html">
+      <img src="https://wsrv.nl/?url=https://snabsolutions.in/wp-content/uploads/2026/02/stackly-snab-solutions.png&w=260&h=104&output=webp&q=80&fit=inside" alt="Stackly">
+      </a><span class="sb-badge">Owner</span>
+    </div>
+
+    <div class="sb-user">
+      <div class="sb-avatar" id="ownerInitial">O</div>
+      <div class="sb-user-info">
+        <span class="sb-name" id="ownerName">Store Owner</span>
+        <span class="sb-email" id="ownerEmail">owner@stackly.com</span>
+        <span class="sb-role-tag">Store Administrator</span>
+      </div>
+    </div>
+
+    <nav class="sb-nav">
+      <span class="sb-section-label">Overview</span>
+      <div class="sb-item active" onclick="nav('overview')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Overview
+      </div>
+      <div class="sb-item" onclick="nav('orders')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Orders
+        <span class="sb-badge-count">8</span>
+      </div>
+      <div class="sb-item" onclick="nav('products')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+        Products
+      </div>
+      <span class="sb-section-label">Customers</span>
+      <div class="sb-item" onclick="nav('customers')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Customers
+      </div>
+      <div class="sb-item" onclick="nav('reviews')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Reviews
+        <span class="sb-badge-count">3</span>
+      </div>
+      <span class="sb-section-label">Store</span>
+      <div class="sb-item" onclick="nav('coupons')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+        Coupons
+      </div>
+      <div class="sb-item" onclick="nav('analytics')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Analytics
+      </div>
+      <div class="sb-item" onclick="nav('notifications')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        Notifications
+        <span class="sb-badge-count">5</span>
+      </div>
+      <div class="sb-item" onclick="nav('settings')">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </div>
+    </nav>
+
+    <div class="sb-bottom">
+      <button class="btn-logout" onclick="logout()">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sign Out
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar">
+      <div class="tb-left">
+        <button class="tb-menu-btn" onclick="toggleSidebar()" aria-label="Menu">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <span class="tb-title" id="pageTitle">Store <em>Overview</em></span>
+      </div>
+      <div class="tb-right">
+        <span class="tb-date" id="tbDate"></span>
+        <div class="tb-icon-btn" onclick="nav('notifications')" title="Notifications">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="tb-notif-dot"></span>
+        </div>
+        <div class="tb-icon-btn" onclick="nav('settings')" title="Settings">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- OVERVIEW -->
+      <div class="section active" id="sec-overview">
+        <div class="stats-grid">
+          <div class="stat-card orange"><span class="stat-label">Total Revenue</span><div class="stat-value">₹4.2L</div><div class="stat-sub">↑ 18.4% this month</div><div class="stat-icon orange">💰</div></div>
+          <div class="stat-card green"><span class="stat-label">Total Orders</span><div class="stat-value">1,284</div><div class="stat-sub">↑ 94 new this week</div><div class="stat-icon green">📦</div></div>
+          <div class="stat-card gold"><span class="stat-label">Active Products</span><div class="stat-value">247</div><div class="stat-sub">↑ 12 added this week</div><div class="stat-icon gold">🏷️</div></div>
+          <div class="stat-card blue"><span class="stat-label">Customers</span><div class="stat-value">3,891</div><div class="stat-sub">↑ 231 new this month</div><div class="stat-icon blue">👥</div></div>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-hdr"><span class="card-title">Monthly Revenue</span><span class="card-action" onclick="nav('analytics')">View Analytics →</span></div>
+            <div class="chart-bars" id="revChart"></div>
+          </div>
+          <div class="card">
+            <div class="card-hdr"><span class="card-title">Orders by Category</span><span class="card-action">This Month</span></div>
+            <div class="donut-wrap">
+              <svg class="donut-svg" width="100" height="100" viewBox="0 0 110 110">
+                <circle cx="55" cy="55" r="40" fill="none" stroke="#E8E4DF" stroke-width="18"/>
+                <circle cx="55" cy="55" r="40" fill="none" stroke="#C9614A" stroke-width="18" stroke-dasharray="100 151" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 55 55)"/>
+                <circle cx="55" cy="55" r="40" fill="none" stroke="#8FA882" stroke-width="18" stroke-dasharray="57 151" stroke-dashoffset="-100" stroke-linecap="round" transform="rotate(-90 55 55)"/>
+                <circle cx="55" cy="55" r="40" fill="none" stroke="#C9A96E" stroke-width="18" stroke-dasharray="35 151" stroke-dashoffset="-157" stroke-linecap="round" transform="rotate(-90 55 55)"/>
+                <circle cx="55" cy="55" r="40" fill="none" stroke="#D4956A" stroke-width="18" stroke-dasharray="10 151" stroke-dashoffset="-192" stroke-linecap="round" transform="rotate(-90 55 55)"/>
+              </svg>
+              <div class="donut-legend">
+                <div class="legend-item"><div class="legend-dot" style="background:#C9614A"></div><span class="legend-label">Dresses</span><span class="legend-val">402</span><span class="legend-pct">40%</span></div>
+                <div class="legend-item"><div class="legend-dot" style="background:#8FA882"></div><span class="legend-label">Tops</span><span class="legend-val">228</span><span class="legend-pct">23%</span></div>
+                <div class="legend-item"><div class="legend-dot" style="background:#C9A96E"></div><span class="legend-label">Bottoms</span><span class="legend-val">141</span><span class="legend-pct">14%</span></div>
+                <div class="legend-item"><div class="legend-dot" style="background:#D4956A"></div><span class="legend-label">Other</span><span class="legend-val">234</span><span class="legend-pct">23%</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-hdr"><span class="card-title">Recent Orders</span><span class="card-action" onclick="nav('orders')">View All →</span></div>
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead><tr><th>Order ID</th><th>Customer</th><th>Product</th><th>Amount</th><th>Date</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>#STK-4821</td><td>Priya Sharma</td><td>Floral Midi Dress</td><td>₹2,499</td><td>Jun 8</td><td><span class="badge badge-processing">Processing</span></td></tr>
+                <tr><td>#STK-4820</td><td>Ananya Iyer</td><td>Linen Blazer Set</td><td>₹4,299</td><td>Jun 8</td><td><span class="badge badge-shipped">Shipped</span></td></tr>
+                <tr><td>#STK-4819</td><td>Riya Mehta</td><td>Cotton Kurta</td><td>₹1,599</td><td>Jun 7</td><td><span class="badge badge-delivered">Delivered</span></td></tr>
+                <tr><td>#STK-4818</td><td>Shreya Nair</td><td>Silk Saree</td><td>₹6,999</td><td>Jun 7</td><td><span class="badge badge-delivered">Delivered</span></td></tr>
+                <tr><td>#STK-4817</td><td>Nisha Kapoor</td><td>Denim Jacket</td><td>₹3,299</td><td>Jun 6</td><td><span class="badge badge-returned">Returned</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ORDERS -->
+      <div class="section" id="sec-orders">
+        <div class="page-hdr"><h2>All <em>Orders</em></h2><p>Manage and track every customer order</p></div>
+        <div class="card">
+          <div class="card-hdr">
+            <span class="card-title">Order List (1,284 total)</span>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <select style="padding:6px 10px;border:1px solid var(--light-gray);border-radius:8px;font-size:12px;background:var(--cream);outline:none">
+                <option>All Status</option><option>Pending</option><option>Processing</option><option>Shipped</option><option>Delivered</option><option>Returned</option>
+              </select>
+              <button class="btn-primary" style="padding:7px 14px;font-size:12px">Export CSV</button>
+            </div>
+          </div>
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead><tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Amount</th><th>Date</th><th>Payment</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr><td>#STK-4821</td><td>Priya Sharma</td><td>2 items</td><td>₹2,499</td><td>Jun 8</td><td>UPI</td><td><span class="badge badge-processing">Processing</span></td><td><span class="card-action" onclick="showToast('Order details opened')">View</span></td></tr>
+                <tr><td>#STK-4820</td><td>Ananya Iyer</td><td>1 item</td><td>₹4,299</td><td>Jun 8</td><td>Card</td><td><span class="badge badge-shipped">Shipped</span></td><td><span class="card-action" onclick="showToast('Tracking info opened')">Track</span></td></tr>
+                <tr><td>#STK-4819</td><td>Riya Mehta</td><td>3 items</td><td>₹1,599</td><td>Jun 7</td><td>COD</td><td><span class="badge badge-delivered">Delivered</span></td><td><span class="card-action" onclick="showToast('Invoice downloaded')">Invoice</span></td></tr>
+                <tr><td>#STK-4818</td><td>Shreya Nair</td><td>1 item</td><td>₹6,999</td><td>Jun 7</td><td>UPI</td><td><span class="badge badge-delivered">Delivered</span></td><td><span class="card-action" onclick="showToast('Invoice downloaded')">Invoice</span></td></tr>
+                <tr><td>#STK-4817</td><td>Nisha Kapoor</td><td>1 item</td><td>₹3,299</td><td>Jun 6</td><td>Card</td><td><span class="badge badge-returned">Returned</span></td><td><span class="card-action" onclick="showToast('Return request viewed')">View</span></td></tr>
+                <tr><td>#STK-4816</td><td>Kavita Singh</td><td>4 items</td><td>₹8,799</td><td>Jun 5</td><td>UPI</td><td><span class="badge badge-delivered">Delivered</span></td><td><span class="card-action" onclick="showToast('Invoice downloaded')">Invoice</span></td></tr>
+                <tr><td>#STK-4815</td><td>Divya Rao</td><td>2 items</td><td>₹3,499</td><td>Jun 4</td><td>COD</td><td><span class="badge badge-pending">Pending</span></td><td><span class="card-action" onclick="showToast('Order confirmed')">Confirm</span></td></tr>
+                <tr><td>#STK-4814</td><td>Meena Joshi</td><td>1 item</td><td>₹1,199</td><td>Jun 3</td><td>Card</td><td><span class="badge badge-shipped">Shipped</span></td><td><span class="card-action" onclick="showToast('Tracking info opened')">Track</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRODUCTS -->
+      <div class="section" id="sec-products">
+        <div class="page-hdr"><h2>Product <em>Catalogue</em></h2><p>247 products across 5 categories</p></div>
+        <div class="card">
+          <div class="card-hdr">
+            <span class="card-title">All Products</span>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <select style="padding:6px 10px;border:1px solid var(--light-gray);border-radius:8px;font-size:12px;background:var(--cream);outline:none">
+                <option>All Categories</option><option>Dresses</option><option>Tops</option><option>Bottoms</option><option>Outerwear</option><option>Accessories</option>
+              </select>
+              <button class="btn-primary" style="padding:7px 14px;font-size:12px" onclick="document.getElementById('addProductModal').classList.add('open')">+ Add Product</button>
+            </div>
+          </div>
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Sales</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr><td><div class="prod-cell"><img class="prod-thumb" src="https://wsrv.nl/?url=images.unsplash.com/photo-1595777457583-95e059d581b8?w=72&h=72&fit=crop&output=webp" alt=""><div><div class="prod-name">Floral Midi Dress</div><div class="prod-sku">STK-1042</div></div></div></td><td>Dresses</td><td>₹2,499</td><td>84</td><td>312</td><td><span class="badge badge-active">Active</span></td><td><span class="card-action" onclick="showToast('Product edited')">Edit</span></td></tr>
+                <tr><td><div class="prod-cell"><img class="prod-thumb" src="https://wsrv.nl/?url=images.unsplash.com/photo-1594938298603-c8148c4b4e93?w=72&h=72&fit=crop&output=webp" alt=""><div><div class="prod-name">Linen Blazer Set</div><div class="prod-sku">STK-1043</div></div></div></td><td>Outerwear</td><td>₹4,299</td><td>47</td><td>198</td><td><span class="badge badge-active">Active</span></td><td><span class="card-action" onclick="showToast('Product edited')">Edit</span></td></tr>
+                <tr><td><div class="prod-cell"><img class="prod-thumb" src="https://wsrv.nl/?url=images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=72&h=72&fit=crop&output=webp" alt=""><div><div class="prod-name">Cotton Kurta Set</div><div class="prod-sku">STK-1044</div></div></div></td><td>Tops</td><td>₹1,599</td><td>12</td><td>445</td><td><span class="badge badge-low">Low Stock</span></td><td><span class="card-action" onclick="showToast('Restock requested')">Restock</span></td></tr>
+                <tr><td><div class="prod-cell"><img class="prod-thumb" src="https://wsrv.nl/?url=images.unsplash.com/photo-1610030469983-98e550d6193c?w=72&h=72&fit=crop&output=webp" alt=""><div><div class="prod-name">Printed Silk Saree</div><div class="prod-sku">STK-1045</div></div></div></td><td>Dresses</td><td>₹6,999</td><td>0</td><td>87</td><td><span class="badge badge-out">Out of Stock</span></td><td><span class="card-action" onclick="showToast('Restock order placed')">Restock</span></td></tr>
+                <tr><td><div class="prod-cell"><img class="prod-thumb" src="https://wsrv.nl/?url=images.unsplash.com/photo-1581044777550-4cfa60707c03?w=72&h=72&fit=crop&output=webp" alt=""><div><div class="prod-name">Denim Jacket</div><div class="prod-sku">STK-1046</div></div></div></td><td>Outerwear</td><td>₹3,299</td><td>63</td><td>221</td><td><span class="badge badge-active">Active</span></td><td><span class="card-action" onclick="showToast('Product edited')">Edit</span></td></tr>
+                <tr><td><div class="prod-cell"><img class="prod-thumb" src="https://wsrv.nl/?url=images.unsplash.com/photo-1566206091558-7f218b696731?w=72&h=72&fit=crop&output=webp" alt=""><div><div class="prod-name">Wide Leg Trousers</div><div class="prod-sku">STK-1047</div></div></div></td><td>Bottoms</td><td>₹2,199</td><td>38</td><td>167</td><td><span class="badge badge-active">Active</span></td><td><span class="card-action" onclick="showToast('Product edited')">Edit</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- CUSTOMERS -->
+      <div class="section" id="sec-customers">
+        <div class="page-hdr"><h2>Customer <em>Base</em></h2><p>3,891 registered customers</p></div>
+        <div class="customer-grid">
+          <div class="cust-card"><img class="cust-avatar" src="https://wsrv.nl/?url=i.pravatar.cc/88?img=5&output=webp" alt=""><div class="cust-name">Priya Sharma</div><div class="cust-email">priya.sharma@gmail.com</div><div class="cust-stats"><div class="cust-stat"><span>₹18,490</span>Spent</div><div class="cust-stat"><span>12</span>Orders</div><div class="cust-stat"><span>4.8★</span>Rating</div></div></div>
+          <div class="cust-card"><img class="cust-avatar" src="https://wsrv.nl/?url=i.pravatar.cc/88?img=9&output=webp" alt=""><div class="cust-name">Nisha Kapoor</div><div class="cust-email">nisha.k@outlook.com</div><div class="cust-stats"><div class="cust-stat"><span>₹32,100</span>Spent</div><div class="cust-stat"><span>21</span>Orders</div><div class="cust-stat"><span>4.9★</span>Rating</div></div></div>
+          <div class="cust-card"><img class="cust-avatar" src="https://wsrv.nl/?url=i.pravatar.cc/88?img=16&output=webp" alt=""><div class="cust-name">Ananya Iyer</div><div class="cust-email">ananya.iyer@yahoo.in</div><div class="cust-stats"><div class="cust-stat"><span>₹9,880</span>Spent</div><div class="cust-stat"><span>7</span>Orders</div><div class="cust-stat"><span>4.6★</span>Rating</div></div></div>
+          <div class="cust-card"><img class="cust-avatar" src="https://wsrv.nl/?url=i.pravatar.cc/88?img=20&output=webp" alt=""><div class="cust-name">Riya Mehta</div><div class="cust-email">riya.mehta@gmail.com</div><div class="cust-stats"><div class="cust-stat"><span>₹14,250</span>Spent</div><div class="cust-stat"><span>9</span>Orders</div><div class="cust-stat"><span>4.7★</span>Rating</div></div></div>
+          <div class="cust-card"><img class="cust-avatar" src="https://wsrv.nl/?url=i.pravatar.cc/88?img=23&output=webp" alt=""><div class="cust-name">Kavita Singh</div><div class="cust-email">kavita.singh@rediffmail.com</div><div class="cust-stats"><div class="cust-stat"><span>₹22,700</span>Spent</div><div class="cust-stat"><span>15</span>Orders</div><div class="cust-stat"><span>5.0★</span>Rating</div></div></div>
+          <div class="cust-card"><img class="cust-avatar" src="https://wsrv.nl/?url=i.pravatar.cc/88?img=31&output=webp" alt=""><div class="cust-name">Shreya Nair</div><div class="cust-email">shreya.nair@icloud.com</div><div class="cust-stats"><div class="cust-stat"><span>₹7,199</span>Spent</div><div class="cust-stat"><span>4</span>Orders</div><div class="cust-stat"><span>4.5★</span>Rating</div></div></div>
+        </div>
+      </div>
+
+      <!-- REVIEWS -->
+      <div class="section" id="sec-reviews">
+        <div class="page-hdr"><h2>Customer <em>Reviews</em></h2><p>3 new reviews awaiting response</p></div>
+        <div class="review-grid">
+          <div class="review-card"><div class="rev-hdr"><img class="rev-avatar" src="https://wsrv.nl/?url=i.pravatar.cc/72?img=9&output=webp" alt=""><div><div class="rev-name">Nisha Kapoor</div><div class="rev-product">Floral Midi Dress</div></div><span class="rev-stars">★★★★★</span></div><p class="rev-text">"Absolutely love the quality of this dress. The fabric is so soft and the fit is perfect. Will definitely be ordering more!"</p><div class="rev-date">Jun 7, 2026 <button class="btn-primary" style="padding:5px 12px;font-size:11px" onclick="showToast('Response sent to Nisha')">Reply</button></div></div>
+          <div class="review-card"><div class="rev-hdr"><img class="rev-avatar" src="https://wsrv.nl/?url=i.pravatar.cc/72?img=5&output=webp" alt=""><div><div class="rev-name">Priya Sharma</div><div class="rev-product">Cotton Kurta Set</div></div><span class="rev-stars">★★★★☆</span></div><p class="rev-text">"Good quality kurta, the embroidery is beautiful. Sizing runs slightly small, so I'd recommend going one size up. Otherwise great purchase!"</p><div class="rev-date">Jun 5, 2026 <button class="btn-primary" style="padding:5px 12px;font-size:11px" onclick="showToast('Response sent to Priya')">Reply</button></div></div>
+          <div class="review-card"><div class="rev-hdr"><img class="rev-avatar" src="https://wsrv.nl/?url=i.pravatar.cc/72?img=16&output=webp" alt=""><div><div class="rev-name">Ananya Iyer</div><div class="rev-product">Linen Blazer Set</div></div><span class="rev-stars">★★★★★</span></div><p class="rev-text">"This blazer is stunning! Wore it to a work presentation and got so many compliments. The linen is breathable and looks very premium."</p><div class="rev-date">Jun 3, 2026 <button class="btn-primary" style="padding:5px 12px;font-size:11px" onclick="showToast('Response sent to Ananya')">Reply</button></div></div>
+          <div class="review-card"><div class="rev-hdr"><img class="rev-avatar" src="https://wsrv.nl/?url=i.pravatar.cc/72?img=20&output=webp" alt=""><div><div class="rev-name">Riya Mehta</div><div class="rev-product">Wide Leg Trousers</div></div><span class="rev-stars">★★★☆☆</span></div><p class="rev-text">"Decent trousers but the colour was slightly different from the photo online. The material is good quality though. Customer support was helpful."</p><div class="rev-date">Jun 1, 2026 <button class="btn-primary" style="padding:5px 12px;font-size:11px" onclick="showToast('Response sent to Riya')">Reply</button></div></div>
+        </div>
+      </div>
+
+      <!-- COUPONS -->
+      <div class="section" id="sec-coupons">
+        <div class="page-hdr"><h2>Discount <em>Coupons</em></h2><p>Create and manage promotional codes</p></div>
+        <div class="card">
+          <div class="card-hdr"><span class="card-title">Active Coupons</span><button class="btn-primary" style="padding:7px 16px;font-size:12px" onclick="showToast('Coupon builder coming soon!')">+ New Coupon</button></div>
+          <div class="coupon-grid">
+            <div class="coupon-card"><div class="coupon-code">SUMMER26</div><div class="coupon-off">20% OFF</div><div class="coupon-desc">All summer collection items</div><div class="coupon-uses">Used 184 / 500 · Expires Jul 31</div><div class="coupon-status"><span class="badge badge-active">Active</span></div></div>
+            <div class="coupon-card"><div class="coupon-code">FIRSTBUY</div><div class="coupon-off">₹200 OFF</div><div class="coupon-desc">First purchase above ₹1,500</div><div class="coupon-uses">Used 341 / ∞ · No expiry</div><div class="coupon-status"><span class="badge badge-active">Active</span></div></div>
+            <div class="coupon-card"><div class="coupon-code">SAREE15</div><div class="coupon-off">15% OFF</div><div class="coupon-desc">All sarees and ethnic wear</div><div class="coupon-uses">Used 67 / 200 · Expires Jun 30</div><div class="coupon-status"><span class="badge badge-active">Active</span></div></div>
+            <div class="coupon-card" style="opacity:.6"><div class="coupon-code">MONSOON10</div><div class="coupon-off">10% OFF</div><div class="coupon-desc">All orders above ₹2,000</div><div class="coupon-uses">Used 500 / 500 · Expired May 31</div><div class="coupon-status"><span class="badge badge-out">Expired</span></div></div>
+            <div class="coupon-card"><div class="coupon-code">APP20</div><div class="coupon-off">20% OFF</div><div class="coupon-desc">App-only purchases</div><div class="coupon-uses">Used 92 / 300 · Expires Aug 15</div><div class="coupon-status"><span class="badge badge-active">Active</span></div></div>
+            <div class="coupon-card"><div class="coupon-code">LOYAL50</div><div class="coupon-off">₹500 OFF</div><div class="coupon-desc">Loyalty members only (10+ orders)</div><div class="coupon-uses">Used 28 / 100 · No expiry</div><div class="coupon-status"><span class="badge badge-active">Active</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANALYTICS -->
+      <div class="section" id="sec-analytics">
+        <div class="page-hdr"><h2>Store <em>Analytics</em></h2><p>Performance insights for June 2026</p></div>
+        <div class="stats-grid analytics-stats">
+          <div class="stat-card orange"><span class="stat-label">Avg Order Value</span><div class="stat-value">₹3,280</div><div class="stat-sub">↑ 8.2% vs last month</div><div class="stat-icon orange">📈</div></div>
+          <div class="stat-card green"><span class="stat-label">Conversion Rate</span><div class="stat-value">3.8%</div><div class="stat-sub">↑ 0.4% improvement</div><div class="stat-icon green">🎯</div></div>
+          <div class="stat-card gold"><span class="stat-label">Return Rate</span><div class="stat-value">4.2%</div><div class="stat-sub down">↑ 0.6% — review needed</div><div class="stat-icon gold">🔄</div></div>
+          <div class="stat-card blue"><span class="stat-label">Repeat Buyers</span><div class="stat-value">61%</div><div class="stat-sub">↑ 5% this quarter</div><div class="stat-icon blue">💎</div></div>
+        </div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-hdr"><span class="card-title">Revenue — Last 6 Months</span></div>
+            <div class="chart-bars" id="analyticsChart"></div>
+          </div>
+          <div class="card">
+            <div class="card-hdr"><span class="card-title">Top Selling Products</span></div>
+            <div class="tbl-wrap">
+              <table class="tbl" style="min-width:300px">
+                <thead><tr><th>Product</th><th>Units</th><th>Revenue</th></tr></thead>
+                <tbody>
+                  <tr><td>Cotton Kurta Set</td><td>445</td><td>₹71,155</td></tr>
+                  <tr><td>Floral Midi Dress</td><td>312</td><td>₹77,988</td></tr>
+                  <tr><td>Denim Jacket</td><td>221</td><td>₹72,929</td></tr>
+                  <tr><td>Linen Blazer Set</td><td>198</td><td>₹85,102</td></tr>
+                  <tr><td>Wide Leg Trousers</td><td>167</td><td>₹36,703</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOTIFICATIONS -->
+      <div class="section" id="sec-notifications">
+        <div class="page-hdr"><h2>Store <em>Notifications</em></h2><p>5 unread alerts</p></div>
+        <div class="card">
+          <div class="card-hdr"><span class="card-title">Recent Alerts</span><span class="card-action" onclick="showToast('All notifications marked as read')">Mark all read</span></div>
+          <div class="notif-list">
+            <div class="notif-item"><div class="notif-dot"></div><div><div class="notif-text"><strong>Low stock alert:</strong> Cotton Kurta Set (STK-1044) is down to 12 units. Consider restocking.</div><div class="notif-time">2 hours ago</div></div></div>
+            <div class="notif-item"><div class="notif-dot"></div><div><div class="notif-text"><strong>New order #STK-4821</strong> placed by Priya Sharma for ₹2,499. Awaiting processing.</div><div class="notif-time">3 hours ago</div></div></div>
+            <div class="notif-item"><div class="notif-dot"></div><div><div class="notif-text"><strong>Return request</strong> submitted by Nisha Kapoor for Denim Jacket (Order #STK-4817). Reason: Wrong size.</div><div class="notif-time">Yesterday, 6:14 PM</div></div></div>
+            <div class="notif-item"><div class="notif-dot"></div><div><div class="notif-text"><strong>New review</strong> posted by Ananya Iyer — 5 stars on Linen Blazer Set. No response yet.</div><div class="notif-time">Yesterday, 2:30 PM</div></div></div>
+            <div class="notif-item"><div class="notif-dot"></div><div><div class="notif-text"><strong>SAREE15 coupon</strong> is nearing its usage limit (67/200). Expires Jun 30 — consider extending.</div><div class="notif-time">2 days ago</div></div></div>
+            <div class="notif-item"><div class="notif-dot read"></div><div><div class="notif-text" style="color:var(--medium-gray)"><strong>Payment received</strong> for Order #STK-4818 — ₹6,999 via UPI. Funds settled.</div><div class="notif-time">Jun 7, 10:22 AM</div></div></div>
+            <div class="notif-item"><div class="notif-dot read"></div><div><div class="notif-text" style="color:var(--medium-gray)"><strong>Monthly report ready:</strong> May 2026 performance summary is available to download.</div><div class="notif-time">Jun 1, 9:00 AM</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="section" id="sec-settings">
+        <div class="page-hdr"><h2>Store <em>Settings</em></h2><p>Manage your store preferences and account</p></div>
+        <div class="card" style="padding:20px">
+          <div class="settings-section">
+            <h3>Store Information</h3>
+            <div class="form-row">
+              <div class="f-field"><label>Store Name</label><input type="text" value="Stackly Fashion"></div>
+              <div class="f-field"><label>Store Email</label><input type="email" id="settingsEmail" value=""></div>
+            </div>
+            <div class="form-row">
+              <div class="f-field"><label>Phone</label><input type="tel" value="+91 98765 43210"></div>
+              <div class="f-field"><label>GST Number</label><input type="text" value="29AADCS1234F1Z5"></div>
+            </div>
+            <div class="f-field" style="margin-bottom:16px"><label>Store Address</label><input type="text" value="12, MG Road, Bengaluru, Karnataka – 560001"></div>
+            <button class="btn-primary" onclick="showToast('Store info saved successfully!')">Save Changes</button>
+          </div>
+          <div class="settings-section" style="margin-top:28px">
+            <h3>Notifications</h3>
+            <div class="toggle-row"><div class="toggle-info"><div class="tgl-label">New order alerts</div><div class="tgl-desc">Get notified when a new order is placed</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="tgl-label">Low stock warnings</div><div class="tgl-desc">Alert when product stock falls below 15 units</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="tgl-label">Return requests</div><div class="tgl-desc">Notify on new customer return submissions</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="tgl-label">Review alerts</div><div class="tgl-desc">Get notified of new customer reviews</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div class="toggle-info"><div class="tgl-label">Weekly sales digest</div><div class="tgl-desc">Receive a weekly performance email</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          </div>
+          <div class="settings-section" style="margin-top:28px">
+            <h3>Security</h3>
+            <div class="form-row">
+              <div class="f-field"><label>Current Password</label><input type="password" placeholder="••••••••"></div>
+              <div class="f-field"><label>New Password</label><input type="password" placeholder="New password"></div>
+            </div>
+            <button class="btn-outline" onclick="showToast('Password updated successfully!')">Update Password</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </main>
+</div><!-- /app -->
+
+<!-- BOTTOM NAV (mobile) -->
+<nav class="bottom-nav" id="bottomNav">
+  <div class="bn-items">
+    <div class="bn-item active" id="bn-overview" onclick="nav('overview')">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <span class="bn-label">Overview</span>
+    </div>
+    <div class="bn-item" id="bn-orders" onclick="nav('orders')">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <span class="bn-label">Orders</span>
+      <span class="bn-dot"></span>
+    </div>
+    <div class="bn-item" id="bn-products" onclick="nav('products')">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+      <span class="bn-label">Products</span>
+    </div>
+    <div class="bn-item" id="bn-analytics" onclick="nav('analytics')">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      <span class="bn-label">Analytics</span>
+    </div>
+    <div class="bn-item" id="bn-settings" onclick="nav('settings')">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span class="bn-label">Settings</span>
+    </div>
+  </div>
+</nav>
+
+<script>
+  // Load user
+  const user = JSON.parse(sessionStorage.getItem('stackly_user') || '{}');
+  if(user.email){
+    document.getElementById('ownerEmail').textContent = user.email;
+    document.getElementById('ownerName').textContent = user.name || 'Store Owner';
+    document.getElementById('ownerInitial').textContent = (user.name||user.email).charAt(0).toUpperCase();
+    const se = document.getElementById('settingsEmail');
+    if(se) se.value = user.email;
+  }
+
+  // Date
+  document.getElementById('tbDate').textContent = new Date().toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+
+  // Sidebar toggle
+  function toggleSidebar(){
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebarOverlay').classList.toggle('open');
+  }
+  function closeSidebar(){
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('open');
+  }
+
+  // Bottom nav IDs mapped to sections
+  const bnMap = {overview:'overview',orders:'orders',products:'products',analytics:'analytics',settings:'settings'};
+
+  // Nav
+  const titles = {overview:'Store <em>Overview</em>',orders:'All <em>Orders</em>',products:'Product <em>Catalogue</em>',customers:'Customer <em>Base</em>',reviews:'Customer <em>Reviews</em>',coupons:'Discount <em>Coupons</em>',analytics:'Store <em>Analytics</em>',notifications:'Store <em>Notifications</em>',settings:'Store <em>Settings</em>'};
+  function nav(id){
+    document.querySelectorAll('.sb-item').forEach(el=>el.classList.remove('active'));
+    document.querySelector(`.sb-item[onclick="nav('${id}')"]`)?.classList.add('active');
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+    document.getElementById('sec-'+id)?.classList.add('active');
+    document.getElementById('pageTitle').innerHTML = titles[id]||id;
+    // Update bottom nav
+    document.querySelectorAll('.bn-item').forEach(el=>el.classList.remove('active'));
+    const bn = document.getElementById('bn-'+id);
+    if(bn) bn.classList.add('active');
+    // Build analytics chart on first visit
+    if(id==='analytics') buildChart('analyticsChart',[220,180,310,280,390,420],['Jan','Feb','Mar','Apr','May','Jun']);
+    // Close sidebar on mobile
+    closeSidebar();
+  }
+
+  // Toast
+  function showToast(msg){
+    const t=document.getElementById('toast'),m=document.getElementById('toastMsg');
+    m.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);
+  }
+
+  // Modal
+  function closeModal(id){document.getElementById(id).classList.remove('open')}
+  document.querySelectorAll('.modal-bg').forEach(bg=>bg.addEventListener('click',e=>{if(e.target===bg)bg.classList.remove('open')}));
+
+  function saveProduct(){closeModal('addProductModal');showToast('Product added to catalogue!')}
+
+  // Chart builder
+  function buildChart(id, data, labels){
+    const el=document.getElementById(id);
+    if(!el||el.children.length)return;
+    const max=Math.max(...data);
+    el.style.alignItems='flex-end';
+    labels.forEach((l,i)=>{
+      const wrap=document.createElement('div');wrap.className='bar-wrap';
+      const val=document.createElement('div');val.className='bar-val';val.textContent='₹'+data[i]+'K';
+      const bar=document.createElement('div');bar.className='bar';bar.style.height='0px';
+      const lbl=document.createElement('div');lbl.className='bar-label';lbl.textContent=l;
+      wrap.appendChild(val);wrap.appendChild(bar);wrap.appendChild(lbl);el.appendChild(wrap);
+      setTimeout(()=>{bar.style.height=Math.round((data[i]/max)*100)+'px'},100+i*80);
+    });
+  }
+  buildChart('revChart',[142,168,195,220,285,310],['Jan','Feb','Mar','Apr','May','Jun']);
+
+  // Logout
+  function logout(){sessionStorage.removeItem('stackly_user');window.location.href='signin.html'}
+</script>
+</body>
+</html>

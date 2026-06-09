@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In — Stackly Fashion</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream:#FAF7F2; --warm-white:#FFFDF9; --blush:#F2C4B0;
+      --terracotta:#C9614A; --rust:#A8432A; --caramel:#D4956A;
+      --sage:#8FA882; --deep-sage:#5A7050; --charcoal:#2C2C2C;
+      --soft-black:#1A1A1A; --medium-gray:#888; --light-gray:#E8E4DF;
+      --gold:#C9A96E;
+      --font-display:'Cormorant Garamond',serif;
+      --font-body:'DM Sans',sans-serif;
+      --font-accent:'Bebas Neue',sans-serif;
+      --ease:cubic-bezier(.25,.46,.45,.94);
+      --bounce:cubic-bezier(.34,1.56,.64,1);
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{font-size:16px}
+    body{font-family:var(--font-body);background:var(--cream);color:var(--charcoal);overflow-x:hidden;cursor:none;min-height:100vh}
+    a{text-decoration:none;color:inherit}
+    img{max-width:100%;height:auto;display:block}
+
+    .cursor{width:12px;height:12px;background:var(--terracotta);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .1s var(--ease),width .3s,height .3s}
+    .cursor-follower{width:36px;height:36px;border:1.5px solid var(--terracotta);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform .18s var(--ease),opacity .3s;opacity:.6}
+
+    /* HEADER */
+    .si-header{position:fixed;top:0;left:0;width:100%;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:05px 30px;background:rgba(250,247,242,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--light-gray)}
+    .si-header .logo img{width:130px;height:auto;filter:invert(42%) sepia(60%) saturate(600%) hue-rotate(330deg) brightness(90%) contrast(95%);transition:transform .3s}
+    .si-header .logo img:hover{transform:scale(1.04)}
+    .hdr-link{font-size:13px;color:var(--medium-gray)}
+    .hdr-link span{color:var(--terracotta);font-weight:600;margin-left:4px}
+    .hdr-link:hover span{color:var(--rust)}
+
+    /* LAYOUT */
+    .si-layout{display:grid;grid-template-columns:1fr 1fr;min-height:100vh}
+
+    /* LEFT */
+    .si-left{position:relative;overflow:hidden}
+    .si-left img{width:100%;height:100%;object-fit:cover;object-position:center 20%}
+    .si-overlay{position:absolute;inset:0;background:linear-gradient(160deg,rgba(26,20,15,.4) 0%,rgba(90,112,80,.2) 60%,rgba(26,20,15,.7) 100%)}
+    .si-panel{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:60px 52px}
+    .panel-label{font-family:var(--font-accent);font-size:11px;letter-spacing:.28em;color:rgba(255,255,255,.6);margin-bottom:16px}
+    .panel-headline{font-family:var(--font-display);font-size:clamp(34px,4vw,54px);font-weight:400;color:#fff;line-height:1.15;margin-bottom:18px}
+    .panel-headline em{font-style:italic;color:var(--blush)}
+    .panel-desc{font-size:14px;color:rgba(255,255,255,.7);line-height:1.7;max-width:320px;margin-bottom:32px}
+
+    /* Quote card */
+    .quote-card{background:rgba(255,255,255,.1);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.18);border-radius:16px;padding:24px 28px}
+    .quote-text{font-family:var(--font-display);font-size:17px;font-style:italic;color:#fff;line-height:1.55;margin-bottom:14px}
+    .quote-author{display:flex;align-items:center;gap:12px}
+    .quote-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.3)}
+    .quote-name{font-size:12px;font-weight:600;color:rgba(255,255,255,.9)}
+    .quote-role{font-size:11px;color:rgba(255,255,255,.55)}
+    .quote-stars{font-size:11px;color:var(--gold);margin-top:2px}
+
+    /* RIGHT */
+    .si-right{display:flex;align-items:center;justify-content:center;padding:100px 64px 60px;background:var(--warm-white);overflow-y:auto}
+    .form-wrap{width:100%;max-width:400px}
+    .form-eyebrow{font-family:var(--font-accent);font-size:11px;letter-spacing:.3em;color:var(--terracotta);text-transform:uppercase;margin-bottom:12px}
+    .form-title{font-family:var(--font-display);font-size:clamp(30px,3.5vw,46px);font-weight:400;color:var(--soft-black);line-height:1.15;margin-bottom:8px}
+    .form-title em{font-style:italic;color:var(--terracotta)}
+    .form-subtitle{font-size:14px;color:var(--medium-gray);line-height:1.6;margin-bottom:28px}
+
+    /* ROLE TABS */
+    .role-tabs{display:flex;gap:10px;margin-bottom:28px;background:var(--cream);border-radius:12px;padding:5px}
+    .role-tab{flex:1;padding:11px;border:none;border-radius:9px;background:transparent;font-family:var(--font-body);font-size:13px;font-weight:600;color:var(--medium-gray);cursor:pointer;transition:all .3s var(--ease);display:flex;align-items:center;justify-content:center;gap:7px}
+    .role-tab.active{background:var(--warm-white);color:var(--terracotta);box-shadow:0 2px 12px rgba(0,0,0,.08)}
+    .role-tab:hover:not(.active){color:var(--charcoal)}
+
+    /* Role hint */
+    .role-hint{font-size:12px;color:var(--medium-gray);background:var(--cream);border:1px solid var(--light-gray);border-radius:10px;padding:10px 14px;margin-bottom:20px;display:flex;align-items:center;gap:8px;transition:all .3s var(--ease)}
+    .role-hint .hint-icon{font-size:14px;flex-shrink:0}
+    .role-hint.owner-hint{background:rgba(201,97,74,.04);border-color:rgba(201,97,74,.2);color:var(--charcoal)}
+
+    /* SOCIAL */
+    .social-btns{display:flex;gap:10px;margin-bottom:22px}
+    .btn-social{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border:1.5px solid var(--light-gray);border-radius:12px;background:var(--warm-white);font-family:var(--font-body);font-size:13px;font-weight:500;color:var(--charcoal);cursor:pointer;transition:all .3s var(--ease)}
+    .btn-social:hover{border-color:var(--terracotta);background:rgba(201,97,74,.04);transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.06)}
+
+    /* DIVIDER */
+    .divider{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+    .divider-line{flex:1;height:1px;background:var(--light-gray)}
+    .divider-text{font-size:11px;color:var(--medium-gray);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+
+    /* FIELDS */
+    .form-field{margin-bottom:16px}
+    .form-field label{display:block;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--charcoal);margin-bottom:7px}
+    .input-wrap{position:relative}
+    .input-wrap>svg:first-child{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--medium-gray);pointer-events:none;transition:color .3s}
+    .form-input{width:100%;padding:13px 14px 13px 44px;border:1.5px solid var(--light-gray);border-radius:12px;background:var(--cream);font-family:var(--font-body);font-size:14px;color:var(--charcoal);outline:none;transition:all .3s var(--ease)}
+    .form-input::placeholder{color:#bbb}
+    .form-input:focus{border-color:var(--terracotta);background:var(--warm-white);box-shadow:0 0 0 4px rgba(201,97,74,.08)}
+    .input-wrap:focus-within>svg:first-child{color:var(--terracotta)}
+    .form-input.error{border-color:#e05252}
+    .form-input.error:focus{box-shadow:0 0 0 4px rgba(224,82,82,.1)}
+    .form-input.valid{border-color:var(--sage)}
+
+    .toggle-pw{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--medium-gray);display:flex;align-items:center;padding:4px;border-radius:6px;transition:color .3s}
+    .toggle-pw:hover{color:var(--terracotta)}
+
+    .field-error{font-size:11px;color:#e05252;margin-top:5px;display:none;padding-left:2px}
+    .field-error.show{display:block}
+
+    /* FORGOT */
+    .forgot-row{display:flex;justify-content:flex-end;margin-top:-8px;margin-bottom:16px}
+    .forgot-link{font-size:12px;color:var(--terracotta);font-weight:500;transition:color .3s}
+    .forgot-link:hover{color:var(--rust)}
+
+    /* CHECKBOX */
+    .cb-field{display:flex;align-items:center;gap:10px;margin-bottom:20px;cursor:pointer}
+    .cb-field input[type=checkbox]{appearance:none;width:17px;height:17px;border:1.5px solid var(--light-gray);border-radius:5px;background:var(--cream);cursor:pointer;flex-shrink:0;position:relative;transition:all .25s}
+    .cb-field input:checked{background:var(--terracotta);border-color:var(--terracotta)}
+    .cb-field input:checked::after{content:'';position:absolute;left:4px;top:1px;width:5px;height:9px;border:2px solid #fff;border-top:none;border-left:none;transform:rotate(45deg)}
+    .cb-label{font-size:13px;color:var(--medium-gray)}
+
+    /* SUBMIT */
+    .btn-signin{width:100%;padding:15px 32px;background:var(--terracotta);color:#fff;font-family:var(--font-body);font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;border:none;border-radius:12px;cursor:pointer;transition:all .35s var(--bounce);display:flex;align-items:center;justify-content:center;gap:10px;position:relative;overflow:hidden}
+    .btn-signin:hover{background:var(--rust);transform:translateY(-2px);box-shadow:0 12px 30px rgba(201,97,74,.4)}
+    .btn-signin:active{transform:translateY(0)}
+    .btn-signin:disabled{opacity:.8;cursor:not-allowed;transform:none}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .spinner{animation:spin .8s linear infinite}
+
+    .signup-prompt{text-align:center;margin-top:22px;font-size:13px;color:var(--medium-gray)}
+    .signup-prompt a{color:var(--terracotta);font-weight:600;margin-left:4px}
+    .signup-prompt a:hover{color:var(--rust)}
+
+    /* SUCCESS OVERLAY */
+    .success-overlay{position:fixed;inset:0;background:var(--warm-white);z-index:8000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;opacity:0;pointer-events:none;transition:opacity .5s}
+    .success-overlay.show{opacity:1;pointer-events:all}
+    .success-icon{width:72px;height:72px;background:rgba(90,112,80,.12);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;animation:popIn .6s var(--bounce) both}
+    @keyframes popIn{0%{transform:scale(0)}100%{transform:scale(1)}}
+    .success-title{font-family:var(--font-display);font-size:36px;color:var(--soft-black)}
+    .success-title em{font-style:italic;color:var(--terracotta)}
+    .success-sub{font-size:14px;color:var(--medium-gray)}
+
+    /* TOAST */
+    .toast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--soft-black);color:#fff;padding:13px 26px;border-radius:50px;font-size:13px;font-weight:500;z-index:9000;transition:transform .5s var(--bounce),opacity .4s;opacity:0;pointer-events:none;white-space:nowrap;display:flex;align-items:center;gap:9px}
+    .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+    /* RESPONSIVE */
+    @media(max-width:900px){
+      .si-layout{grid-template-columns:1fr}
+      .si-left{display:none}
+      .si-right{padding:100px 32px 60px}
+      .si-header{padding:16px 24px}
+    }
+    @media(max-width:480px){
+      .si-right{padding:90px 20px 50px}
+      .form-title{font-size:30px}
+      .social-btns{flex-direction:column}
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor"></div>
+<div class="cursor-follower"></div>
+
+<div class="toast" id="toast">
+  <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toastMsg"></span>
+</div>
+
+<!-- Success overlay -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-icon" id="successIcon">✓</div>
+  <h2 class="success-title" id="successTitle">Welcome <em>Back!</em></h2>
+  <p class="success-sub" id="successSub">Taking you to your Stackly account…</p>
+</div>
+
+<!-- Header -->
+<header class="si-header">
+  <a href="index.html" class="logo"><img src="https://wsrv.nl/?url=https://snabsolutions.in/wp-content/uploads/2026/02/stackly-snab-solutions.png&w=260&h=104&output=webp&q=80&fit=inside" alt="Stackly" width="130" height="52"></a>
+ 
+</header>
+
+<div class="si-layout">
+
+  <!-- LEFT -->
+  <div class="si-left">
+    <img src="https://wsrv.nl/?url=images.unsplash.com/photo-1469334031218-e382a71b716b?w=1000&h=1400&fit=crop&auto=format&q=80&output=webp" alt="" width="1000" height="1400" loading="eager">
+    <div class="si-overlay"></div>
+    <div class="si-panel">
+      <span class="panel-label">✦ Good to Have You Back</span>
+      <h2 class="panel-headline">Your <em>Style</em><br>Awaits You<br>Again</h2>
+      <p class="panel-desc">Everything you loved is still here — new arrivals, saved wishlists, and exclusive member deals waiting for you.</p>
+      <div class="quote-card">
+        <p class="quote-text">"Stackly completely changed how I shop. It feels personal, curated, and always on-trend."</p>
+      
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="si-right">
+    <div class="form-wrap">
+
+      <p class="form-eyebrow">Welcome Back</p>
+      <h1 class="form-title">Sign In to<br><em>Stackly</em></h1>
+      <p class="form-subtitle">Access your orders, wishlist, and exclusive member perks.</p>
+
+      <!-- ROLE TABS -->
+      <div class="role-tabs">
+        <button type="button" class="role-tab active" id="tabCustomer" onclick="setTab('customer')">🛍️ Customer</button>
+        <button type="button" class="role-tab" id="tabOwner" onclick="setTab('owner')">🏪 Owner</button>
+      </div>
+
+      <!-- Role hint -->
+      <div class="role-hint" id="roleHint">
+        <span class="hint-icon">🛍️</span>
+        <span id="roleHintText">Sign in to track orders, manage your wishlist, and redeem loyalty points.</span>
+      </div>
+
+      
+
+      <div class="divider"><div class="divider-line"></div><span class="divider-text">or sign in with email</span><div class="divider-line"></div></div>
+
+      <form id="signinForm" novalidate>
+
+        <div class="form-field">
+          <label for="siEmail">Email Address</label>
+          <div class="input-wrap">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <input type="email" id="siEmail" class="form-input" placeholder="priya@example.com" autocomplete="email">
+          </div>
+          <span class="field-error" id="siEmailErr">Please fill in your email address.</span>
+        </div>
+
+        <div class="form-field">
+          <label for="siPassword">Password</label>
+          <div class="input-wrap">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input type="password" id="siPassword" class="form-input" placeholder="Your password" autocomplete="current-password">
+            <button type="button" class="toggle-pw" id="siTogglePw" aria-label="Show password">
+              <svg id="siEyeIcon" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <span class="field-error" id="siPasswordErr">Please fill in your password.</span>
+        </div>
+
+        <div class="forgot-row">
+          <a href="#" class="forgot-link" onclick="showToast('Password reset coming soon!')">Forgot password?</a>
+        </div>
+
+        <label class="cb-field">
+          <input type="checkbox" id="rememberMe" checked>
+          <span class="cb-label">Keep me signed in</span>
+        </label>
+
+        <button type="submit" class="btn-signin" id="siBtn">
+          <span id="siBtnText">Sign In</span>
+          <svg id="siBtnArrow" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <svg id="siBtnSpinner" class="spinner" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:none"><path d="M12 2a10 10 0 1 0 10 10" stroke-linecap="round"/></svg>
+        </button>
+<br>
+        <!-- Social -->
+      <div class="social-btns">
+        <button class="btn-social" type="button" onclick="showToast('Google sign-in coming soon!')">
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+          Google
+        </button>
+        <button class="btn-social" type="button" onclick="showToast('Facebook sign-in coming soon!')">
+          <svg width="16" height="16" fill="#1877F2" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          Facebook
+        </button>
+      </div>
+
+        <p class="signup-prompt">Don't have an account? <a href="signup.html">Create one free</a></p>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Cursor
+  const cur=document.querySelector('.cursor'),fol=document.querySelector('.cursor-follower');
+  let mx=0,my=0,fx=0,fy=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+  (function af(){fx+=(mx-fx)*.12;fy+=(my-fy)*.12;fol.style.left=fx+'px';fol.style.top=fy+'px';requestAnimationFrame(af)})();
+  document.querySelectorAll('a,button,input,select,label').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cur.style.transform='translate(-50%,-50%) scale(2)';fol.style.opacity='.2'});
+    el.addEventListener('mouseleave',()=>{cur.style.transform='translate(-50%,-50%) scale(1)';fol.style.opacity='.6'});
+  });
+
+  // Role tabs
+  let currentRole = 'customer';
+
+  function setTab(role) {
+    currentRole = role;
+    document.getElementById('tabCustomer').classList.toggle('active', role === 'customer');
+    document.getElementById('tabOwner').classList.toggle('active', role === 'owner');
+
+    // Update hint
+    const hint = document.getElementById('roleHint');
+    const hintText = document.getElementById('roleHintText');
+    if (role === 'owner') {
+      hint.classList.add('owner-hint');
+      hint.querySelector('.hint-icon').textContent = '🏪';
+      hintText.textContent = 'Sign in to manage your store, view orders, products, and analytics.';
+    } else {
+      hint.classList.remove('owner-hint');
+      hint.querySelector('.hint-icon').textContent = '🛍️';
+      hintText.textContent = 'Sign in to track orders, manage your wishlist, and redeem loyalty points.';
+    }
+  }
+
+  // Password toggle
+  const siPw=document.getElementById('siPassword'),siTog=document.getElementById('siTogglePw'),siEye=document.getElementById('siEyeIcon');
+  siTog.addEventListener('click',()=>{
+    const show=siPw.type==='password';siPw.type=show?'text':'password';
+    siEye.innerHTML=show
+      ?'<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>'
+      :'<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+  });
+
+  // Toast
+  function showToast(msg){
+    const t=document.getElementById('toast'),m=document.getElementById('toastMsg');
+    m.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200);
+  }
+
+  // Error helpers
+  function err(inputId,errId,show){
+    const inp=document.getElementById(inputId),e=document.getElementById(errId);
+    if(inp){inp.classList.toggle('error',show);inp.classList.toggle('valid',!show&&inp.value)}
+    if(e){e.classList.toggle('show',show)}
+    return !show;
+  }
+
+  document.getElementById('siEmail').addEventListener('blur',function(){err('siEmail','siEmailErr',!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.value.trim()))});
+  document.getElementById('siPassword').addEventListener('blur',function(){err('siPassword','siPasswordErr',!this.value)});
+
+  // Submit — redirect based on selected role
+  document.getElementById('signinForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const em = document.getElementById('siEmail').value.trim();
+    const pw = document.getElementById('siPassword').value;
+    let ok = true;
+    ok = err('siEmail','siEmailErr', !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) && ok;
+    ok = err('siPassword','siPasswordErr', !pw) && ok;
+    if (!ok) {
+      const firstErr = document.querySelector('.form-input.error');
+      if (firstErr) firstErr.scrollIntoView({behavior:'smooth', block:'center'});
+      return;
+    }
+
+    // Loading state
+    const btn = document.getElementById('siBtn');
+    btn.disabled = true;
+    document.getElementById('siBtnText').textContent = 'Signing In…';
+    document.getElementById('siBtnArrow').style.display = 'none';
+    document.getElementById('siBtnSpinner').style.display = 'block';
+
+    // Derive a display name from the email
+    const name = em.split('@')[0]
+      .replace(/[._]/g, ' ')
+      .replace(/\b\w/g, c => c.toUpperCase());
+
+    // Persist user info for dashboards to pick up
+    sessionStorage.setItem('stackly_user', JSON.stringify({
+      email: em,
+      name: name,
+      role: currentRole
+    }));
+
+    // Simulate network delay
+    await new Promise(r => setTimeout(r, 1400));
+
+    // Show success overlay with role-specific message
+    const overlay = document.getElementById('successOverlay');
+    const successTitle = document.getElementById('successTitle');
+    const successSub = document.getElementById('successSub');
+    const successIcon = document.getElementById('successIcon');
+
+    if (currentRole === 'owner') {
+      successIcon.textContent = '🏪';
+      successTitle.innerHTML = 'Welcome, <em>Owner!</em>';
+      successSub.textContent = 'Loading your Store Dashboard…';
+    } else {
+      successIcon.textContent = '✓';
+      successTitle.innerHTML = 'Welcome <em>Back!</em>';
+      successSub.textContent = 'Taking you to your Stackly account…';
+    }
+
+    overlay.classList.add('show');
+
+    // Redirect after overlay fades in
+    setTimeout(() => {
+      if (currentRole === 'owner') {
+        window.location.href = 'owner-dashboard.html';
+      } else {
+        window.location.href = 'customer-dashboard.html';
+      }
+    }, 1800);
+  });
+</script>
+</body>
+</html>
