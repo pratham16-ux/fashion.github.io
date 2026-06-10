@@ -957,36 +957,138 @@
     const lbBg = document.getElementById('lb-hero-bg');
     if (lbBg) { lbBg.addEventListener('load', function() { lbBg.classList.add('loaded'); }); }
 
-    // Season tabs
+    // ---- Season Tabs with real filtering ----
+    const TAB_CATEGORY_MAP = {
+      'All Looks':      null,
+      "Women's Edit":   ["Women's Edit", "women"],
+      "Men's Edit":     ["Men's Edit", "men"],
+      'Occasion Wear':  ['Occasion Wear', 'occasion'],
+      'Casual Day':     ['Casual Day', 'casual'],
+      'Evening Out':    ['Evening Out', 'evening'],
+      'Vacation Vibes': ['Vacation Vibes', 'vacation', 'summer'],
+      'Workwear':       ['Workwear', 'work']
+    };
+
+    // Assign data-category to mosaic items from their label tag text
+    document.querySelectorAll('.lb-mosaic-item').forEach(function(item) {
+      var tag = item.querySelector('.lb-mosaic-label-tag');
+      if (tag) item.dataset.category = tag.textContent.trim().toLowerCase();
+    });
+
+    // Assign data-category to look cards from badge + season text
+    document.querySelectorAll('.lb-look-card').forEach(function(card) {
+      var badge = card.querySelector('.lb-look-badge');
+      var season = card.querySelector('.lb-look-season');
+      var text = ((badge ? badge.textContent : '') + ' ' + (season ? season.textContent : '')).toLowerCase();
+      card.dataset.category = text.trim();
+    });
+
+    function filterItems(label) {
+      var cats = TAB_CATEGORY_MAP[label];
+
+      document.querySelectorAll('.lb-mosaic-item').forEach(function(item) {
+        if (!cats) {
+          item.style.display = '';
+          return;
+        }
+        var cat = (item.dataset.category || '').toLowerCase();
+        var match = cats.some(function(c) { return cat.includes(c.toLowerCase()); });
+        item.style.display = match ? '' : 'none';
+      });
+
+      document.querySelectorAll('.lb-look-card').forEach(function(card) {
+        if (!cats) {
+          card.style.display = '';
+          return;
+        }
+        var cat = (card.dataset.category || '').toLowerCase();
+        var match = cats.some(function(c) { return cat.includes(c.toLowerCase()); });
+        card.style.display = match ? '' : 'none';
+      });
+
+      // Reset carousel
+      lbCurrent = 0;
+      if (lbTrack) lbTrack.style.transform = 'translateX(0)';
+    }
+
     document.querySelectorAll('.lb-tab').forEach(function(tab) {
       tab.addEventListener('click', function() {
-        document.querySelectorAll('.lb-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.lb-tab').forEach(function(t) { t.classList.remove('active'); });
         tab.classList.add('active');
+        filterItems(tab.textContent.trim());
       });
     });
 
-    // Looks carousel
-    const lbTrack = document.getElementById('lb-looks-track');
-    const lbPrev = document.getElementById('lb-prev');
-    const lbNext = document.getElementById('lb-next');
-    let lbCurrent = 0;
-    function getLbPerView() { return window.innerWidth < 700 ? 1 : window.innerWidth < 1100 ? 2 : 4; }
+    // ---- Looks Carousel ----
+    var lbTrack = document.getElementById('lb-looks-track');
+    var lbPrev = document.getElementById('lb-prev');
+    var lbNext = document.getElementById('lb-next');
+    var lbCurrent = 0;
+
+    function getLbPerView() {
+      return window.innerWidth < 500 ? 1 : window.innerWidth < 900 ? 2 : 4;
+    }
+
+    function getVisibleLookCards() {
+      return lbTrack ? Array.from(lbTrack.querySelectorAll('.lb-look-card')).filter(function(c) {
+        return c.style.display !== 'none';
+      }) : [];
+    }
+
     function moveLb(dir) {
       if (!lbTrack) return;
-      const cards = lbTrack.querySelectorAll('.lb-look-card');
-      const perView = getLbPerView();
-      const max = Math.max(0, cards.length - perView);
+      var cards = getVisibleLookCards();
+      if (!cards.length) return;
+      var perView = getLbPerView();
+      var max = Math.max(0, cards.length - perView);
       lbCurrent = Math.max(0, Math.min(lbCurrent + dir, max));
-      const cardW = cards[0].offsetWidth + 24;
-      lbTrack.style.transform = `translateX(-${lbCurrent * cardW}px)`;
+      var cardW = cards[0].offsetWidth + 24;
+      lbTrack.style.transform = 'translateX(-' + (lbCurrent * cardW) + 'px)';
     }
+
     if (lbPrev) lbPrev.addEventListener('click', function() { moveLb(-1); });
     if (lbNext) lbNext.addEventListener('click', function() { moveLb(1); });
 
-    // Editorial split reversed
+    // Touch swipe on carousel
+    if (lbTrack) {
+      var touchStartX = 0;
+      lbTrack.addEventListener('touchstart', function(e) {
+        touchStartX = e.touches[0].clientX;
+      }, { passive: true });
+      lbTrack.addEventListener('touchend', function(e) {
+        var diff = touchStartX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 40) moveLb(diff > 0 ? 1 : -1);
+      }, { passive: true });
+    }
+
+    window.addEventListener('resize', function() {
+      lbCurrent = 0;
+      if (lbTrack) lbTrack.style.transform = 'translateX(0)';
+    });
+
+    // ---- Editorial split reversed grids ----
     document.querySelectorAll('.editorial-split[style*="row-reverse"]').forEach(function(el) {
-      el.style.gridTemplateColumns = '1fr 1fr';
+      el.setAttribute('data-reversed', 'true');
+      if (window.innerWidth > 768) el.style.gridTemplateColumns = '1fr 1fr';
+    });
+
+    // ---- Mosaic tap-to-reveal for touch devices ----
+    document.querySelectorAll('.lb-mosaic-item').forEach(function(item) {
+      item.addEventListener('click', function() {
+        var isActive = item.classList.contains('touch-active');
+        document.querySelectorAll('.lb-mosaic-item.touch-active').forEach(function(i) {
+          i.classList.remove('touch-active');
+        });
+        if (!isActive) item.classList.add('touch-active');
+      });
     });
   </script>
+  <style>
+    /* Touch: show mosaic labels on tap instead of hover */
+    @media (hover: none) {
+      .lb-mosaic-item.touch-active .lb-mosaic-overlay { opacity: 1; }
+      .lb-mosaic-item.touch-active .lb-mosaic-label { transform: translateY(0); opacity: 1; }
+    }
+  </style>
 </body>
 </html>

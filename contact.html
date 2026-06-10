@@ -745,31 +745,438 @@
     }
 
     /* ====== RESPONSIVE ====== */
+
+    /* ── 1100px ── */
     @media (max-width: 1100px) {
       .contact-body-inner { padding: 0 40px; gap: 48px; }
       .faq-inner { padding: 0 40px; }
       .contact-form-wrap { padding: 44px 36px; }
+      .contact-hero-title { font-size: clamp(52px, 8vw, 88px); }
     }
+
+    /* ── 900px: tablet ── */
     @media (max-width: 900px) {
-      .contact-hero-content { padding: 0 24px 60px; }
+      /* Hero */
+      .contact-hero { height: 60vh; min-height: 420px; }
+      .contact-hero-content { padding: 0 28px 60px; max-width: 100%; }
       .contact-hero-deco { display: none; }
+      .contact-hero-title { font-size: clamp(44px, 10vw, 72px); }
+      .contact-hero-sub { font-size: 15px; }
+
+      /* Body */
+      .contact-body { padding: 72px 0; }
       .contact-body-inner {
         grid-template-columns: 1fr;
-        padding: 0 24px;
+        padding: 0 28px;
         gap: 40px;
       }
+
+      /* Unstick form on tablet */
       .contact-form-wrap {
-        padding: 36px 28px;
+        padding: 40px 36px;
         position: static;
+        border-radius: 22px;
       }
-      .contact-form .form-row { grid-template-columns: 1fr; gap: 0; }
-      .faq-grid { grid-template-columns: 1fr; }
-      .faq-inner { padding: 0 24px; }
-      .contact-social-cta { padding: 60px 24px; }
+
+      /* Form rows: two columns still usable on tablet */
+      .contact-form .form-row { gap: 16px; }
+
+      /* FAQ */
+      .faq-grid { grid-template-columns: 1fr; gap: 12px; }
+      .faq-inner { padding: 0 28px; }
+      .faq-section { padding: 72px 0; }
+
+      /* Social CTA */
+      .contact-social-cta { padding: 64px 28px; }
     }
+
+    /* ── 680px: large phones landscape ── */
+    @media (max-width: 680px) {
+      /* Hero */
+      .contact-hero { height: auto; min-height: 380px; padding-top: 88px; }
+      .contact-hero-content { padding: 0 20px 52px; }
+      .contact-hero-title { font-size: clamp(38px, 11vw, 60px); }
+      .contact-hero-sub { font-size: 14px; max-width: 100%; }
+      .contact-hero-eyebrow { font-size: 10px; padding: 5px 13px; }
+
+      /* Body */
+      .contact-body { padding: 56px 0; }
+      .contact-body-inner { padding: 0 20px; gap: 32px; }
+
+      /* Info cards */
+      .contact-info-stack { gap: 12px; }
+      .contact-info-card { padding: 20px 20px; gap: 14px; }
+      .contact-info-icon-wrap { width: 46px; height: 46px; border-radius: 12px; flex-shrink: 0; }
+      .contact-info-icon-wrap svg { width: 20px; height: 20px; }
+      .contact-info-title { font-size: 17px; }
+      .contact-info-detail { font-size: 13px; }
+      .contact-info-label { font-size: 10px; margin-bottom: 3px; }
+
+      /* Hours */
+      .hours-card { padding: 26px 22px; margin-bottom: 28px; }
+      .hours-table td { padding: 8px 0; font-size: 13px; }
+
+      /* Map */
+      .map-label { font-size: 12px; }
+      .map-wrapper iframe { height: 260px; }
+      .map-overlay-tag {
+        top: 12px; left: 12px;
+        bottom: auto;
+        font-size: 12px; padding: 9px 14px; gap: 8px;
+        border-radius: 10px;
+      }
+      .map-overlay-tag .map-pin-dot { width: 9px; height: 9px; }
+      .map-open-link {
+        top: auto; bottom: 12px; right: 12px;
+        font-size: 11px; padding: 8px 14px;
+      }
+
+      /* Social strip */
+      .contact-social { flex-direction: column; gap: 10px; margin-top: 20px; }
+      .contact-social-btn { padding: 13px 16px; justify-content: center; font-size: 12px; }
+
+      /* Form wrap */
+      .contact-form-wrap { padding: 32px 24px; border-radius: 18px; }
+      .form-header { margin-bottom: 28px; }
+      .form-header-title { font-size: clamp(26px, 7vw, 38px); }
+      .form-header-sub { font-size: 14px; }
+
+      /* Topic pills */
+      .form-topic-tabs { gap: 6px; margin-bottom: 24px; flex-wrap: wrap; }
+      .form-topic-tab { font-size: 11px; padding: 6px 13px; }
+
+      /* Two-col form rows → single col */
+      .contact-form .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+      .contact-form .form-row .form-group { margin-bottom: 16px; }
+
+      /* Inputs — 16px prevents iOS auto-zoom */
+      .contact-form .form-input,
+      .contact-form .form-select,
+      .contact-form .form-textarea {
+        font-size: 16px;
+        padding: 13px 15px;
+        border-radius: 10px;
+      }
+      .contact-form .form-label { font-size: 11px; }
+      .contact-form .form-group { margin-bottom: 16px; }
+
+      /* Submit */
+      .btn-contact-submit { padding: 15px; font-size: 14px; border-radius: 12px; margin-top: 20px; }
+
+      /* FAQ */
+      .faq-inner { padding: 0 20px; }
+      .faq-section { padding: 56px 0; }
+      .faq-grid { gap: 10px; margin-top: 36px; }
+      .faq-item { padding: 22px 20px; border-radius: 14px; }
+      .faq-q-text { font-size: 16px; }
+      .faq-answer-inner { font-size: 13px; padding-top: 12px; }
+      .faq-toggle { width: 28px; height: 28px; flex-shrink: 0; }
+
+      /* Social CTA */
+      .contact-social-cta { padding: 56px 20px; }
+      .cta-title { font-size: clamp(28px, 8vw, 46px); }
+      .cta-desc { font-size: 14px; margin-bottom: 28px; }
+      .cta-social-row { gap: 8px; flex-wrap: wrap; }
+      .cta-social-link { font-size: 12px; padding: 11px 18px; gap: 8px; }
+    }
+
+    /* ── 480px: portrait phones ── */
     @media (max-width: 480px) {
-      .contact-social { flex-direction: column; }
+      /* Hero */
+      .contact-hero { padding-top: 80px; }
+      .contact-hero-content { padding: 0 16px 44px; }
+      .contact-hero-title { font-size: clamp(32px, 11vw, 50px); }
+
+      /* Body */
+      .contact-body-inner { padding: 0 16px; gap: 28px; }
+
+      /* Info cards — tighter */
+      .contact-info-card { padding: 16px 16px; gap: 12px; border-radius: 14px; }
+      .contact-info-icon-wrap { width: 40px; height: 40px; border-radius: 10px; }
+      .contact-info-icon-wrap svg { width: 18px; height: 18px; }
+      .contact-info-title { font-size: 15px; }
+
+      /* Hours */
+      .hours-card { padding: 20px 18px; border-radius: 16px; }
+      .hours-table td { font-size: 12px; padding: 7px 0; }
+
+      /* Map */
+      .map-wrapper iframe { height: 230px; }
+      .map-overlay-tag { font-size: 11px; padding: 8px 12px; }
+
+      /* Form */
+      .contact-form-wrap { padding: 24px 16px; border-radius: 16px; }
+      .form-header-title { font-size: 26px; }
+      .form-topic-tab { font-size: 10px; padding: 5px 10px; }
+      .char-count { font-size: 10px; }
+
+      /* Rating stars */
+      .form-rating-star { font-size: 20px; }
+
+      /* FAQ */
+      .faq-inner { padding: 0 16px; }
+      .faq-item { padding: 18px 16px; }
+
+      /* Social CTA */
+      .contact-social-cta { padding: 48px 16px; }
+      /* Two social buttons per row */
+      .cta-social-link { flex: 1 1 calc(50% - 6px); justify-content: center; min-width: 110px; }
     }
+
+ /* ======================================
+   CONTACT PAGE RESPONSIVE FIX
+====================================== */
+
+html,
+body{
+  overflow-x:hidden;
+  width:100%;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+img,
+iframe,
+video{
+  max-width:100%;
+  height:auto;
+  display:block;
+}
+
+/* Tablet */
+@media screen and (max-width:1024px){
+
+  .contact-body-inner{
+    display:flex !important;
+    flex-direction:column !important;
+    gap:40px;
+  }
+
+  .contact-left,
+  .reveal-right{
+    width:100% !important;
+    max-width:100% !important;
+  }
+
+  .contact-form-wrap,
+  .hours-card,
+  .map-section,
+  .contact-info-stack{
+    width:100% !important;
+  }
+
+  .faq-grid{
+    grid-template-columns:1fr 1fr !important;
+    gap:20px;
+  }
+
+  .contact-hero-title{
+    font-size:4rem !important;
+    line-height:1.1;
+  }
+}
+
+/* Mobile */
+@media screen and (max-width:768px){
+
+  .contact-body{
+    padding:60px 20px !important;
+  }
+
+  .contact-body-inner{
+    display:flex !important;
+    flex-direction:column !important;
+    gap:32px !important;
+  }
+
+  .contact-hero{
+    min-height:70vh !important;
+  }
+
+  .contact-hero-content{
+    width:100% !important;
+    padding:0 20px !important;
+  }
+
+  .contact-hero-title{
+    font-size:2.8rem !important;
+    line-height:1.05 !important;
+  }
+
+  .contact-hero-sub{
+    font-size:15px !important;
+    max-width:100% !important;
+  }
+
+  .contact-hero-deco{
+    display:none !important;
+  }
+
+  .contact-info-card{
+    padding:20px !important;
+    flex-direction:column !important;
+    align-items:flex-start !important;
+    gap:15px !important;
+  }
+
+  .form-row{
+    display:flex !important;
+    flex-direction:column !important;
+    gap:16px !important;
+  }
+
+  .form-group{
+    width:100% !important;
+  }
+
+  .form-input,
+  .form-select,
+  .form-textarea{
+    width:100% !important;
+  }
+
+  .form-topic-tabs{
+    display:flex !important;
+    overflow-x:auto !important;
+    flex-wrap:nowrap !important;
+    gap:10px !important;
+    padding-bottom:10px;
+    scrollbar-width:none;
+  }
+
+  .form-topic-tabs::-webkit-scrollbar{
+    display:none;
+  }
+
+  .form-topic-tab{
+    flex:0 0 auto !important;
+    white-space:nowrap;
+  }
+
+  .btn-contact-submit{
+    width:100% !important;
+    justify-content:center !important;
+  }
+
+  .map-wrapper iframe{
+    height:280px !important;
+    width:100% !important;
+  }
+
+  .map-open-link{
+    position:static !important;
+    margin-top:15px;
+    display:inline-flex;
+  }
+
+  .contact-social{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    gap:12px !important;
+  }
+
+  .contact-social-btn{
+    width:100% !important;
+    justify-content:center;
+  }
+
+  .hours-table{
+    width:100%;
+  }
+
+  .faq-grid{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+  }
+
+  .faq-question{
+    padding:18px !important;
+  }
+
+  .faq-answer-inner{
+    padding:0 18px 18px !important;
+  }
+
+  .section-title,
+  .cta-title{
+    font-size:2rem !important;
+  }
+
+  .section-subtitle,
+  .cta-desc{
+    font-size:15px !important;
+  }
+
+  .cta-social-row{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    gap:12px !important;
+  }
+
+  .cta-social-link{
+    width:100% !important;
+    justify-content:center !important;
+  }
+}
+
+/* Small Mobile */
+@media screen and (max-width:480px){
+
+  .contact-body{
+    padding:40px 14px !important;
+  }
+
+  .contact-hero{
+    min-height:60vh !important;
+  }
+
+  .contact-hero-title{
+    font-size:2.2rem !important;
+  }
+
+  .contact-hero-sub{
+    font-size:14px !important;
+  }
+
+  .contact-info-card,
+  .hours-card,
+  .contact-form-wrap{
+    padding:16px !important;
+  }
+
+  .form-header-title{
+    font-size:1.8rem !important;
+  }
+
+  .section-title,
+  .cta-title{
+    font-size:1.7rem !important;
+  }
+
+  .hours-day,
+  .hours-time{
+    font-size:13px !important;
+  }
+
+  .faq-q-text{
+    font-size:14px !important;
+  }
+
+  .contact-social-btn,
+  .cta-social-link{
+    font-size:14px !important;
+  }
+
+  .map-wrapper iframe{
+    height:220px !important;
+  }
+}
+    
   </style>
 </head>
 <body>

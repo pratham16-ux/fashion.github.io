@@ -322,18 +322,119 @@
     /* ====== RESPONSIVE ====== */
     @media (max-width: 1100px) {
       .shop-inner { padding: 0 40px; grid-template-columns: 240px 1fr; gap: 32px; }
+      .shop-hero { padding: 150px 40px 70px; }
     }
+
+    /* ---- Tablet ---- */
     @media (max-width: 900px) {
+      .shop-hero { padding: 130px 24px 56px; }
+      .shop-hero::before { font-size: 140px; right: -10px; }
+      .shop-hero-inner { flex-direction: column; align-items: flex-start; gap: 20px; }
+      .shop-hero-title { font-size: clamp(34px, 8vw, 52px); }
+      .shop-hero-meta { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .shop-hero-tags { gap: 6px; }
+      .shop-hero-tag { font-size: 11px; padding: 5px 13px; }
+
       .shop-inner { grid-template-columns: 1fr; padding: 0 24px; }
-      .filter-sidebar { position: static; display: none; }
+      .filter-sidebar { position: static; display: none; border-radius: 16px; padding: 24px; margin-bottom: 8px; }
       .filter-sidebar.show { display: block; }
-      .filter-toggle-btn { display: flex; }
+      .filter-toggle-btn { display: flex !important; }
+
       .products-grid-4 { grid-template-columns: repeat(2, 1fr); gap: 16px; }
-      .shop-hero { padding: 140px 24px 60px; }
+      .products-grid-4.view-2col { grid-template-columns: repeat(2, 1fr); }
+
+      .shop-toolbar { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .shop-toolbar-right { width: 100%; justify-content: space-between; }
+      .sort-select { flex: 1; }
+
+      .collection-section-head { font-size: 22px; margin: 36px 0 16px; }
+
+      /* Cart drawer full-width on tablet */
+      .cart-drawer { width: min(460px, 94vw); }
     }
-    @media (max-width: 480px) {
+
+    /* ---- Mobile ---- */
+    @media (max-width: 600px) {
+      .shop-page-wrap { padding: 40px 0 80px; }
+      .shop-inner { padding: 0 16px; }
+
+      .shop-hero { padding: 110px 16px 44px; }
+      .shop-hero::before { display: none; }
+      .shop-hero-title { font-size: clamp(28px, 9vw, 42px); }
+      .shop-hero-count { font-size: 12px; }
+      .shop-hero-tags { gap: 6px; }
+      .shop-hero-tag { font-size: 11px; padding: 5px 12px; }
+
+      .filter-toggle-btn { width: 100%; justify-content: center; border-radius: 12px; }
+
+      .shop-toolbar { margin-bottom: 20px; }
+      .shop-toolbar-right { flex-wrap: wrap; gap: 10px; }
+      .sort-select { width: 100%; border-radius: 10px; }
+      .view-toggle { margin-left: auto; }
+
+      .active-filters { gap: 6px; }
+      .active-filter-tag { font-size: 11px; padding: 4px 10px; }
+
       .products-grid-4 { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+
+      /* Product card compact on small screens */
+      .product-info { padding: 10px 12px 14px; }
+      .product-name { font-size: 14px; }
+      .product-brand { font-size: 9px; }
+      .price-current { font-size: 14px; }
+      .price-original { font-size: 11px; }
+      .price-save { font-size: 10px; }
+      .product-rating { margin-bottom: 6px; }
+      .stars { font-size: 10px; }
+      .rating-count { font-size: 10px; }
+      .color-swatch { width: 12px; height: 12px; }
+
+      /* Always-visible add-to-bag on mobile (no hover) */
+      .product-actions {
+        transform: translateY(0) !important;
+        background: linear-gradient(transparent 0%, rgba(255,255,255,0.97) 40%);
+        padding: 10px;
+        gap: 6px;
+      }
+      .product-action-btn { padding: 8px 6px; font-size: 10px; letter-spacing: 0; }
+      .btn-wishlist { flex: 0 0 34px; }
+
+      .collection-section-head { font-size: 20px; margin: 28px 0 12px; gap: 8px; }
+      .coll-pill { font-size: 9px; padding: 3px 8px; }
+
+      /* Pagination compact */
+      .pagination { gap: 4px; margin-top: 40px; flex-wrap: wrap; justify-content: center; }
+      .page-btn { width: 36px; height: 36px; font-size: 12px; border-radius: 8px; }
+
+      /* Cart drawer full-width on phone */
       .cart-drawer { width: 100%; right: -100%; }
+      .cart-drawer.open { right: 0; }
+      .cart-header { padding: 18px 20px; }
+      .cart-body { padding: 12px 20px; }
+      .cart-footer { padding: 14px 20px; }
+      .cart-header h2 { font-size: 22px; }
+      .cart-item-img { width: 64px; height: 80px; border-radius: 8px; }
+      .ci-name { font-size: 13px; }
+      .ci-price { font-size: 13px; }
+      .cart-grand { font-size: 16px; }
+      .btn-checkout { font-size: 13px; padding: 13px; }
+    }
+
+    /* ---- Small phones ---- */
+    @media (max-width: 380px) {
+      .shop-inner { padding: 0 12px; }
+      .products-grid-4 { gap: 8px; }
+      .product-info { padding: 8px 10px 12px; }
+      .product-name { font-size: 13px; line-height: 1.25; }
+      .shop-hero-tags { gap: 4px; }
+      .shop-hero-tag { font-size: 10px; padding: 4px 10px; }
+      .page-btn { width: 32px; height: 32px; font-size: 11px; }
+    }
+
+    /* ---- Touch: show product actions without hover ---- */
+    @media (hover: none) {
+      .product-actions { transform: translateY(0); }
+      .product-card:active { transform: none; }
     }
   </style>
 </head>
@@ -570,6 +671,7 @@
 // ================================================================
 //  IMAGE HELPER — wsrv.nl proxy, exact format from original shop.html
 // ================================================================
+
 function img(id, w, h) {
   return `https://wsrv.nl/?url=images.unsplash.com/${id}?w=${w}&h=${h}&fit=crop&auto=format&q=72&output=webp`;
 }
@@ -579,154 +681,154 @@ function img(id, w, h) {
 //  All image IDs verified present in the original shop.html or are
 //  well-known stable Unsplash fashion IDs
 // ================================================================
-const PRODUCTS = [
-  // ── WOMEN'S (12) ──────────────────────────────────────────────
-  { id:1,  cat:'women', badge:'new',  brand:'Stackly Essentials', name:'Floral Wrap Midi Dress',       price:2499, orig:3999,  stars:5, rev:128, colors:['#E8C4B0','#8FA882','#2C2C2C'],
+
+ const PRODUCTS = [
+  // ── WOMEN'S ──────────────────────────────────────────────────
+  { id:1,  cat:'women', badge:'new',  brand:'Stackly Essentials', name:'Floral Wrap Midi Dress',      price:2499, orig:3999,  stars:5, rev:128, colors:['#E8C4B0','#8FA882','#2C2C2C'],
     img: img('photo-1539109136881-3be0616acf4b',480,640) },
-  { id:2,  cat:'women', badge:'',     brand:'Studio Line',        name:'Premium Linen Blazer',          price:4799, orig:0,    stars:4, rev:87,  colors:['#D4C5A9','#2C2C2C'],
+  { id:2,  cat:'women', badge:'',     brand:'Studio Line',        name:'Premium Linen Blazer',         price:4799, orig:0,    stars:4, rev:87,  colors:['#D4C5A9','#2C2C2C'],
     img: img('photo-1591047139829-d91aecb6caea',480,640) },
-  { id:3,  cat:'women', badge:'sale', brand:'Stackly Summer',      name:'Boho Smocked Sundress',         price:1799, orig:2999, stars:5, rev:204, colors:['#F2C4B0','#C9A96E','#fff'],
+  { id:3,  cat:'women', badge:'sale', brand:'Stackly Summer',     name:'Boho Smocked Sundress',        price:1799, orig:2999, stars:5, rev:204, colors:['#F2C4B0','#C9A96E','#fff'],
     img: img('photo-1485230895905-ec40ba36b9bc',480,640) },
-  { id:4,  cat:'women', badge:'new',  brand:'Luxe Edit',           name:'Silk Satin Relaxed Blouse',     price:3299, orig:0,    stars:4, rev:56,  colors:['#FAEBD7','#C9614A','#8FA882'],
+  { id:4,  cat:'women', badge:'new',  brand:'Luxe Edit',          name:'Silk Satin Relaxed Blouse',    price:3299, orig:0,    stars:4, rev:56,  colors:['#FAEBD7','#C9614A','#8FA882'],
     img: img('photo-1434389677669-e08b4cac3105',480,640) },
-  { id:5,  cat:'women', badge:'hot',  brand:'Stackly Summer',      name:'Ruffled Off-Shoulder Dress',    price:2199, orig:3499, stars:5, rev:312, colors:['#F2C4B0','#fff'],
+  { id:5,  cat:'women', badge:'hot',  brand:'Stackly Summer',     name:'Ruffled Off-Shoulder Dress',   price:2199, orig:3499, stars:5, rev:312, colors:['#F2C4B0','#fff'],
     img: img('photo-1509631179647-0177331693ae',480,640) },
-  { id:6,  cat:'women', badge:'sale', brand:'Stackly Essentials',  name:'Pleated Midi Skirt',            price:1499, orig:2299, stars:5, rev:166, colors:['#D4C5A9','#8FA882','#2C2C2C'],
+  { id:6,  cat:'women', badge:'sale', brand:'Stackly Essentials', name:'Pleated Midi Skirt',           price:1499, orig:2299, stars:5, rev:166, colors:['#D4C5A9','#8FA882','#2C2C2C'],
     img: img('photo-1515886657613-9f3515b0c78f',480,640) },
-  { id:7,  cat:'women', badge:'new',  brand:'Stackly Summer',      name:'Resort Co-ord Set',             price:3799, orig:5499, stars:5, rev:231, colors:['#F2C4B0','#8FA882'],
+  { id:7,  cat:'women', badge:'new',  brand:'Stackly Summer',     name:'Resort Co-ord Set',            price:3799, orig:5499, stars:5, rev:231, colors:['#F2C4B0','#8FA882'],
     img: img('photo-1558769132-cb1aea458c5e',480,640) },
-  { id:8,  cat:'women', badge:'sale', brand:'Luxe Edit',           name:'Sequin Evening Gown',           price:6999, orig:10999,stars:5, rev:44,  colors:['#C9A96E','#2C2C2C'],
+  { id:8,  cat:'women', badge:'sale', brand:'Luxe Edit',          name:'Sequin Evening Gown',          price:6999, orig:10999,stars:5, rev:44,  colors:['#C9A96E','#2C2C2C'],
     img: img('photo-1469334031218-e382a71b716b',480,640) },
-  { id:9,  cat:'women', badge:'new',  brand:'Stackly Summer',      name:'Linen Crop Top & Trouser Set',  price:2799, orig:3799, stars:5, rev:87,  colors:['#FAEBD7','#8FA882'],
+  { id:9,  cat:'women', badge:'new',  brand:'Stackly Summer',     name:'Linen Crop Top & Trouser Set', price:2799, orig:3799, stars:5, rev:87,  colors:['#FAEBD7','#8FA882'],
     img: img('photo-1534126511673-b6899657816a',480,640) },
-  { id:10, cat:'women', badge:'',     brand:'Studio Line',         name:'Asymmetric Hem Maxi Dress',     price:3499, orig:0,    stars:4, rev:99,  colors:['#FAEBD7','#C9614A'],
+  { id:10, cat:'women', badge:'',     brand:'Studio Line',        name:'Asymmetric Hem Maxi Dress',    price:3499, orig:0,    stars:4, rev:99,  colors:['#FAEBD7','#C9614A'],
     img: img('photo-1496747611176-843222e1e57c',480,640) },
-  { id:11, cat:'women', badge:'sale', brand:'Stackly Essentials',  name:'Wide Leg Cargo Pants',          price:1999, orig:2999, stars:4, rev:78,  colors:['#D4C5A9','#2C2C2C','#8FA882'],
+  { id:11, cat:'women', badge:'sale', brand:'Stackly Essentials', name:'Wide Leg Cargo Pants',         price:1999, orig:2999, stars:4, rev:78,  colors:['#D4C5A9','#2C2C2C','#8FA882'],
     img: img('photo-1506629082955-511b1aa562c8',480,640) },
-  { id:12, cat:'women', badge:'hot',  brand:'Luxe Edit',           name:'Velvet Wrap Skirt',             price:4199, orig:5999, stars:5, rev:145, colors:['#7B8FA1','#2C2C2C'],
+  { id:12, cat:'women', badge:'hot',  brand:'Luxe Edit',          name:'Velvet Wrap Skirt',            price:4199, orig:5999, stars:5, rev:145, colors:['#7B8FA1','#2C2C2C'],
     img: img('photo-1572804013309-59a88b7e92f1',480,640) },
 
-  // ── MEN'S (11) ────────────────────────────────────────────────
-  { id:13, cat:'men', badge:'',     brand:'Studio Line',        name:'Slim Fit Oxford Shirt',         price:1899, orig:0,    stars:4, rev:74,  colors:['#FAEBD7','#7B8FA1','#2C2C2C'],
+  // ── MEN'S ─────────────────────────────────────────────────────
+  { id:13, cat:'men', badge:'',     brand:'Studio Line',        name:'Slim Fit Oxford Shirt',        price:1899, orig:0,    stars:4, rev:74,  colors:['#FAEBD7','#7B8FA1','#2C2C2C'],
     img: img('photo-1516257984-b1b4d707412e',480,640) },
-  { id:14, cat:'men', badge:'new',  brand:'Stackly Essentials', name:'Premium Chino Trousers',        price:2299, orig:0,    stars:4, rev:93,  colors:['#D4C5A9','#2C2C2C','#7B8FA1'],
+  { id:14, cat:'men', badge:'new',  brand:'Stackly Essentials', name:'Premium Chino Trousers',       price:2299, orig:0,    stars:4, rev:93,  colors:['#D4C5A9','#2C2C2C','#7B8FA1'],
     img: img('photo-1473966968600-fa801b869a1a',480,640) },
-  { id:15, cat:'men', badge:'sale', brand:'Studio Line',        name:'Structured Wool Blazer',        price:5499, orig:7999, stars:5, rev:62,  colors:['#2C2C2C','#D4C5A9'],
-    img: img('photo-1594938298603-c8148c4b4571',480,640) },
-  { id:16, cat:'men', badge:'hot',  brand:'Stackly Essentials', name:'Relaxed Linen Shirt',           price:1699, orig:2499, stars:5, rev:188, colors:['#FAEBD7','#8FA882','#7B8FA1'],
+  { id:15, cat:'men', badge:'sale', brand:'Studio Line',        name:'Structured Wool Blazer',       price:5499, orig:7999, stars:5, rev:62,  colors:['#2C2C2C','#D4C5A9'],
+    img: img('photo-1520367745676-56196632073f', 480, 640) },
+  { id:16, cat:'men', badge:'hot',  brand:'Stackly Essentials', name:'Relaxed Linen Shirt',          price:1699, orig:2499, stars:5, rev:188, colors:['#FAEBD7','#8FA882','#7B8FA1'],
     img: img('photo-1602810318383-e386cc2a3ccf',480,640) },
-  { id:17, cat:'men', badge:'new',  brand:'Studio Line',        name:'Technical Cargo Shorts',        price:1999, orig:0,    stars:4, rev:112, colors:['#D4C5A9','#2C2C2C','#8FA882'],
-    img: img('photo-1591195853828-11db59a44f43',480,640) },
-  { id:18, cat:'men', badge:'',     brand:'Stackly Essentials', name:'Classic Crew Neck Tee',         price:999,  orig:0,    stars:4, rev:254, colors:['#fff','#2C2C2C','#7B8FA1','#8FA882'],
+  { id:17, cat:'men', badge:'new',  brand:'Studio Line',        name:'Technical Cargo Shorts',       price:1999, orig:0,    stars:4, rev:112, colors:['#D4C5A9','#2C2C2C','#8FA882'],
+    img: img('photo-1490114538077-0a7f8cb49891', 480, 640) },
+  { id:18, cat:'men', badge:'',     brand:'Stackly Essentials', name:'Classic Crew Neck Tee',        price:999,  orig:0,    stars:4, rev:254, colors:['#fff','#2C2C2C','#7B8FA1','#8FA882'],
     img: img('photo-1583743814966-8936f5b7be1a',480,640) },
-  { id:19, cat:'men', badge:'sale', brand:'Studio Line',        name:'Merino Crewneck Sweater',       price:2999, orig:4499, stars:5, rev:67,  colors:['#D4C5A9','#2C2C2C','#7B8FA1'],
+  { id:19, cat:'men', badge:'sale', brand:'Studio Line',        name:'Merino Crewneck Sweater',      price:2999, orig:4499, stars:5, rev:67,  colors:['#D4C5A9','#2C2C2C','#7B8FA1'],
     img: img('photo-1576566588028-4147f3842f27',480,640) },
-  { id:20, cat:'men', badge:'new',  brand:'Heritage Co.',       name:'Indigo Denim Jacket',           price:3799, orig:0,    stars:5, rev:136, colors:['#7B8FA1','#2C2C2C'],
+  { id:20, cat:'men', badge:'new',  brand:'Heritage Co.',       name:'Indigo Denim Jacket',          price:3799, orig:0,    stars:5, rev:136, colors:['#7B8FA1','#2C2C2C'],
     img: img('photo-1551698618-1dfe5d97d256',480,640) },
-  { id:21, cat:'men', badge:'hot',  brand:'Stackly Essentials', name:'Jogger Sweatpants',             price:1499, orig:2199, stars:4, rev:201, colors:['#2C2C2C','#D4C5A9','#8FA882'],
+  { id:21, cat:'men', badge:'hot',  brand:'Stackly Essentials', name:'Jogger Sweatpants',            price:1499, orig:2199, stars:4, rev:201, colors:['#2C2C2C','#D4C5A9','#8FA882'],
     img: img('photo-1552902865-b72c031ac5ea',480,640) },
-  { id:22, cat:'men', badge:'',     brand:'Heritage Co.',       name:'Tailored Formal Trousers',      price:2799, orig:0,    stars:4, rev:89,  colors:['#2C2C2C','#D4C5A9','#7B8FA1'],
+  { id:22, cat:'men', badge:'',     brand:'Heritage Co.',       name:'Tailored Formal Trousers',     price:2799, orig:0,    stars:4, rev:89,  colors:['#2C2C2C','#D4C5A9','#7B8FA1'],
     img: img('photo-1507003211169-0a1dd7228f2d',480,640) },
-  { id:23, cat:'men', badge:'sale', brand:'Studio Line',        name:'Printed Camp Collar Shirt',     price:1799, orig:2699, stars:4, rev:78,  colors:['#FAEBD7','#C9614A','#8FA882'],
+  { id:23, cat:'men', badge:'sale', brand:'Studio Line',        name:'Printed Camp Collar Shirt',    price:1799, orig:2699, stars:4, rev:78,  colors:['#FAEBD7','#C9614A','#8FA882'],
     img: img('photo-1620012253295-c15cc3e65df4',480,640) },
 
-  // ── ACCESSORIES (11) ──────────────────────────────────────────
-  { id:24, cat:'accessories', badge:'',     brand:'Luxe Edit',          name:'Structured Tote Bag',         price:5499, orig:0,    stars:5, rev:93,  colors:['#D4C5A9','#2C2C2C','#C9614A'],
+  // ── ACCESSORIES ───────────────────────────────────────────────
+  { id:24, cat:'accessories', badge:'',     brand:'Luxe Edit',          name:'Structured Tote Bag',        price:5499, orig:0,    stars:5, rev:93,  colors:['#D4C5A9','#2C2C2C','#C9614A'],
     img: img('photo-1553062407-98eeb64c6a62',480,640) },
-  { id:25, cat:'accessories', badge:'new',  brand:'Luxe Edit',          name:'Leather Crossbody Bag',       price:4299, orig:0,    stars:5, rev:156, colors:['#D4C5A9','#2C2C2C'],
+  { id:25, cat:'accessories', badge:'new',  brand:'Luxe Edit',          name:'Leather Crossbody Bag',      price:4299, orig:0,    stars:5, rev:156, colors:['#D4C5A9','#2C2C2C'],
     img: img('photo-1548036328-c9fa89d128fa',480,640) },
-  { id:26, cat:'accessories', badge:'sale', brand:'Stackly Essentials', name:'Woven Straw Hat',             price:999,  orig:1499, stars:4, rev:77,  colors:['#D4C5A9','#2C2C2C'],
+  { id:26, cat:'accessories', badge:'sale', brand:'Stackly Essentials', name:'Woven Straw Hat',            price:999,  orig:1499, stars:4, rev:77,  colors:['#D4C5A9','#2C2C2C'],
     img: img('photo-1521369909029-2afed882baee',480,640) },
-  { id:27, cat:'accessories', badge:'new',  brand:'Luxe Edit',          name:'Silk Square Scarf',           price:1299, orig:0,    stars:5, rev:44,  colors:['#F2C4B0','#C9614A','#8FA882','#2C2C2C'],
+  { id:27, cat:'accessories', badge:'new',  brand:'Luxe Edit',          name:'Silk Square Scarf',          price:1299, orig:0,    stars:5, rev:44,  colors:['#F2C4B0','#C9614A','#8FA882','#2C2C2C'],
     img: img('photo-1601924994987-69e26d50dc26',480,640) },
-  { id:28, cat:'accessories', badge:'hot',  brand:'Luxe Edit',          name:'Layered Gold Necklace',       price:2499, orig:3499, stars:5, rev:211, colors:['#C9A96E'],
+  { id:28, cat:'accessories', badge:'hot',  brand:'Luxe Edit',          name:'Layered Gold Necklace',      price:2499, orig:3499, stars:5, rev:211, colors:['#C9A96E'],
     img: img('photo-1515562141207-7a88fb7ce338',480,640) },
-  { id:29, cat:'accessories', badge:'',     brand:'Stackly Essentials', name:'Minimalist Leather Belt',     price:799,  orig:0,    stars:4, rev:58,  colors:['#2C2C2C','#D4C5A9','#C9614A'],
-    img: img('photo-1553456558-aff63285bdd1',480,640) },
-  { id:30, cat:'accessories', badge:'sale', brand:'Luxe Edit',          name:'Cat-Eye Sunglasses',          price:1799, orig:2499, stars:5, rev:134, colors:['#2C2C2C','#C9A96E'],
+  { id:29, cat:'accessories', badge:'',     brand:'Stackly Essentials', name:'Minimalist Leather Belt',    price:799,  orig:0,    stars:4, rev:58,  colors:['#2C2C2C','#D4C5A9','#C9614A'],
+    img: img('photo-1490114538077-0a7f8cb49891', 480, 640)},
+  { id:30, cat:'accessories', badge:'sale', brand:'Luxe Edit',          name:'Cat-Eye Sunglasses',         price:1799, orig:2499, stars:5, rev:134, colors:['#2C2C2C','#C9A96E'],
     img: img('photo-1572635196237-14b3f281503f',480,640) },
-  { id:31, cat:'accessories', badge:'new',  brand:'Luxe Edit',          name:'Beaded Wrist Cuff',           price:1199, orig:0,    stars:4, rev:63,  colors:['#C9A96E','#F2C4B0','#2C2C2C'],
+  { id:31, cat:'accessories', badge:'new',  brand:'Luxe Edit',          name:'Beaded Wrist Cuff',          price:1199, orig:0,    stars:4, rev:63,  colors:['#C9A96E','#F2C4B0','#2C2C2C'],
     img: img('photo-1611591437281-460bfbe1220a',480,640) },
-  { id:32, cat:'accessories', badge:'hot',  brand:'Stackly Essentials', name:'Canvas Shopper Tote',         price:699,  orig:999,  stars:4, rev:187, colors:['#FAEBD7','#2C2C2C','#8FA882'],
+  { id:32, cat:'accessories', badge:'hot',  brand:'Stackly Essentials', name:'Canvas Shopper Tote',        price:699,  orig:999,  stars:4, rev:187, colors:['#FAEBD7','#2C2C2C','#8FA882'],
     img: img('photo-1622560480654-d96214fdc887',480,640) },
-  { id:33, cat:'accessories', badge:'sale', brand:'Luxe Edit',          name:'Embroidered Clutch',          price:2199, orig:3199, stars:5, rev:49,  colors:['#C9614A','#D4C5A9','#2C2C2C'],
+  { id:33, cat:'accessories', badge:'sale', brand:'Luxe Edit',          name:'Embroidered Clutch',         price:2199, orig:3199, stars:5, rev:49,  colors:['#C9614A','#D4C5A9','#2C2C2C'],
     img: img('photo-1584917865442-de89df76afd3',480,640) },
-  { id:34, cat:'accessories', badge:'new',  brand:'Luxe Edit',          name:'Pearl Drop Earrings',         price:1599, orig:0,    stars:5, rev:92,  colors:['#fff','#C9A96E'],
+  { id:34, cat:'accessories', badge:'new',  brand:'Luxe Edit',          name:'Pearl Drop Earrings',        price:1599, orig:0,    stars:5, rev:92,  colors:['#fff','#C9A96E'],
     img: img('photo-1535632066927-ab7c9ab60908',480,640) },
 
-  // ── FOOTWEAR (11) ─────────────────────────────────────────────
-  { id:35, cat:'footwear', badge:'',     brand:'Stackly Essentials', name:'Minimal Canvas Sneakers',     price:2999, orig:0,    stars:4, rev:148, colors:['#fff','#2C2C2C','#F2C4B0'],
+  // ── FOOTWEAR ──────────────────────────────────────────────────
+  { id:35, cat:'footwear', badge:'',     brand:'Stackly Essentials', name:'Minimal Canvas Sneakers',    price:2999, orig:0,    stars:4, rev:148, colors:['#fff','#2C2C2C','#F2C4B0'],
     img: img('photo-1542291026-7eec264c27ff',480,640) },
-  { id:36, cat:'footwear', badge:'new',  brand:'Studio Line',        name:'Block Heel Mules',            price:3499, orig:0,    stars:5, rev:107, colors:['#D4C5A9','#2C2C2C','#C9614A'],
+  { id:36, cat:'footwear', badge:'new',  brand:'Studio Line',        name:'Block Heel Mules',           price:3499, orig:0,    stars:5, rev:107, colors:['#D4C5A9','#2C2C2C','#C9614A'],
     img: img('photo-1543163521-1bf539c55dd2',480,640) },
-  { id:37, cat:'footwear', badge:'sale', brand:'Stackly Essentials', name:'Leather Chelsea Boots',      price:4299, orig:6499, stars:5, rev:89,  colors:['#2C2C2C','#D4C5A9'],
+  { id:37, cat:'footwear', badge:'sale', brand:'Stackly Essentials', name:'Leather Chelsea Boots',     price:4299, orig:6499, stars:5, rev:89,  colors:['#2C2C2C','#D4C5A9'],
     img: img('photo-1608256246200-53e635b5b65f',480,640) },
-  { id:38, cat:'footwear', badge:'hot',  brand:'Studio Line',        name:'Platform Espadrilles',       price:2199, orig:3299, stars:4, rev:176, colors:['#D4C5A9','#2C2C2C','#C9614A'],
+  { id:38, cat:'footwear', badge:'hot',  brand:'Studio Line',        name:'Platform Espadrilles',      price:2199, orig:3299, stars:4, rev:176, colors:['#D4C5A9','#2C2C2C','#C9614A'],
     img: img('photo-1595950653106-6c9ebd614d3a',480,640) },
-  { id:39, cat:'footwear', badge:'new',  brand:'Stackly Essentials', name:'Strappy Heeled Sandals',     price:2799, orig:0,    stars:4, rev:118, colors:['#FAEBD7','#C9614A','#2C2C2C'],
+  { id:39, cat:'footwear', badge:'new',  brand:'Stackly Essentials', name:'Strappy Heeled Sandals',    price:2799, orig:0,    stars:4, rev:118, colors:['#FAEBD7','#C9614A','#2C2C2C'],
     img: img('photo-1566150905458-1bf1fc113f0d',480,640) },
-  { id:40, cat:'footwear', badge:'',     brand:'Heritage Co.',       name:'Derby Oxford Shoes',         price:3999, orig:0,    stars:5, rev:64,  colors:['#2C2C2C','#D4C5A9'],
+  { id:40, cat:'footwear', badge:'',     brand:'Heritage Co.',       name:'Derby Oxford Shoes',        price:3999, orig:0,    stars:5, rev:64,  colors:['#2C2C2C','#D4C5A9'],
     img: img('photo-1449505278894-297fdb3edbc1',480,640) },
-  { id:41, cat:'footwear', badge:'sale', brand:'Stackly Essentials', name:'Flat Leather Loafers',       price:2499, orig:3799, stars:4, rev:99,  colors:['#D4C5A9','#2C2C2C','#C9614A'],
+  { id:41, cat:'footwear', badge:'sale', brand:'Stackly Essentials', name:'Flat Leather Loafers',      price:2499, orig:3799, stars:4, rev:99,  colors:['#D4C5A9','#2C2C2C','#C9614A'],
     img: img('photo-1561861422-a549073e547a',480,640) },
-  { id:42, cat:'footwear', badge:'new',  brand:'Studio Line',        name:'Chunky Platform Boots',      price:4899, orig:0,    stars:5, rev:143, colors:['#2C2C2C','#D4C5A9'],
+  { id:42, cat:'footwear', badge:'new',  brand:'Studio Line',        name:'Chunky Platform Boots',     price:4899, orig:0,    stars:5, rev:143, colors:['#2C2C2C','#D4C5A9'],
     img: img('photo-1638247025967-b4e38f787b76',480,640) },
-  { id:43, cat:'footwear', badge:'hot',  brand:'Stackly Essentials', name:'Slip-On Sport Shoes',        price:1899, orig:2699, stars:4, rev:225, colors:['#fff','#2C2C2C','#F2C4B0','#7B8FA1'],
+  { id:43, cat:'footwear', badge:'hot',  brand:'Stackly Essentials', name:'Slip-On Sport Shoes',       price:1899, orig:2699, stars:4, rev:225, colors:['#fff','#2C2C2C','#F2C4B0','#7B8FA1'],
     img: img('photo-1539185441755-769473a23570',480,640) },
-  { id:44, cat:'footwear', badge:'',     brand:'Heritage Co.',       name:'Suede Ankle Boots',          price:3699, orig:0,    stars:5, rev:71,  colors:['#D4C5A9','#2C2C2C','#C9614A'],
-    img: img('photo-1531217257604-de69b2a5e1be',480,640) },
-  { id:45, cat:'footwear', badge:'sale', brand:'Studio Line',        name:'Embroidered Juttis',         price:1299, orig:1999, stars:5, rev:188, colors:['#C9614A','#C9A96E','#2C2C2C'],
+  { id:44, cat:'footwear', badge:'',     brand:'Heritage Co.',       name:'Suede Ankle Boots',         price:3699, orig:0,    stars:5, rev:71,  colors:['#D4C5A9','#2C2C2C','#C9614A'],
+    img: img('photo-1605733160314-4fc7dac4bb16', 480, 640)  },
+  { id:45, cat:'footwear', badge:'sale', brand:'Studio Line',        name:'Embroidered Juttis',        price:1299, orig:1999, stars:5, rev:188, colors:['#C9614A','#C9A96E','#2C2C2C'],
     img: img('photo-1562273138-f46be4ebdf33',480,640) },
-
-  // ── ETHNIC & FESTIVE (11) ────────────────────────────────────
-  { id:46, cat:'ethnic', badge:'new',  brand:'Heritage Co.', name:'Anarkali Embroidered Kurta',    price:3999, orig:5999, stars:5, rev:201, colors:['#C9614A','#C9A96E','#7B8FA1'],
-    img: img('photo-1583391733956-6c78276477e2',480,640) },
-  { id:47, cat:'ethnic', badge:'hot',  brand:'Heritage Co.', name:'Banarasi Silk Saree',           price:8999, orig:12999,stars:5, rev:87,  colors:['#C9A96E','#C9614A','#7B8FA1'],
-    img: img('photo-1610189352649-6e773b9f6754',480,640) },
-  { id:48, cat:'ethnic', badge:'sale', brand:'Heritage Co.', name:'Chanderi Palazzo Set',          price:2799, orig:3999, stars:4, rev:133, colors:['#F2C4B0','#8FA882','#FAEBD7'],
+    
+  // ── ETHNIC & FESTIVE ──────────────────────────────────────────
+  { id:46, cat:'ethnic', badge:'new',  brand:'Heritage Co.', name:'Anarkali Embroidered Kurta',   price:3999, orig:5999, stars:5, rev:201, colors:['#C9614A','#C9A96E','#7B8FA1'],
+    img: img('photo-1741847639057-b51a25d42892', 480, 640)},
+  { id:47, cat:'ethnic', badge:'hot',  brand:'Heritage Co.', name:'Banarasi Silk Saree',          price:8999, orig:12999,stars:5, rev:87,  colors:['#C9A96E','#C9614A','#7B8FA1'],
+    img: img('photo-1618901185975-d59f7091bcfe', 480, 640)},
+  { id:48, cat:'ethnic', badge:'sale', brand:'Heritage Co.', name:'Chanderi Palazzo Set',         price:2799, orig:3999, stars:4, rev:133, colors:['#F2C4B0','#8FA882','#FAEBD7'],
     img: img('photo-1593030761757-71fae45fa0e7',480,640) },
-  { id:49, cat:'ethnic', badge:'new',  brand:'Heritage Co.', name:'Phulkari Embroidered Dupatta',  price:1499, orig:0,    stars:5, rev:68,  colors:['#C9614A','#C9A96E','#7B8FA1'],
+  { id:49, cat:'ethnic', badge:'new',  brand:'Heritage Co.', name:'Phulkari Embroidered Dupatta', price:1499, orig:0,    stars:5, rev:68,  colors:['#C9614A','#C9A96E','#7B8FA1'],
     img: img('photo-1617627143750-d86bc21e42bb',480,640) },
-  { id:50, cat:'ethnic', badge:'hot',  brand:'Heritage Co.', name:'Lehenga Choli Set',             price:7499, orig:9999, stars:5, rev:156, colors:['#C9A96E','#C9614A','#2C2C2C'],
+  { id:50, cat:'ethnic', badge:'hot',  brand:'Heritage Co.', name:'Lehenga Choli Set',            price:7499, orig:9999, stars:5, rev:156, colors:['#C9A96E','#C9614A','#2C2C2C'],
     img: img('photo-1595777457583-95e059d581b8',480,640) },
-  { id:51, cat:'ethnic', badge:'',     brand:'Heritage Co.', name:'Block Print Cotton Kurta',      price:1899, orig:0,    stars:4, rev:112, colors:['#C9614A','#8FA882','#FAEBD7'],
+  { id:51, cat:'ethnic', badge:'',     brand:'Heritage Co.', name:'Block Print Cotton Kurta',     price:1899, orig:0,    stars:4, rev:112, colors:['#C9614A','#8FA882','#FAEBD7'],
     img: img('photo-1606503153255-59d8b8b82176',480,640) },
-  { id:52, cat:'ethnic', badge:'new',  brand:'Heritage Co.', name:'Mirror Work Festive Blouse',    price:2299, orig:0,    stars:5, rev:79,  colors:['#C9A96E','#C9614A','#7B8FA1'],
+  { id:52, cat:'ethnic', badge:'new',  brand:'Heritage Co.', name:'Mirror Work Festive Blouse',   price:2299, orig:0,    stars:5, rev:79,  colors:['#C9A96E','#C9614A','#7B8FA1'],
     img: img('photo-1585386959984-a4155224a1ad',480,640) },
-  { id:53, cat:'ethnic', badge:'sale', brand:'Heritage Co.', name:'Chikankari Straight Kurta',     price:2499, orig:3499, stars:4, rev:95,  colors:['#FAEBD7','#F2C4B0','#8FA882'],
+  { id:53, cat:'ethnic', badge:'sale', brand:'Heritage Co.', name:'Chikankari Straight Kurta',    price:2499, orig:3499, stars:4, rev:95,  colors:['#FAEBD7','#F2C4B0','#8FA882'],
     img: img('photo-1588444837495-c6cfeb53f32d',480,640) },
-  { id:54, cat:'ethnic', badge:'hot',  brand:'Heritage Co.', name:'Zardozi Festive Suit',          price:6499, orig:8999, stars:5, rev:44,  colors:['#C9A96E','#C9614A'],
-    img: img('photo-1546961342-ea5f62d951f0',480,640) },
-  { id:55, cat:'ethnic', badge:'new',  brand:'Heritage Co.', name:'Ikat Print Co-ord Set',         price:3299, orig:0,    stars:4, rev:61,  colors:['#C9614A','#8FA882','#2C2C2C'],
+  { id:54, cat:'ethnic', badge:'hot',  brand:'Heritage Co.', name:'Zardozi Festive Suit',         price:6499, orig:8999, stars:5, rev:44,  colors:['#C9A96E','#C9614A'],
+    img: img('photo-1727430228383-aa1fb59db8bf', 480, 640) },
+  { id:55, cat:'ethnic', badge:'new',  brand:'Heritage Co.', name:'Ikat Print Co-ord Set',        price:3299, orig:0,    stars:4, rev:61,  colors:['#C9614A','#8FA882','#2C2C2C'],
     img: img('photo-1593030761757-71fae45fa0e7',480,640) },
-  { id:56, cat:'ethnic', badge:'sale', brand:'Heritage Co.', name:'Organza Party Saree',           price:4999, orig:6999, stars:5, rev:72,  colors:['#7B8FA1','#C9614A','#C9A96E'],
+  { id:56, cat:'ethnic', badge:'sale', brand:'Heritage Co.', name:'Organza Party Saree',          price:4999, orig:6999, stars:5, rev:72,  colors:['#7B8FA1','#C9614A','#C9A96E'],
     img: img('photo-1617627143750-d86bc21e42bb',480,640) },
 
-  // ── SALE PICKS (11) ──────────────────────────────────────────
-  { id:57, cat:'sale', badge:'sale', brand:'Stackly Essentials', name:'Summer Floral Mini Dress',    price:1299, orig:2499, stars:5, rev:334, colors:['#F2C4B0','#8FA882','#fff'],
+  // ── SALE PICKS ────────────────────────────────────────────────
+  { id:57, cat:'sale', badge:'sale', brand:'Stackly Essentials', name:'Summer Floral Mini Dress',   price:1299, orig:2499, stars:5, rev:334, colors:['#F2C4B0','#8FA882','#fff'],
     img: img('photo-1485230895905-ec40ba36b9bc',480,640) },
-  { id:58, cat:'sale', badge:'sale', brand:'Studio Line',        name:'Classic Denim Jacket',        price:2199, orig:3999, stars:4, rev:167, colors:['#7B8FA1','#2C2C2C'],
+  { id:58, cat:'sale', badge:'sale', brand:'Studio Line',        name:'Classic Denim Jacket',       price:2199, orig:3999, stars:4, rev:167, colors:['#7B8FA1','#2C2C2C'],
     img: img('photo-1551698618-1dfe5d97d256',480,640) },
-  { id:59, cat:'sale', badge:'sale', brand:'Stackly Summer',     name:'Tie-Dye Oversized Tee',       price:799,  orig:1499, stars:4, rev:289, colors:['#F2C4B0','#8FA882','#7B8FA1'],
+  { id:59, cat:'sale', badge:'sale', brand:'Stackly Summer',     name:'Tie-Dye Oversized Tee',      price:799,  orig:1499, stars:4, rev:289, colors:['#F2C4B0','#8FA882','#7B8FA1'],
     img: img('photo-1503342394128-c104d54dba01',480,640) },
-  { id:60, cat:'sale', badge:'sale', brand:'Luxe Edit',          name:'Satin Slip Dress',            price:1999, orig:3999, stars:5, rev:122, colors:['#D4C5A9','#C9614A','#2C2C2C'],
+  { id:60, cat:'sale', badge:'sale', brand:'Luxe Edit',          name:'Satin Slip Dress',           price:1999, orig:3999, stars:5, rev:122, colors:['#D4C5A9','#C9614A','#2C2C2C'],
     img: img('photo-1572804013309-59a88b7e92f1',480,640) },
-  { id:61, cat:'sale', badge:'sale', brand:'Stackly Essentials', name:'Cosy Knit Cardigan',          price:1499, orig:2799, stars:4, rev:198, colors:['#FAEBD7','#D4C5A9','#8FA882'],
+  { id:61, cat:'sale', badge:'sale', brand:'Stackly Essentials', name:'Cosy Knit Cardigan',         price:1499, orig:2799, stars:4, rev:198, colors:['#FAEBD7','#D4C5A9','#8FA882'],
     img: img('photo-1576566588028-4147f3842f27',480,640) },
-  { id:62, cat:'sale', badge:'sale', brand:'Studio Line',        name:'Pleated Palazzo Pants',       price:999,  orig:1999, stars:4, rev:211, colors:['#2C2C2C','#D4C5A9','#8FA882'],
+  { id:62, cat:'sale', badge:'sale', brand:'Studio Line',        name:'Pleated Palazzo Pants',      price:999,  orig:1999, stars:4, rev:211, colors:['#2C2C2C','#D4C5A9','#8FA882'],
     img: img('photo-1506629082955-511b1aa562c8',480,640) },
-  { id:63, cat:'sale', badge:'sale', brand:'Stackly Summer',     name:'Embroidered Shorts',          price:699,  orig:1299, stars:3, rev:89,  colors:['#FAEBD7','#F2C4B0','#8FA882'],
+  { id:63, cat:'sale', badge:'sale', brand:'Stackly Summer',     name:'Embroidered Shorts',         price:699,  orig:1299, stars:3, rev:89,  colors:['#FAEBD7','#F2C4B0','#8FA882'],
     img: img('photo-1534126511673-b6899657816a',480,640) },
-  { id:64, cat:'sale', badge:'sale', brand:'Heritage Co.',       name:'Embellished Jutti Flats',     price:999,  orig:1799, stars:5, rev:304, colors:['#C9614A','#C9A96E','#7B8FA1'],
+  { id:64, cat:'sale', badge:'sale', brand:'Heritage Co.',       name:'Embellished Jutti Flats',    price:999,  orig:1799, stars:5, rev:304, colors:['#C9614A','#C9A96E','#7B8FA1'],
     img: img('photo-1562273138-f46be4ebdf33',480,640) },
-  { id:65, cat:'sale', badge:'sale', brand:'Stackly Essentials', name:'Printed Wrap Skirt',          price:899,  orig:1699, stars:4, rev:143, colors:['#F2C4B0','#8FA882','#FAEBD7'],
+  { id:65, cat:'sale', badge:'sale', brand:'Stackly Essentials', name:'Printed Wrap Skirt',         price:899,  orig:1699, stars:4, rev:143, colors:['#F2C4B0','#8FA882','#FAEBD7'],
     img: img('photo-1515886657613-9f3515b0c78f',480,640) },
-  { id:66, cat:'sale', badge:'sale', brand:'Studio Line',        name:'Mesh Layer Top',              price:749,  orig:1299, stars:4, rev:76,  colors:['#2C2C2C','#FAEBD7','#F2C4B0'],
+  { id:66, cat:'sale', badge:'sale', brand:'Studio Line',        name:'Mesh Layer Top',             price:749,  orig:1299, stars:4, rev:76,  colors:['#2C2C2C','#FAEBD7','#F2C4B0'],
     img: img('photo-1434389677669-e08b4cac3105',480,640) },
-  { id:67, cat:'sale', badge:'sale', brand:'Stackly Essentials', name:'Relaxed Cotton Tee Dress',    price:1199, orig:2099, stars:4, rev:192, colors:['#FAEBD7','#F2C4B0','#8FA882','#2C2C2C'],
+  { id:67, cat:'sale', badge:'sale', brand:'Stackly Essentials', name:'Relaxed Cotton Tee Dress',   price:1199, orig:2099, stars:4, rev:192, colors:['#FAEBD7','#F2C4B0','#8FA882','#2C2C2C'],
     img: img('photo-1539109136881-3be0616acf4b',480,640) },
 ];
-
 const SECTION_META = {
   women:       'Women\'s Fashion',
   men:         'Men\'s Collection',
