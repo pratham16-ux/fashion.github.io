@@ -898,19 +898,92 @@
       + '</div>';
     document.body.appendChild(modal);
     modal.addEventListener('click', function(e){ if (e.target === modal) modal.remove(); });
+    setupAddrNameField();
+    setupCityAutocomplete();
+  }
+
+  // ─── Indian cities list for city validation ───────────────────────────────────
+  var INDIAN_CITIES = [
+    'Agra','Ahmedabad','Ajmer','Aligarh','Allahabad','Prayagraj','Amravati','Amritsar','Asansol',
+    'Aurangabad','Bareilly','Belgaum','Belagavi','Bhilai','Bhopal','Bhubaneswar','Bikaner',
+    'Chandigarh','Chennai','Coimbatore','Cuttack','Dehradun','Delhi','New Delhi','Dhanbad',
+    'Durgapur','Faridabad','Ghaziabad','Goa','Panaji','Gorakhpur','Gurgaon','Gurugram',
+    'Guwahati','Gwalior','Hubli','Dharwad','Hyderabad','Imphal','Indore','Jabalpur',
+    'Jaipur','Jalandhar','Jammu','Jamshedpur','Jodhpur','Kanpur','Kochi','Kolkata',
+    'Kota','Kozhikode','Lucknow','Ludhiana','Madurai','Mangaluru','Meerut','Mumbai',
+    'Mysuru','Mysore','Nagpur','Nashik','Navi Mumbai','Noida','Greater Noida','Patna',
+    'Pune','Raipur','Rajkot','Ranchi','Salem','Shimla','Siliguri','Solapur','Srinagar',
+    'Surat','Thane','Thiruvananthapuram','Tiruchirappalli','Tiruppur','Vadodara','Varanasi',
+    'Vijayawada','Visakhapatnam','Warangal'
+  ];
+
+  function setupAddrNameField() {
+    var el = document.getElementById('addrName');
+    if (!el) return;
+    el.setAttribute('maxlength', '16');
+    el.addEventListener('input', function() {
+      // Strip anything that isn't a letter or space
+      var clean = this.value.replace(/[^a-zA-Z\s]/g, '');
+      // Limit to 16 chars
+      if (clean.length > 16) clean = clean.slice(0, 16);
+      if (this.value !== clean) this.value = clean;
+    });
+    el.addEventListener('keydown', function(e) {
+      // Block digits and special characters at keydown level
+      if (/[0-9]/.test(e.key) || /[^a-zA-Z\s]/.test(e.key) && e.key.length === 1) {
+        e.preventDefault();
+      }
+    });
+  }
+
+  function setupCityAutocomplete() {
+    var el = document.getElementById('addrCity');
+    if (!el) return;
+    var list = document.getElementById('cityDatalist');
+    if (!list) {
+      list = document.createElement('datalist');
+      list.id = 'cityDatalist';
+      INDIAN_CITIES.forEach(function(c) {
+        var opt = document.createElement('option');
+        opt.value = c;
+        list.appendChild(opt);
+      });
+      document.body.appendChild(list);
+    }
+    el.setAttribute('list', 'cityDatalist');
+    el.setAttribute('autocomplete', 'off');
+    el.setAttribute('placeholder', 'e.g. Mumbai, Delhi, Pune…');
   }
 
   function submitAddressForm() {
-    var name  = (document.getElementById('addrName')  || {}).value || '';
-    var phone = (document.getElementById('addrPhone') || {}).value || '';
-    var line  = (document.getElementById('addrLine')  || {}).value || '';
-    var city  = (document.getElementById('addrCity')  || {}).value || '';
-    var pin   = (document.getElementById('addrPin')   || {}).value || '';
-    name = name.trim(); phone = phone.trim(); line = line.trim(); city = city.trim(); pin = pin.trim();
+    var nameEl  = document.getElementById('addrName');
+    var phoneEl = document.getElementById('addrPhone');
+    var lineEl  = document.getElementById('addrLine');
+    var cityEl  = document.getElementById('addrCity');
+    var pinEl   = document.getElementById('addrPin');
 
-    if (!name || !phone || !line || !city || !pin) { showToast('Please fill in all required fields.'); return; }
-    if (!/^\d{10}$/.test(phone)) { showToast('Phone must be exactly 10 digits.'); return; }
-    if (!/^\d{6}$/.test(pin))    { showToast('PIN code must be exactly 6 digits.'); return; }
+    var name  = (nameEl  ? nameEl.value  : '').trim();
+    var phone = (phoneEl ? phoneEl.value : '').trim();
+    var line  = (lineEl  ? lineEl.value  : '').trim();
+    var city  = (cityEl  ? cityEl.value  : '').trim();
+    var pin   = (pinEl   ? pinEl.value   : '').trim();
+
+    // Full Name: letters & spaces only, 2–16 chars
+    if (!name) { showToast('Please enter a full name.'); if (nameEl) nameEl.focus(); return; }
+    if (!/^[a-zA-Z\s]{2,16}$/.test(name)) { showToast('Name must be 2–16 letters only (no numbers or symbols).'); if (nameEl) nameEl.focus(); return; }
+
+    if (!phone) { showToast('Please enter a phone number.'); if (phoneEl) phoneEl.focus(); return; }
+    if (!/^\d{10}$/.test(phone)) { showToast('Phone must be exactly 10 digits.'); if (phoneEl) phoneEl.focus(); return; }
+
+    if (!line) { showToast('Please enter an address.'); if (lineEl) lineEl.focus(); return; }
+
+    // City: must match a known Indian city (case-insensitive)
+    if (!city) { showToast('Please select a city.'); if (cityEl) cityEl.focus(); return; }
+    var cityMatch = INDIAN_CITIES.find(function(c) { return c.toLowerCase() === city.toLowerCase(); });
+    if (!cityMatch) { showToast('Please enter a valid Indian city (e.g. Mumbai, Delhi, Pune).'); if (cityEl) { cityEl.value = ''; cityEl.focus(); } return; }
+
+    if (!pin) { showToast('Please enter a PIN code.'); if (pinEl) pinEl.focus(); return; }
+    if (!/^\d{6}$/.test(pin)) { showToast('PIN code must be exactly 6 digits.'); if (pinEl) pinEl.focus(); return; }
 
     var modal = document.getElementById('addrModal');
     if (modal) modal.remove();
@@ -932,7 +1005,7 @@
       + '<div style="display:flex;gap:10px;flex-wrap:wrap">'
       + '<button type="button" class="btn-primary" onclick="window.location.href=\'404.html\'">Set as Default</button>'
       + '<button type="button" class="btn-outline" style="border-color:rgba(224,82,82,.4);color:#C0392B" onclick="window.location.href=\'404.html\'">Remove</button>'
-      + '<button type="button" class="btn-outline" onclick="window.location.href=\'404.html\'">Cancel</button>'
+      + '<button type="button" class="btn-outline" onclick="document.getElementById(\'payModal\').remove()">Cancel</button>'
       + '</div>';
   } else {
     bodyHtml = '<div class="f-field" style="margin-bottom:12px"><label>Card / UPI / Account Number</label><input type="text" id="payNumber" placeholder="Card number or UPI ID"></div>'
@@ -942,7 +1015,7 @@
       + '</div>'
       + '<div style="display:flex;gap:10px;margin-top:8px">'
       + '<button type="button" class="btn-primary" onclick="window.location.href=\'404.html\'" style="flex:1">Save</button>'
-      + '<button type="button" class="btn-outline" onclick="window.location.href=\'404.html\'">Cancel</button>'
+      + '<button type="button" class="btn-outline" onclick="document.getElementById(\'payModal\').remove()">Cancel</button>'
       + '</div>';
   }
 
@@ -951,7 +1024,7 @@
     : 'Add <em style="font-style:italic;color:var(--terracotta)">Payment</em>';
 
   modal.innerHTML = '<div style="background:var(--warm-white);border-radius:18px;padding:28px;width:100%;max-width:420px;position:relative">'
-    + '<button type="button" onclick="window.location.href=\'404.html\'" style="position:absolute;top:16px;right:16px;background:var(--light-gray);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--charcoal)">✕</button>'
+    + '<button type="button" onclick="document.getElementById(\'payModal\').remove()" style="position:absolute;top:16px;right:16px;background:var(--light-gray);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--charcoal)">✕</button>'
     + '<h3 style="font-family:var(--font-display);font-size:20px;margin-bottom:20px">' + titleText + '</h3>'
     + bodyHtml
     + '</div>';
@@ -959,9 +1032,7 @@
   document.body.appendChild(modal);
 
   modal.addEventListener('click', function(e) {
-    if (e.target === modal) {
-      window.location.href = '404.html';
-    }
+    if (e.target === modal) modal.remove();
   });
 }
   function submitPaymentForm() {
