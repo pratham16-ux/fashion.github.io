@@ -766,6 +766,7 @@
     try { sessionStorage.setItem('stackly_cart', JSON.stringify(cart)); } catch(e) {}
   }
 
+  
   function cartTotal() {
     return cart.reduce(function(s, i){ return s + i.qty; }, 0);
   }
@@ -788,6 +789,10 @@
     }
     showToast('"' + name + '" added to cart! (' + cartTotal() + ' items)');
   }
+  function addToCart(name, price, btn) {
+  window.location.href = '404.html';
+}
+
 
   function addAllToCart() {
     var wishItems = [
@@ -913,48 +918,52 @@
   }
 
   // ─── BUG-024 & 025: Payment form modal ───────────────────────────────────────
-  function openPaymentForm(existing) {
-    var old = document.getElementById('payModal');
-    if (old) old.remove();
+ function openPaymentForm(existing) {
+  var old = document.getElementById('payModal');
+  if (old) old.remove();
 
-    var modal = document.createElement('div');
-    modal.id = 'payModal';
-    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9500;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)';
+  var modal = document.createElement('div');
+  modal.id = 'payModal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9500;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)';
 
-    var bodyHtml;
-    if (existing) {
-      bodyHtml = '<p style="font-size:13px;color:var(--medium-gray);margin-bottom:20px">' + existing + '</p>'
-        + '<div style="display:flex;gap:10px;flex-wrap:wrap">'
-        + '<button type="button" class="btn-primary" onclick="document.getElementById(\'payModal\').remove();showToast(\'Set as default payment method!\')">Set as Default</button>'
-        + '<button type="button" class="btn-outline" style="border-color:rgba(224,82,82,.4);color:#C0392B" onclick="document.getElementById(\'payModal\').remove();showToast(\'Payment method removed.\')">Remove</button>'
-        + '<button type="button" class="btn-outline" onclick="document.getElementById(\'payModal\').remove()">Cancel</button>'
-        + '</div>';
-    } else {
-      bodyHtml = '<div class="f-field" style="margin-bottom:12px"><label>Card / UPI / Account Number</label><input type="text" id="payNumber" placeholder="Card number or UPI ID"></div>'
-        + '<div style="display:flex;gap:10px;margin-bottom:12px">'
-        + '<div class="f-field" style="flex:1"><label>Expiry</label><input type="text" id="payExpiry" placeholder="MM/YY" maxlength="5"></div>'
-        + '<div class="f-field" style="flex:1"><label>CVV</label><input type="password" id="payCvv" placeholder="•••" maxlength="4"></div>'
-        + '</div>'
-        + '<div style="display:flex;gap:10px;margin-top:8px">'
-        + '<button type="button" class="btn-primary" onclick="submitPaymentForm()" style="flex:1">Save</button>'
-        + '<button type="button" class="btn-outline" onclick="document.getElementById(\'payModal\').remove()">Cancel</button>'
-        + '</div>';
-    }
-
-    var titleText = existing
-      ? 'Manage <em style="font-style:italic;color:var(--terracotta)">Payment</em>'
-      : 'Add <em style="font-style:italic;color:var(--terracotta)">Payment</em>';
-
-    modal.innerHTML = '<div style="background:var(--warm-white);border-radius:18px;padding:28px;width:100%;max-width:420px;position:relative">'
-      + '<button type="button" onclick="document.getElementById(\'payModal\').remove()" style="position:absolute;top:16px;right:16px;background:var(--light-gray);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--charcoal)">✕</button>'
-      + '<h3 style="font-family:var(--font-display);font-size:20px;margin-bottom:20px">' + titleText + '</h3>'
-      + bodyHtml
+  var bodyHtml;
+  if (existing) {
+    bodyHtml = '<p style="font-size:13px;color:var(--medium-gray);margin-bottom:20px">' + existing + '</p>'
+      + '<div style="display:flex;gap:10px;flex-wrap:wrap">'
+      + '<button type="button" class="btn-primary" onclick="window.location.href=\'404.html\'">Set as Default</button>'
+      + '<button type="button" class="btn-outline" style="border-color:rgba(224,82,82,.4);color:#C0392B" onclick="window.location.href=\'404.html\'">Remove</button>'
+      + '<button type="button" class="btn-outline" onclick="window.location.href=\'404.html\'">Cancel</button>'
       + '</div>';
-
-    document.body.appendChild(modal);
-    modal.addEventListener('click', function(e){ if (e.target === modal) modal.remove(); });
+  } else {
+    bodyHtml = '<div class="f-field" style="margin-bottom:12px"><label>Card / UPI / Account Number</label><input type="text" id="payNumber" placeholder="Card number or UPI ID"></div>'
+      + '<div style="display:flex;gap:10px;margin-bottom:12px">'
+      + '<div class="f-field" style="flex:1"><label>Expiry</label><input type="text" id="payExpiry" placeholder="MM/YY" maxlength="5"></div>'
+      + '<div class="f-field" style="flex:1"><label>CVV</label><input type="password" id="payCvv" placeholder="•••" maxlength="4"></div>'
+      + '</div>'
+      + '<div style="display:flex;gap:10px;margin-top:8px">'
+      + '<button type="button" class="btn-primary" onclick="window.location.href=\'404.html\'" style="flex:1">Save</button>'
+      + '<button type="button" class="btn-outline" onclick="window.location.href=\'404.html\'">Cancel</button>'
+      + '</div>';
   }
 
+  var titleText = existing
+    ? 'Manage <em style="font-style:italic;color:var(--terracotta)">Payment</em>'
+    : 'Add <em style="font-style:italic;color:var(--terracotta)">Payment</em>';
+
+  modal.innerHTML = '<div style="background:var(--warm-white);border-radius:18px;padding:28px;width:100%;max-width:420px;position:relative">'
+    + '<button type="button" onclick="window.location.href=\'404.html\'" style="position:absolute;top:16px;right:16px;background:var(--light-gray);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--charcoal)">✕</button>'
+    + '<h3 style="font-family:var(--font-display);font-size:20px;margin-bottom:20px">' + titleText + '</h3>'
+    + bodyHtml
+    + '</div>';
+
+  document.body.appendChild(modal);
+
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) {
+      window.location.href = '404.html';
+    }
+  });
+}
   function submitPaymentForm() {
     var num = (document.getElementById('payNumber') || {}).value || '';
     num = num.trim();
@@ -982,11 +991,11 @@
 
   // ─── BUG-026: Delete account ──────────────────────────────────────────────────
   function confirmDeleteAccount() {
-    if (confirm('Are you sure you want to permanently delete your Stackly account?\n\nThis action cannot be undone. Click OK to contact support for account deletion.')) {
-      showToast('Redirecting to support for account deletion…');
-      setTimeout(function(){ window.location.href = 'contact.html'; }, 1500);
-    }
-  }
+  showToast('delecting the account ');
+  setTimeout(function() {
+    window.location.href = 'index.html';
+  }, 1500);
+}
 
   // ─── LOGOUT ───────────────────────────────────────────────────────────────────
   function logout() {

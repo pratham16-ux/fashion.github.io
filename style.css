@@ -195,7 +195,7 @@ header {
 }
 
 header.scrolled .nav-wrapper {
-  padding: 05px 40px;
+  padding: 03px 30px;
   border-bottom-color: var(--light-gray);
   box-shadow: 0 2px 20px rgba(0,0,0,0.06);
 }
