@@ -467,6 +467,27 @@
   </div>
 </aside>
 
+<!-- Wishlist Overlay & Drawer -->
+<div class="cart-overlay" id="wishOverlay"></div>
+<aside class="cart-drawer" id="wishDrawer" aria-label="Wishlist" style="background:var(--warm-white)">
+  <div class="cart-header">
+    <h2>Wishlist <span class="cart-count-badge" id="wishBadge">0</span></h2>
+    <button class="cart-close-btn" id="wishCloseBtn">✕</button>
+  </div>
+  <div class="cart-body" id="wishBody">
+    <div class="cart-empty-state" id="wishEmptyState">
+      <div class="cart-empty-icon">🤍</div>
+      <h3>Your wishlist is empty</h3>
+      <p>Hit the heart on any style to save it here!</p>
+    </div>
+    <div id="wishItemsList"></div>
+  </div>
+  <div class="cart-footer" id="wishFooterEl" style="display:none">
+    <button class="btn-checkout" onclick="addAllWishToCart()">Add All to Bag →</button>
+    <button class="btn-continue-shop" id="continueShoppingWish">Continue Shopping</button>
+  </div>
+</aside>
+
 <div id="header-mount"></div>
 <main>
 
@@ -958,21 +979,52 @@ function buildCard(p) {
   </article>`;
 }
 
-function renderProducts(catFilter) {
+function renderProducts(catFilter, sidebarCats) {
+  // BUG-003/005 FIX: reset page when filter changes
+  if (catFilter !== _lastCatFilter || JSON.stringify(sidebarCats||null) !== JSON.stringify(_lastSidebarCats)) {
+    currentPage = 1;
+  }
+  _lastCatFilter = catFilter;
+  _lastSidebarCats = sidebarCats || null;
+
   const container = document.getElementById('productsContainer');
   const cats = catFilter==='all' ? Object.keys(SECTION_META) : [catFilter];
-  let html='', total=0;
-  cats.forEach(cat=>{
-    const items = PRODUCTS.filter(p=>p.cat===cat);
-    if(!items.length) return;
-    total+=items.length;
-    html+=`<h2 class="collection-section-head">${SECTION_META[cat]} <span class="coll-pill">${items.length} Items</span></h2>`;
-    html+=`<div class="products-grid-4" id="grid-${cat}">`;
-    items.forEach(p=>{ html+=buildCard(p); });
-    html+='</div>';
+  // Apply sidebar category filter if provided
+  const activeCats = sidebarCats && sidebarCats.length ? cats.filter(c=>sidebarCats.includes(c)) : cats;
+  const finalCats = activeCats.length ? activeCats : cats;
+
+  // Collect all matching products
+  let allItems = [];
+  finalCats.forEach(cat=>{
+    PRODUCTS.filter(p=>p.cat===cat).forEach(p=>allItems.push({...p, _sectionLabel: SECTION_META[cat]}));
   });
+
+  const total = allItems.length;
+  // BUG-005 FIX: slice to current page
+  const start = (currentPage - 1) * ITEMS_PER_PAGE;
+  const pageItems = allItems.slice(start, start + ITEMS_PER_PAGE);
+
+  // Group page items by category for section headers
+  let html = '';
+  let lastCat = null;
+  pageItems.forEach(p => {
+    if (p.cat !== lastCat) {
+      if (lastCat !== null) html += '</div>';
+      html += `<h2 class="collection-section-head">${SECTION_META[p.cat]} <span class="coll-pill">${allItems.filter(x=>x.cat===p.cat).length} Items</span></h2>`;
+      html += `<div class="products-grid-4" id="grid-${p.cat}">`;
+      lastCat = p.cat;
+    }
+    html += buildCard(p);
+  });
+  if (lastCat !== null) html += '</div>';
+
+  if (!pageItems.length) html = '<p style="text-align:center;padding:40px 0;color:var(--medium-gray)">No products found for this filter.</p>';
+
   container.innerHTML = html;
-  document.getElementById('resultCount').textContent='1–'+total;
+  const showStart = total ? start + 1 : 0;
+  const showEnd = Math.min(start + ITEMS_PER_PAGE, total);
+  document.getElementById('resultCount').textContent = showStart + '–' + showEnd;
+  buildPagination(total);
   // re-observe for scroll reveal
   if(typeof IntersectionObserver!=='undefined'){
     const io = new IntersectionObserver(entries=>entries.forEach(e=>{
@@ -985,14 +1037,90 @@ function renderProducts(catFilter) {
 
 
 // ── WISHLIST ───────────────────────────────────────────────────
+let wishlist = [];
+
 function toggleWish(btn) {
+  const card = btn.closest('.product-card');
+  const pid = card ? parseInt(card.dataset.id) : null;
   btn.classList.toggle('active');
   const svg = btn.querySelector('svg');
-  if(btn.classList.contains('active')){ svg.setAttribute('fill','#C9614A'); svg.setAttribute('stroke','#C9614A'); }
+  const isNowActive = btn.classList.contains('active');
+  if(isNowActive){ svg.setAttribute('fill','#C9614A'); svg.setAttribute('stroke','#C9614A'); }
   else { svg.setAttribute('fill','none'); svg.setAttribute('stroke','currentColor'); }
-  const msg = btn.classList.contains('active') ? '❤️ Added to wishlist!' : '💔 Removed from wishlist';
+  
+  if(pid) {
+    const p = PRODUCTS.find(x=>x.id===pid);
+    if(p) {
+      if(isNowActive) { if(!wishlist.find(x=>x.id===pid)) wishlist.push({...p}); }
+      else { wishlist = wishlist.filter(x=>x.id!==pid); }
+      renderWishlist();
+    }
+  }
+  const msg = isNowActive ? '❤️ Added to wishlist!' : '💔 Removed from wishlist';
   if(typeof showToast==='function') showToast(msg); else _toast(msg);
 }
+
+function renderWishlist() {
+  const cnt = wishlist.length;
+  const badge = document.getElementById('wishBadge');
+  if(badge) badge.textContent = cnt;
+  // Also update header wishlist icon badge
+  const hWishBadge = document.getElementById('headerWishBadge');
+  if(hWishBadge) { hWishBadge.textContent = cnt; hWishBadge.style.display = cnt > 0 ? 'flex' : 'none'; }
+  
+  const emptyEl = document.getElementById('wishEmptyState');
+  const listEl = document.getElementById('wishItemsList');
+  const footerEl = document.getElementById('wishFooterEl');
+  if(!emptyEl || !listEl) return;
+  if(!wishlist.length) { emptyEl.style.display='flex'; listEl.innerHTML=''; if(footerEl) footerEl.style.display='none'; return; }
+  emptyEl.style.display='none'; if(footerEl) footerEl.style.display='block';
+  listEl.innerHTML = wishlist.map(it=>`
+    <div class="cart-item">
+      <img class="cart-item-img" src="${it.img}" alt="${it.name}" loading="lazy" onerror="this.style.background='var(--light-gray)';this.src=''">
+      <div class="cart-item-info">
+        <p class="ci-brand">${it.brand}</p>
+        <p class="ci-name">${it.name}</p>
+        <p class="ci-meta">${SECTION_META[it.cat]||it.cat}</p>
+        <div class="ci-bottom">
+          <span class="ci-price">₹${it.price.toLocaleString('en-IN')}</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <button class="product-action-btn btn-add-cart" style="padding:6px 12px;font-size:11px;border-radius:6px" onclick="addToCart(${it.id});_toast('🛍️ Added to bag!')">Add to Bag</button>
+            <button class="ci-remove" onclick="removeWish(${it.id})" title="Remove">✕</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function removeWish(pid) {
+  wishlist = wishlist.filter(x=>x.id!==pid);
+  // Also deactivate heart button on card if visible
+  const card = document.querySelector(`.product-card[data-id="${pid}"]`);
+  if(card) { 
+    const btn = card.querySelector('.btn-wishlist'); 
+    if(btn) { btn.classList.remove('active'); const svg=btn.querySelector('svg'); if(svg){svg.setAttribute('fill','none');svg.setAttribute('stroke','currentColor');} }
+  }
+  renderWishlist();
+}
+
+function addAllWishToCart() {
+  wishlist.forEach(p=>{ const ex=cart.find(x=>x.id===p.id); if(ex) ex.qty++; else cart.push({...p,qty:1}); });
+  renderCart();
+  if(typeof showToast==='function') showToast('🛍️ All wishlist items added to bag!'); else _toast('🛍️ All wishlist items added to bag!');
+  closeWish();
+}
+
+function openWish()  { document.getElementById('wishDrawer').classList.add('open'); document.getElementById('wishOverlay').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeWish() { document.getElementById('wishDrawer').classList.remove('open'); document.getElementById('wishOverlay').classList.remove('open'); document.body.style.overflow=''; }
+
+document.addEventListener('click', function(e){
+  const btn = e.target.closest('[aria-label="Wishlist"]');
+  if(btn && !btn.classList.contains('btn-wishlist')) { e.preventDefault(); openWish(); }
+});
+document.getElementById('wishCloseBtn').addEventListener('click', closeWish);
+document.getElementById('wishOverlay').addEventListener('click', closeWish);
+document.getElementById('continueShoppingWish').addEventListener('click', closeWish);
 
 // ── FALLBACK TOAST (if main.js not loaded) ─────────────────────
 function _toast(msg) {
@@ -1038,7 +1166,34 @@ document.getElementById('clearAllFilters').addEventListener('click',function(){
   document.querySelectorAll('.filter-sidebar input[type="checkbox"]').forEach(c=>c.checked=false);
   document.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.filter-color-swatch').forEach(s=>s.classList.remove('active'));
+  applyFilters();
   if(typeof showToast==='function') showToast('✓ Filters cleared'); else _toast('✓ Filters cleared');
+});
+
+// Apply sidebar filters to product grid
+function applyFilters() {
+  const checkedCats = [];
+  document.querySelectorAll('.filter-sidebar .filter-body .filter-checkbox input[type="checkbox"]:checked').forEach(cb=>{
+    // BUG-004 FIX: use the label's text node, not the full div textContent (which includes input)
+    const labelDiv = cb.closest('.filter-checkbox-left');
+    const label = labelDiv ? labelDiv.innerText.trim().toLowerCase() : '';
+    if(label.includes("women")) checkedCats.push('women');
+    else if(label.includes("men")) checkedCats.push('men');
+    else if(label.includes("accessories")) checkedCats.push('accessories');
+    else if(label.includes("footwear")) checkedCats.push('footwear');
+    else if(label.includes("ethnic")) checkedCats.push('ethnic');
+    else if(label.includes("kids")) checkedCats.push('kids');
+  });
+  // Get active hero tab
+  const activeTag = document.querySelector('.shop-hero-tag.active');
+  const heroCat = activeTag ? activeTag.dataset.cat : 'all';
+  // If no sidebar cats checked, show all (or hero filter)
+  renderProducts(heroCat, checkedCats.length ? checkedCats : null);
+}
+
+// Wire sidebar category checkboxes
+document.querySelectorAll('.filter-sidebar .filter-body .filter-checkbox input[type="checkbox"]').forEach(cb=>{
+  cb.addEventListener('change', applyFilters);
 });
 
 // Price slider
@@ -1057,13 +1212,40 @@ document.querySelectorAll('.size-btn').forEach(btn=>{
 });
 
 // Pagination
-document.querySelectorAll('.page-btn:not(.arrow)').forEach(btn=>{
-  btn.addEventListener('click',function(){
-    document.querySelectorAll('.page-btn:not(.arrow)').forEach(b=>b.classList.remove('active'));
-    this.classList.add('active');
-    window.scrollTo({top:0,behavior:'smooth'});
+let currentPage = 1;
+const ITEMS_PER_PAGE = 12;
+
+function buildPagination(totalItems) {
+  const totalPages = Math.max(1, Math.ceil(totalItems / ITEMS_PER_PAGE));
+  const nav = document.querySelector('.pagination');
+  if(!nav) return;
+  let html = '<button class="page-btn arrow" id="pgPrev">‹</button>';
+  const maxVisible = 5;
+  let start = Math.max(1, currentPage - 2);
+  let end = Math.min(totalPages, start + maxVisible - 1);
+  if(end - start < maxVisible - 1) start = Math.max(1, end - maxVisible + 1);
+  if(start > 1) { html+=`<button class="page-btn" data-page="1">1</button>`; if(start>2) html+=`<span style="padding:0 4px;color:var(--medium-gray)">…</span>`; }
+  for(let i=start;i<=end;i++) html+=`<button class="page-btn${i===currentPage?' active':''}" data-page="${i}">${i}</button>`;
+  if(end < totalPages) { if(end<totalPages-1) html+=`<span style="padding:0 4px;color:var(--medium-gray)">…</span>`; html+=`<button class="page-btn" data-page="${totalPages}">${totalPages}</button>`; }
+  html+='<button class="page-btn arrow" id="pgNext">›</button>';
+  nav.innerHTML = html;
+  nav.querySelectorAll('.page-btn[data-page]').forEach(btn=>{
+    btn.addEventListener('click',function(){
+      currentPage=parseInt(this.dataset.page);
+      renderCurrentPage();
+      window.scrollTo({top:document.querySelector('.shop-page-wrap').offsetTop-80,behavior:'smooth'});
+    });
   });
-});
+  const prev=nav.querySelector('#pgPrev'), next=nav.querySelector('#pgNext');
+  if(prev) prev.addEventListener('click',function(){ if(currentPage>1){currentPage--;renderCurrentPage();window.scrollTo({top:document.querySelector('.shop-page-wrap').offsetTop-80,behavior:'smooth'});} });
+  if(next) next.addEventListener('click',function(){ if(currentPage<totalPages){currentPage++;renderCurrentPage();window.scrollTo({top:document.querySelector('.shop-page-wrap').offsetTop-80,behavior:'smooth'});} });
+}
+
+let _lastCatFilter = 'all', _lastSidebarCats = null;
+
+function renderCurrentPage() {
+  renderProducts(_lastCatFilter, _lastSidebarCats);
+}
 
 // Sort
 document.getElementById('sortSelect').addEventListener('change',function(){

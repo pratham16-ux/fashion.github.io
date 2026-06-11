@@ -1186,7 +1186,7 @@ video{
     <!-- ===== HERO ===== -->
     <section class="contact-hero" aria-label="Contact Stackly">
       <img class="contact-hero-bg" id="contact-hero-bg"
-           src="https://wsrv.nl/?url=images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1600&h=900&fit=crop&auto=format&q=75&output=webp"
+           src="https://wsrv.nl/?url=images.unsplash.com/photo-1445205170230-053b83016050?w=1600&h=900&fit=crop&auto=format&q=72&output=webp"
            alt="Stackly Store Interior" width="1600" height="900" loading="eager">
       <div class="contact-hero-overlay"></div>
       <div class="contact-hero-content">
@@ -1313,15 +1313,15 @@ video{
 
             <!-- Social quick links -->
             <div class="contact-social">
-              <a href="https://instagram.com" target="_blank" rel="noopener" class="contact-social-btn">
+              <a href="404.html" target="_blank" rel="noopener" class="contact-social-btn">
                 <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
                 Instagram
               </a>
-              <a href="https://wa.me/919876543210" target="_blank" rel="noopener" class="contact-social-btn">
+              <a href="404.html" target="_blank" rel="noopener" class="contact-social-btn">
                 <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
                 WhatsApp
               </a>
-              <a href="mailto:hello@stackly.in" class="contact-social-btn">
+              <a href="404.html" class="contact-social-btn">
                 <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                 Email
               </a>
@@ -1663,6 +1663,120 @@ video{
       });
     });
 
+    // ---- Field Restrictions ----
+
+    // First/Last Name: alphabets only, max 16 chars
+    function enforceNameField(fieldId) {
+      const field = document.getElementById(fieldId);
+      if (!field) return;
+      field.setAttribute('maxlength', '16');
+      field.addEventListener('keypress', function(e) {
+        const char = String.fromCharCode(e.charCode || e.keyCode);
+        if (!/[a-zA-Z\s]/.test(char)) { e.preventDefault(); return false; }
+      });
+      field.addEventListener('input', function() {
+        // Strip any non-alpha chars that may have been pasted
+        const cleaned = this.value.replace(/[^a-zA-Z\s]/g, '').slice(0, 16);
+        if (this.value !== cleaned) this.value = cleaned;
+      });
+      field.addEventListener('paste', function(e) {
+        e.preventDefault();
+        const pasted = (e.clipboardData || window.clipboardData).getData('text');
+        const cleaned = pasted.replace(/[^a-zA-Z\s]/g, '').slice(0, 16);
+        const start = this.selectionStart, end = this.selectionEnd;
+        const current = this.value;
+        const result = (current.slice(0, start) + cleaned + current.slice(end)).slice(0, 16);
+        this.value = result;
+      });
+    }
+    enforceNameField('f-name');
+    enforceNameField('f-lname');
+
+    // Phone: exactly 10 digits
+    const phoneField = document.getElementById('f-phone');
+    if (phoneField) {
+      phoneField.setAttribute('maxlength', '10');
+      phoneField.setAttribute('pattern', '[0-9]{10}');
+      phoneField.setAttribute('title', 'Enter exactly 10 digits');
+      phoneField.addEventListener('keypress', function(e) {
+        const char = String.fromCharCode(e.charCode || e.keyCode);
+        if (!/[0-9]/.test(char)) { e.preventDefault(); return false; }
+      });
+      phoneField.addEventListener('input', function() {
+        const cleaned = this.value.replace(/\D/g, '').slice(0, 10);
+        if (this.value !== cleaned) this.value = cleaned;
+        // Show inline hint
+        let hint = this.parentElement.querySelector('.field-hint');
+        if (!hint) { hint = document.createElement('span'); hint.className = 'field-hint'; hint.style.cssText = 'font-size:11px;margin-top:4px;display:block;'; this.parentElement.appendChild(hint); }
+        const len = cleaned.length;
+        if (len > 0 && len < 10) { hint.textContent = len + '/10 digits'; hint.style.color = '#C9614A'; }
+        else if (len === 10) { hint.textContent = '✓ Valid phone number'; hint.style.color = 'var(--sage,#8FA882)'; }
+        else { hint.textContent = ''; }
+      });
+      phoneField.addEventListener('paste', function(e) {
+        e.preventDefault();
+        const pasted = (e.clipboardData || window.clipboardData).getData('text');
+        this.value = pasted.replace(/\D/g, '').slice(0, 10);
+        this.dispatchEvent(new Event('input'));
+      });
+    }
+
+    // City: valid Indian cities list
+    const VALID_CITIES = [
+      'mumbai','delhi','bangalore','bengaluru','hyderabad','chennai','kolkata','pune','ahmedabad',
+      'surat','jaipur','lucknow','kanpur','nagpur','indore','thane','bhopal','visakhapatnam',
+      'pimpri','patna','vadodara','ghaziabad','ludhiana','agra','nashik','faridabad','meerut',
+      'rajkot','kalyan','vasai-virar','varanasi','srinagar','aurangabad','dhanbad','amritsar',
+      'allahabad','ranchi','howrah','coimbatore','jabalpur','gwalior','vijayawada','jodhpur',
+      'madurai','raipur','kota','chandigarh','guwahati','solapur','hubli','mysuru','mysore',
+      'tiruchirappalli','bareilly','aligarh','tiruppur','moradabad','jalandhar','bhubaneswar',
+      'salem','warangal','guntur','bhiwandi','saharanpur','gorakhpur','bikaner','amravati',
+      'noida','jamshedpur','bhilai','cuttack','firozabad','kochi','ernakulam','trivandrum',
+      'thiruvananthapuram','kozhikode','thrissur','kollam','dehradun','shimla','navi mumbai',
+      'new delhi','gurugram','gurgaon','greater noida','prayagraj','nellore','ajmer',
+      'durgapur','asansol','kolhapur','udaipur','siliguri','mangalore','mangaluru','belgaum',
+      'belagavi','jamnagar','malegaon','tirunelveli','maheshtala','rajahmundry','raurkela',
+      'nanded','sangli','jammu','daman','gandhinagar','anand','bharuch','secunderabad',
+      'patiala','rohtak','karnal','ambala','panipat','hisar','gurgaon','faridabad',
+      'agartala','aizawl','imphal','shillong','kohima','gangtok','itanagar','dispur','silvassa'
+    ];
+
+    // BUG-010 FIX: strict city validation — exact match only (no substring guessing)
+    function isValidCity(val) {
+      var v = val.trim().toLowerCase();
+      return VALID_CITIES.indexOf(v) !== -1;
+    }
+
+    const cityField = document.getElementById('f-city');
+    if (cityField) {
+      // Allow only alphabets, spaces and hyphens in city field
+      cityField.addEventListener('keypress', function(e) {
+        const char = String.fromCharCode(e.charCode || e.keyCode);
+        if (!/[a-zA-Z\s\-]/.test(char)) { e.preventDefault(); return false; }
+      });
+      cityField.addEventListener('input', function() {
+        const cleaned = this.value.replace(/[^a-zA-Z\s\-]/g, '');
+        if (this.value !== cleaned) this.value = cleaned;
+        const val = cleaned.trim();
+        let hint = this.parentElement.querySelector('.city-hint');
+        if (!hint) { hint = document.createElement('span'); hint.className = 'city-hint'; hint.style.cssText = 'font-size:11px;margin-top:4px;display:block;'; this.parentElement.appendChild(hint); }
+        if (val.length < 3) { hint.textContent = ''; this.style.borderColor = ''; return; }
+        if (isValidCity(val)) {
+          hint.textContent = '✓ Valid city'; hint.style.color = 'var(--sage,#8FA882)'; this.style.borderColor = '';
+        } else {
+          hint.textContent = '⚠ Please enter a valid Indian city name'; hint.style.color = '#C9614A';
+        }
+      });
+      cityField.addEventListener('blur', function() {
+        const val = this.value.trim();
+        if (!val) return;
+        if (!isValidCity(val)) this.style.borderColor = '#C9614A';
+        else this.style.borderColor = '';
+      });
+      // Expose for form submit validation
+      cityField._isValidCity = isValidCity;
+    }
+
     // ---- Form submit ----
     const contactForm = document.getElementById('contact-form');
     const formContent = document.getElementById('form-content');
@@ -1671,30 +1785,43 @@ video{
     if (contactForm) {
       contactForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        // Basic validation
-        const name = document.getElementById('f-name').value.trim();
+        const fname = document.getElementById('f-name').value.trim();
+        const lname = document.getElementById('f-lname') ? document.getElementById('f-lname').value.trim() : '';
         const email = document.getElementById('f-email').value.trim();
+        const phone = document.getElementById('f-phone') ? document.getElementById('f-phone').value.trim() : '';
+        const city = document.getElementById('f-city') ? document.getElementById('f-city').value.trim() : '';
         const message = document.getElementById('f-msg').value.trim();
         const consent = document.getElementById('f-consent').checked;
+        let valid = true;
 
-        if (!name || !email || !message || !consent) {
-          // Show toast via main.js showToast — fallback alert
+        // Name validation
+        if (!fname || !/^[a-zA-Z\s]+$/.test(fname)) {
+          document.getElementById('f-name').style.borderColor = '#C9614A'; valid = false;
+        }
+        if (document.getElementById('f-lname') && (!lname || !/^[a-zA-Z\s]+$/.test(lname))) {
+          document.getElementById('f-lname').style.borderColor = '#C9614A'; valid = false;
+        }
+        // Phone validation (if filled)
+        if (phone && phone.length !== 10) {
+          document.getElementById('f-phone').style.borderColor = '#C9614A'; valid = false;
+        }
+        // City validation (if filled) — BUG-010 FIX: use strict exact-match
+        if (city) {
+          const cityOk = isValidCity(city);
+          if (!cityOk) { document.getElementById('f-city').style.borderColor = '#C9614A'; valid = false; }
+        }
+        if (!email || !message || !consent) {
           const toast = new CustomEvent('stackly-toast', { detail: '⚠️ Please fill in all required fields and accept the privacy policy.' });
           document.dispatchEvent(toast);
-          // Simple inline feedback
-          if (!name) document.getElementById('f-name').style.borderColor = '#C9614A';
           if (!email) document.getElementById('f-email').style.borderColor = '#C9614A';
           if (!message) document.getElementById('f-msg').style.borderColor = '#C9614A';
-          return;
+          valid = false;
         }
+        if (!valid) return;
 
         // Simulate submission
         const submitBtn = contactForm.querySelector('.btn-contact-submit');
-        if (submitBtn) {
-          submitBtn.textContent = 'Sending…';
-          submitBtn.disabled = true;
-        }
-
+        if (submitBtn) { submitBtn.textContent = 'Sending…'; submitBtn.disabled = true; }
         setTimeout(function() {
           if (formContent) formContent.style.display = 'none';
           if (formSuccess) formSuccess.classList.add('show');
@@ -1703,9 +1830,7 @@ video{
 
       // Clear red borders on input
       contactForm.querySelectorAll('.form-input, .form-textarea').forEach(function(input) {
-        input.addEventListener('input', function() {
-          input.style.borderColor = '';
-        });
+        input.addEventListener('input', function() { input.style.borderColor = ''; });
       });
     }
 
