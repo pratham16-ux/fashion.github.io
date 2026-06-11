@@ -1008,15 +1008,43 @@
       + '<button type="button" class="btn-outline" onclick="document.getElementById(\'payModal\').remove()">Cancel</button>'
       + '</div>';
   } else {
-    bodyHtml = '<div class="f-field" style="margin-bottom:12px"><label>Card / UPI / Account Number</label><input type="text" id="payNumber" placeholder="Card number or UPI ID"></div>'
+    bodyHtml = '<div class="f-field" style="margin-bottom:12px"><label>Card / Account Number <span style="font-size:10px;color:var(--medium-gray);font-weight:400;text-transform:none">(digits only, max 16)</span></label><input type="text" id="payNumber" placeholder="1234 5678 9012 3456" maxlength="19" inputmode="numeric" autocomplete="cc-number"></div>'
       + '<div style="display:flex;gap:10px;margin-bottom:12px">'
-      + '<div class="f-field" style="flex:1"><label>Expiry</label><input type="text" id="payExpiry" placeholder="MM/YY" maxlength="5"></div>'
-      + '<div class="f-field" style="flex:1"><label>CVV</label><input type="password" id="payCvv" placeholder="•••" maxlength="4"></div>'
+      + '<div class="f-field" style="flex:1"><label>Expiry</label><input type="text" id="payExpiry" placeholder="MM/YY" maxlength="5" inputmode="numeric"></div>'
+      + '<div class="f-field" style="flex:1"><label>CVV <span style="font-size:10px;color:var(--medium-gray);font-weight:400;text-transform:none">(3–4 digits)</span></label><input type="password" id="payCvv" placeholder="•••" maxlength="4" inputmode="numeric"></div>'
       + '</div>'
       + '<div style="display:flex;gap:10px;margin-top:8px">'
-      + '<button type="button" class="btn-primary" onclick="window.location.href=\'404.html\'" style="flex:1">Save</button>'
+      + '<button type="button" class="btn-primary" onclick="submitPaymentForm()" style="flex:1">Save</button>'
       + '<button type="button" class="btn-outline" onclick="document.getElementById(\'payModal\').remove()">Cancel</button>'
-      + '</div>';
+      + '</div>'
+      + '<script>'
+      + '(function(){'
+      + 'var n=document.getElementById("payNumber");'
+      + 'if(n){n.addEventListener("input",function(){'
+      + '  var d=this.value.replace(/\\D/g,"").slice(0,16);'
+      + '  this.value=d.replace(/(\\d{4})(?=\\d)/g,"$1 ");'
+      + '});'
+      + 'n.addEventListener("keydown",function(e){'
+      + '  if(e.key.length===1&&!/\\d/.test(e.key)&&!e.ctrlKey&&!e.metaKey)e.preventDefault();'
+      + '});}'
+      + 'var ex=document.getElementById("payExpiry");'
+      + 'if(ex){ex.addEventListener("input",function(){'
+      + '  var d=this.value.replace(/\\D/g,"");'
+      + '  if(d.length>=3)d=d.slice(0,2)+"/"+d.slice(2,4);'
+      + '  this.value=d;'
+      + '});'
+      + 'ex.addEventListener("keydown",function(e){'
+      + '  if(e.key.length===1&&!/\\d/.test(e.key)&&!e.ctrlKey&&!e.metaKey)e.preventDefault();'
+      + '});}'
+      + 'var cv=document.getElementById("payCvv");'
+      + 'if(cv){cv.addEventListener("input",function(){'
+      + '  this.value=this.value.replace(/\\D/g,"").slice(0,4);'
+      + '});'
+      + 'cv.addEventListener("keydown",function(e){'
+      + '  if(e.key.length===1&&!/\\d/.test(e.key)&&!e.ctrlKey&&!e.metaKey)e.preventDefault();'
+      + '});}'
+      + '})();'
+      + '<\/script>';
   }
 
   var titleText = existing
@@ -1036,9 +1064,23 @@
   });
 }
   function submitPaymentForm() {
-    var num = (document.getElementById('payNumber') || {}).value || '';
-    num = num.trim();
-    if (!num) { showToast('Please enter a card number or UPI ID.'); return; }
+    var numEl    = document.getElementById('payNumber');
+    var expiryEl = document.getElementById('payExpiry');
+    var cvvEl    = document.getElementById('payCvv');
+
+    var num    = (numEl    ? numEl.value.replace(/\s/g,'')    : '');
+    var expiry = (expiryEl ? expiryEl.value.trim() : '');
+    var cvv    = (cvvEl    ? cvvEl.value.trim()    : '');
+
+    if (!num) { showToast('Please enter a card / account number.'); if (numEl) numEl.focus(); return; }
+    if (!/^\d{12,16}$/.test(num)) { showToast('Card number must be 12–16 digits.'); if (numEl) numEl.focus(); return; }
+
+    if (!expiry) { showToast('Please enter the expiry date.'); if (expiryEl) expiryEl.focus(); return; }
+    if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry)) { showToast('Expiry must be MM/YY format (e.g. 09/28).'); if (expiryEl) expiryEl.focus(); return; }
+
+    if (!cvv) { showToast('Please enter the CVV.'); if (cvvEl) cvvEl.focus(); return; }
+    if (!/^\d{3,4}$/.test(cvv)) { showToast('CVV must be 3 or 4 digits.'); if (cvvEl) cvvEl.focus(); return; }
+
     var modal = document.getElementById('payModal');
     if (modal) modal.remove();
     showToast('Payment method saved! ✓');
